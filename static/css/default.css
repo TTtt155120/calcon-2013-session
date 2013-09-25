@@ -1,0 +1,16 @@
+body {
+/*  background-color: rgb(204, 188, 149); 
+background-color: rgb(153, 127, 101); */
+background-color: rgb(172, 223, 242); 
+}
+
+.bibframe-slide {
+  background-color: rgb(204, 188, 149);  
+  border: 1px solid  rgb(153, 127, 101); 
+}
+
+.rda-slide {
+  background-color: rgb(60, 37, 48); 
+  border: 1px solid rgb(159, 143, 152); 
+  color: rgb(255, 255, 255);
+}

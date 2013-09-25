@@ -1,0 +1,29 @@
+<div class="header">
+<ul class="nav nav-pills pull-right">
+  <li {% if category == 'home' %}class="active"{% endif %}><a href="#">Home</a></li>
+  <li class="dropdown{% if category == 'slide' %} active{% endif %}">
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Slides<b class="caret"></b></a>
+    <ul class="dropdown-menu"> 
+    {% for slide in slides.bibframe %}
+    <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}">{{ slide.label }}</a></li>
+    {% endfor %}
+    <li class="divider"></li>
+    {% for slide in slides.rda %}
+    <li><a href="/calcon-2013-session/rda/{{ slide.name }}">{{ slide.label }}</a></li>
+    {% endfor %}
+    </ul>
+
+  </li>
+  <li class="dropdown{% if category == 'addendum' %} active{% endif %}">
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Addendum<b class="caret"></b></a>
+    <ul class="dropdown-menu"> 
+     <li><a href="/calcon-2013-session/glossary.html">Glossary</a></li>
+     <li><a href="/calcon-2013-session/resources.html">Resources</a></li>
+     <li class="divider"></li>
+     <li><a href="#">About</a></li>
+     <li><a href="#">Contact</a></li> 
+    </ul>
+  </li>
+ </ul>
+  <h3 class="text-muted">CALCON 2013: BIBFRAME &amp; RDA </h3>
+</div>

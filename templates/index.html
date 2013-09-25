@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron" >
+  <img src="/static/img/calcon-2013-logo.png" style="float: left">
+  <h2 class="text-muted">CALCON 2013 Session</h2>
+  <h1>BIBFRAME &amp; RDA</h1>
+   <p class="lead">
+    The Library of Congress Bibliographic Framework Initiative released a new vocabulary and framework for
+    replacing the venerated MARC21 standard with a new standard they call BIBFRAME. </p>
+    <p><a class="btn btn-lg btn-success" href="#">What is BIBFRAME?</a></p>
+   <p><a class="btn btn-lg btn-primary" href="#">How is BIBFRAME related to RDA?</a></p>
+</div>
+
+<div class="row marketing">
+ <div class="col-lg-6">
+   <div class="well well-sm bibframe-slide">
+    <h3>What is BIBFRAME?</h3>
+    {% for slide in slides.bibframe %}
+     <h4>{{ slide.label }}</h4>
+      <p>consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+    {% endfor %}
+   </div>
+ </div>
+
+ <div class="col-lg-6">
+   <div class="well well-sm rda-slide">
+    <h3>How is BIBFRAME related to RDA?</h3>
+    {% for slide in slides.rda %}
+     <h4>{{ slide.label }}</h4>
+     <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+    {% endfor %}
+   </div>
+
+ </div>
+</div>
+{% endblock %}
