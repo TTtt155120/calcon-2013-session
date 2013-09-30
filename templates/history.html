@@ -6,6 +6,56 @@
 {% include 'slide-nav.html' %}
 <div class="row"> <div class="col-md-12 jumbotron"><h1>History of BIBFRAME</h1></div>
 </div>
+<hr>
+<div class="row">
+ {% include 'history-quiz.html' %}
+{# START History Video Lecture #}
+ <div class="col-md-8">
+
+ {# END History Video Lecture #}
+ </div>
+</div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+function HistoryQuizViewModel() {
+  var self = this; 
+
+  self.questionOneItems = [
+    { id: 1, name: "2007", selected: false},
+    { id: 2, name: "1999", selected: false},
+    { id: 3, name: "2011", selected: false},
+    { id: 4, name: "2013", selected: false}
+  ];
+  self.questionTwoItems = [
+    { id: 1, name: 'FRBR', selected: false},
+    { id: 2, name: 'MARC21', selected: false},
+    { id: 3, name: 'Schema.org', selected: false},
+    { id: 4, name: 'MODS', selected: false}
+  ];
+  self.questionThreeItems = [
+    { id: 1, name: 'True', selected:false },
+    { id: 0, name: 'False', selected:false }
+
+  ];
+
+  self.gradeQuiz = function() {
+    $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+    });
+  }
+}
+
+ko.applyBindings(new HistoryQuizViewModel());
+</script>
+{% endblock %}

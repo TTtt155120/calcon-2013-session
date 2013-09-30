@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row">
+ <div class="col-md-12 well">
+  <h1>Earn your Open Badge for this Session!</h1>
+  <div class="row">
+   <div class="col-md-3">
+    <img src="/static/img/bibframe-rda-badge.png" class="img-thumbnail"></img>
+   </div>
+   <div class="col-md-8">
+     <ol>
+       <h2><li>Create an Mozilla Open Badge Backpack Account</li></h2>
+       <p class="lead">
+        Create an Mozilla Open Badge Backpack Account 
+        <a href="http://backpack.openbadges.org/backpack/login">Backpack Account</a>
+       </p>
+       <h2><li>Register your E-mail</li></h2>
+       <div class="alert alert-info">
+        <form class="form-inline"> 
+         <div class="form-group">
+           <label for="email_address">Email address*</label>
+           <input type="email" class="form-control" id="email_address"></input>
+         </div>
+         <div class="form-group">
+          <button type="submit" class="btn btn-default">Sign-up</button>
+         </div>
+        </form>
+       </div>
+       <h2><li>Fulfill Badge Critera</li></h2>
+
+     </ol>
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock %}

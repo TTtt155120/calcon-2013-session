@@ -1,0 +1,61 @@
+<form id="badge-quiz"> 
+<input type="hidden" name="slide" value="history">
+{# START History BIBFRAME Quiz #}
+ <div class="col-md-6">
+  <div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Badge Quiz </h2>
+  </div>
+  <div class="panel-body">
+   {# START Q1 #}
+   <div>
+   <label>What year did the Library of Congress announce the 
+          Bibliographic Framework Initiative?</label>  
+    <div data-bind="foreach: questionOneItems">
+    <div class="radio">    
+     <label>
+       <input type="radio" name="q1" data-bind="attr: { value: id },
+                                                checked: $root.selected"  >
+       <span data-bind="text: name"></span>
+      </label>
+     </div>  
+   {# END Q1 #}
+   </div>
+   {# START Q2 #}
+   <div>
+    <label>Which of the following influenced BIBFRAME design?</label>
+    <div data-bind="foreach: questionTwoItems">
+     <div class="checkbox">
+      <label>
+       <input type="checkbox" name="q2" data-bind="attr: { value:id }, 
+                                                   checked: $root.selected">
+       <span data-bind="text: name"></span>
+      </label>
+     </div> 
+    </div>
+   {# END Q2 #}
+   </div> 
+   {# START Q3 #}
+   <div>
+    <label>True or False; BIBFRAME is based on LinkedData</label>
+    <div data-bind="foreach: questionThreeItems">
+     <label class="radio-inline" >
+      <input type="radio" name="q3" data-bind="attr: { value:id },
+                                               checked: $root.selected">
+      <span data-bind="text: name"></span>
+     </label>
+    </div>
+  {# END Q3 #}
+  </div>
+  <div class="btn-group">
+    <a href="#" 
+       class="btn btn-danger btn-sm"
+       data-bind="click: gradeQuiz">Grade</a>
+    <button type="reset"
+       class="btn btn-warning btn-sm">Reset</button>
+  </div>
+
+  </div>
+ {# END History BIBFRAME Quiz #}
+ </div>
+</form>

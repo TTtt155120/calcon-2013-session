@@ -1,0 +1,15 @@
+{
+  "alignment": null, 
+  "criteria": "http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge.html", 
+  "description": "Colorado Association of Libraries Conference 2013 RDA-BIBFRAME Badge", 
+  "image": "http://tuttdemo.coloradocollege.edu/static/img/bibframe-rda-badge.png", 
+  "issuer": "http://tuttdemo.coloradocollege.edu/calcon-2013-session/organization.html", 
+  "name": "CALCON 2013 RDA-BIBFRAME Badge", 
+  "tags": [
+    "rda", 
+    "bibframe", 
+    "calcon2013", 
+    "catalogin", 
+    "future"
+  ]
+}

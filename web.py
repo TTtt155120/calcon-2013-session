@@ -1,7 +1,14 @@
 __author__ = "Jeremy Nelson"
 
+import json
+
 from flask import Flask, render_template, url_for
+from flask import jsonify, request, session
+
 app = Flask(__name__)
+
+ANSWERS = json.load(open('answers.json', 'rb'))
+app.secret_key = ANSWERS.pop('secret_key')
 
 SLIDES = {'bibframe':[{'name': 'history',
                        'label': 'History of BIBFRAME'},
@@ -26,11 +33,45 @@ SLIDES = {'bibframe':[{'name': 'history',
 
 URL_PREFIX = '/calcon-2013-session'
 
+@app.route('{0}/badge.html'.format(URL_PREFIX))
+def badge():
+    return render_template('badge.html',
+                           category='addendum',
+                           slides=SLIDES)
+
+
 @app.route('{0}/glossary.html'.format(URL_PREFIX))
 def glossary():
     return render_template("glossary.html",
                            category='addendum',
                            slides=SLIDES)
+
+@app.route('{0}/grade'.format(URL_PREFIX),
+           methods = ['POST', 'GET'])
+def grade():
+    score = 0
+    if request.method == 'POST':
+        slide = request.form['slide']
+        if slide in ANSWERS:
+            q1_answer = request.form.getlist('q1')
+            if q1_answer == ANSWERS[slide].get('q1'):
+                score += 1
+            q2_answer = request.form.getlist('q2')
+            if q2_answer == ANSWERS[slide].get('q2'):
+                score += 1
+            q3_answer = request.form.getlist('q3')
+            if q3_answer == ANSWERS[slide].get('q3'):
+                score += 1
+        if slide not in session:
+            session[slide] = score
+            return jsonify({'score': score })
+        else:
+            return jsonify(
+                {'error': 'Quiz for {0} with a score of {1} already exists'.format(
+                    slide,
+                    session[slide])})
+
+                           
 @app.route('{0}/resources.html'.format(URL_PREFIX))
 def resources():
     return render_template("resources.html",
