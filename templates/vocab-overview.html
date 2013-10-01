@@ -6,6 +6,70 @@
 {% include 'slide-nav.html' %}
 <div class="row"> <div class="col-md-12 jumbotron"><h1>BIBFRAME Vocabulary Overview</h1></div>
 </div>
+
+<div class="row">
+  {# start core bibframe #}
+  <div class="col-md-7">
+   <h3>Creative Work</h3>
+   <p>A resource reflecting a conceptual essence of the cataloging resource. 
+    (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+   </p>
+   <p>
+    BIBFRAME provides specific types of Creative Works, such as Book, Serial, Article, 
+    Manuscript, MovingImage, NonmusicalAudio, Musical Audios.
+   </p>
+   <h3>Instance</h3>
+   <p>A resource reflecting an individual, material embodiment of the Work. 
+    (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+   </p>
+   <h3>Authority</h3>
+   <p>A resource reflecting key authority concepts that have defined 
+      relationships reflected in the Work and Instance. 
+    (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+   </p>
+   <h3>Annotation</h3>
+   <p>A resource that adds additional information to or about other BIBFRAME resources 
+      when knowing 'who' annotated it is important.
+     (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+   </p>
+  {# END core bibframe #}
+  </div>
+ <div class="col-md-5">  
+  {# START Quiz Panel #}
+  <div class="panel panel-primary">
+   <div class="panel-heading">
+    <h3 class="panel-title">Badge Quiz </h2>
+   </div>
+   <div class="panel-body">
+   <form>
+   {# START Q1 #}
+    <div class="form-group">
+      <label>Select all Creative Work subclasses</label>
+      <input type="checkbox" name="q1" >
+        Manuscript
+      </input>
+    {# END Q1 #}
+    </div>
+   </form>
+   </div>
+  {# END Quiz Panel #}
+  </div>
+ </div>
+</div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+function VocabQuizViewModel() {
+  var self = this; 
+
+  self.questionOneItems = [
+    { id: 1, name: "2007", selected: false},
+    { id: 2, name: "1999", selected: false},
+    { id: 3, name: "2011", selected: false},
+    { id: 4, name: "2013", selected: false}
+  ];
+}
+ko.applyBindings(new VocabQuizViewModel());
+</script>
+{% endblock %}
