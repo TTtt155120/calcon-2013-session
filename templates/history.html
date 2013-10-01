@@ -4,15 +4,49 @@
 {% block more_css %}{% endblock %}
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> <div class="col-md-12 jumbotron"><h1>History of BIBFRAME</h1></div>
+<div class="row"> 
+ <div class="col-md-12 jumbotron">
+  <h1>History of BIBFRAME</h1>
+  <p class="lead">The BIBFRAME specification is relative new having started with an announcement by the Library of Congress
+   in 2011. Since then, a lot of work has gone into developing a more robust vocabulary along with experimental support 
+   implementation by the Library of Congress, OCLC, and others including Colorado College.
+ </div>
 </div>
 <hr>
 <div class="row">
  {% include 'history-quiz.html' %}
-{# START History Video Lecture #}
- <div class="col-md-8">
-
- {# END History Video Lecture #}
+{# START History Timeline #}
+ <div class="col-md-6">
+   <table class="table table-striped">
+     <tr>
+       <th>October 31, 2011</th>
+       <td>Library of Congress press release,
+           <a href="http://www.loc.gov/bibframe/news/framework-103111.html">A Bibliographic Framework for the Digital Age</a>
+       </td>
+     </tr>
+     <tr>
+      <th>May 13, 2012</th>
+      <td>
+       Library of Congress statement, 
+       <a href="http://www.loc.gov/bibframe/news/framework-051311.html">
+         Transforming our Bibliographic Framework: A Statement from the Library of Congress</a>
+      </td>
+     </tr>
+     <tr>
+      <th>May 22, 2012</th>
+      <td>
+       <a href="http://www.loc.gov/bibframe/news/framework-051311.html">Announcement</a> on a modeling initiative 
+       from the Library of Congress
+      </td>
+     </tr>
+     <tr>
+      <th>Spring/Summer 2012</th>
+      <td>Article by Kevin Ford, 
+       <a href="http://www.niso.org/publications/isq/2012/v24no2-3/ford/">LC's Bibliographic Framework Initiative and the Attractiveness of Linked Data</a>
+      </td>
+     </tr>
+   </table>
+ {# END History Timeline #}
  </div>
 </div>
 {% endblock %}

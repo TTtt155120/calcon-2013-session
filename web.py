@@ -62,7 +62,12 @@ ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
 
 SLIDES = {'bibframe':[{'name': 'history',
-                       'label': 'History of BIBFRAME'},
+                       'label': 'History of BIBFRAME',
+                       'description': """The BIBFRAME specification is
+relative new having started with an annoucement by the Library of
+Congress in 2011. Since then, a lot of work has gone into developing a
+more robust vocabulary along with experimental support implementation by
+the Library of Congress, OCLC, and others including Colorado College.""" },
                       {'name': 'vocab-overview',
                        'label': 'BIBFRAME Vocabulary Overview'},
                       {'name': 'creative-works',
@@ -78,7 +83,10 @@ SLIDES = {'bibframe':[{'name': 'history',
                   {'name': 'marc21-is-to-BIBFRAME',
                    'label': '...as MARC21 is to BIBFRAME'},
                   {'name': 'rda-in-bibframe',
-                   'label': 'RDA in BIBFRAME'},
+                   'label': 'RDA in BIBFRAME',
+                   'description': """While BIBFRAME does not currently have any
+formal mapping with RDA, some information mapping and experiementation has
+occurred, particularly in the Redis Library Services Platform"""},
                   {'name': 'bibframe-rlsp',
                    'label': 'BIBFRAME and the Redis Library Services Platform'}]}
 
@@ -212,7 +220,7 @@ if __name__ == '__main__':
                     help='Run in either prod (production) or dev (development)')
     mode = parser.parse_args().mode
     host = '0.0.0.0'
-    port = 8013
+    port = 8130
     if mode == 'prod':
         WSGIServer(app,
                    bindAddress='{0}:{1}'.format(host,

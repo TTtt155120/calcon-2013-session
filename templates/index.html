@@ -33,7 +33,9 @@
     <h3>What is BIBFRAME?</h3>
     {% for slide in slides.bibframe %}
      <h4>{{ slide.label }}</h4>
+     {% if slide.description %}<p>{{ slide.description }}</p>{% else %}
       <p>consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+     {% endif %}
     {% endfor %}
    </div>
  </div>
@@ -43,7 +45,9 @@
     <h3>How is BIBFRAME related to RDA?</h3>
     {% for slide in slides.rda %}
      <h4>{{ slide.label }}</h4>
+     {% if slide.description %}<p>{{ slide.description }}</p>{% else %}
      <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+     {% endif %}
     {% endfor %}
    </div>
 

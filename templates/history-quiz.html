@@ -2,6 +2,7 @@
 <input type="hidden" name="slide" value="history">
 {# START History BIBFRAME Quiz #}
  <div class="col-md-6">
+  {# START panel #}
   <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Badge Quiz </h2>
@@ -37,7 +38,7 @@
    </div> 
    {# START Q3 #}
    <div>
-    <label>True or False; BIBFRAME is based on LinkedData</label>
+    <label>True or False; BIBFRAME is based on LinkedData principles</label>
     <div data-bind="foreach: questionThreeItems">
      <label class="radio-inline" >
       <input type="radio" name="q3" data-bind="attr: { value:id },
@@ -54,8 +55,11 @@
     <button type="reset"
        class="btn btn-warning btn-sm">Reset</button>
   </div>
-
+  {# END panel-body #}
   </div>
+ {# END panel #}
+ </div>
  {# END History BIBFRAME Quiz #}
  </div>
+</div>
 </form>

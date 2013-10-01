@@ -10,6 +10,7 @@
 <div class="row">
   {# start core bibframe #}
   <div class="col-md-7">
+   <div class="alert alert-success">
    <h3>Creative Work</h3>
    <p>A resource reflecting a conceptual essence of the cataloging resource. 
     (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
@@ -18,20 +19,28 @@
     BIBFRAME provides specific types of Creative Works, such as Book, Serial, Article, 
     Manuscript, MovingImage, NonmusicalAudio, Musical Audios.
    </p>
-   <h3>Instance</h3>
-   <p>A resource reflecting an individual, material embodiment of the Work. 
-    (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
-   </p>
-   <h3>Authority</h3>
-   <p>A resource reflecting key authority concepts that have defined 
-      relationships reflected in the Work and Instance. 
-    (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
-   </p>
-   <h3>Annotation</h3>
-   <p>A resource that adds additional information to or about other BIBFRAME resources 
-      when knowing 'who' annotated it is important.
+   </div>
+   <div class="alert alert-info">
+    <h3>Instance</h3>
+    <p>A resource reflecting an individual, material embodiment of the Work. 
      (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
-   </p>
+    </p>
+   </div>
+
+   <div class="alert alert-danger">
+    <h3>Authority</h3>
+    <p>A resource reflecting key authority concepts that have defined 
+       relationships reflected in the Work and Instance. 
+     (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+    </p>
+   </div>
+   <div class="alert alert-warning">
+    <h3>Annotation</h3>
+    <p>A resource that adds additional information to or about other BIBFRAME resources 
+       when knowing 'who' annotated it is important.
+      (source: <a href="/metadata-day-2013/resources.html#bibframe-vocab">bibframe.org</a>)
+    </p>
+   </div>
   {# END core bibframe #}
   </div>
  <div class="col-md-5">  
@@ -41,15 +50,57 @@
     <h3 class="panel-title">Badge Quiz </h2>
    </div>
    <div class="panel-body">
-   <form>
+   <form id="badge-quiz">
+   <input type="hidden" name="slide" value="vocab-overview">
    {# START Q1 #}
-    <div class="form-group">
+   <div class="form-group">
       <label>Select all Creative Work subclasses</label>
-      <input type="checkbox" name="q1" >
-        Manuscript
-      </input>
-    {# END Q1 #}
-    </div>
+      <div data-bind="foreach: questionOneItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q1" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+   {# END Q1 #}
+   </div>
+   {# START Q2 #}
+   <div class="form-group">
+      <label>Which of the following statements are correct:</label>
+      <div data-bind="foreach: questionTwoItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q2" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+   {# END Q2 #}
+   </div>
+   {# START Q3 #}
+   <div class="form-group">
+    <label>Which of the following statements is true?</label>
+    <div data-bind="foreach: questionThreeItems">
+    <div class="radio">    
+     <label>
+       <input type="radio" name="q3" data-bind="attr: { value: id },
+                                                checked: $root.selected"  >
+       <span data-bind="text: name"></span>
+      </label>
+     </div>
+   {# END Q3 #}
+   </div> 
+   <div class="form-group">
+     <div class="btn-group">
+      <a href="#" 
+         class="btn btn-danger btn-sm"
+         data-bind="click: gradeQuiz">Grade</a>
+      <button type="reset"
+         class="btn btn-warning btn-sm">Reset</button>
+     </div>
+   </div>
    </form>
    </div>
   {# END Quiz Panel #}
@@ -63,11 +114,54 @@
 function VocabQuizViewModel() {
   var self = this; 
 
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+    });
+  }
+
   self.questionOneItems = [
-    { id: 1, name: "2007", selected: false},
-    { id: 2, name: "1999", selected: false},
-    { id: 3, name: "2011", selected: false},
-    { id: 4, name: "2013", selected: false}
+    { id: 1, name: "Manuscript", selected: false},
+    { id: 2, name: "Book", selected: false},
+    { id: 3, name: "Globe", selected: false},
+    { id: 4, name: "CoverArt", selected: false}
+  ];
+
+  self.questionTwoItems = [
+   { id: 1, 
+     name: "All Creative Works have at most a single Instance", 
+     selected: false},
+   { id: 2, 
+     name: "An Instance can have multiple Annotations", 
+     selected: false},
+   { id: 3, 
+     name: "Person, Organization, Topic, and Place are all Authority subclasses", 
+     selected: false},
+   { id: 4,
+     name: "All Authorities apply exclusively to Creative Works",
+     selected: false}
+  ];
+
+  self.questionThreeItems = [
+   { id: 1,
+     name: "Reviews, Authorities, and Creative Works are top-level BIBFRAME classes",
+     selected: false},
+   { id: 2,
+     name: "BIBFRAME attempts to model bibliographic relationships in MARC21 using Linked Data principles",
+     selected: false},
+   { id: 3,
+     name: "BIBFRAME directly supports FRBR Work, Expression, Manifestation, and Item",
+     selected: false}
+
   ];
 }
 ko.applyBindings(new VocabQuizViewModel());
