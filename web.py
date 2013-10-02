@@ -64,14 +64,17 @@ app.secret_key = ANSWERS.pop('secret_key')
 SLIDES = {'bibframe':[{'name': 'history',
                        'label': 'History of BIBFRAME',
                        'description': """The BIBFRAME specification is
-relative new having started with an annoucement by the Library of
+relative new having started with an announcement by the Library of
 Congress in 2011. Since then, a lot of work has gone into developing a
 more robust vocabulary along with experimental support implementation by
 the Library of Congress, OCLC, and others including Colorado College.""" },
                       {'name': 'vocab-overview',
                        'label': 'BIBFRAME Vocabulary Overview'},
                       {'name': 'creative-works',
-                       'label': 'Creative Works'},
+                       'label': 'Creative Works',
+                       'description': """Creative Work is the base or root
+class with specific sub-classes for different types of works. BIBFRAME uses a
+class hierarchy with child classes inheriting properties for its parent classes"""},
                       {'name': 'annotations',
                        'label': 'Annotations'},
                       {'name': 'authorities',
@@ -85,7 +88,7 @@ the Library of Congress, OCLC, and others including Colorado College.""" },
                   {'name': 'rda-in-bibframe',
                    'label': 'RDA in BIBFRAME',
                    'description': """While BIBFRAME does not currently have any
-formal mapping with RDA, some information mapping and experiementation has
+formal mapping with RDA, some information mapping and experimentation has
 occurred, particularly in the Redis Library Services Platform"""},
                   {'name': 'bibframe-rlsp',
                    'label': 'BIBFRAME and the Redis Library Services Platform'}]}

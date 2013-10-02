@@ -1,11 +1,299 @@
 {% extends 'layout.html' %}
-{% block title %}{% endblock %}
+{% block title %}{{ current.label }}{% endblock %}
 
-{% block more_css %}{% endblock %}
+{% block more_css %}
+<style>
+ .animation { width: 600px; 
+              height: 600px; 
+              background-color: rgb( 255, 255, 255); }
+
+</style>
+{% endblock %}
+
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> <div class="col-md-12 jumbotron"><h1>Creative Works</h1></div>
+<div class="row"> 
+ <div class="col-md-8 jumbotron">
+  <h1>{{ current.label }}</h1>
+  <p class="lead">
+   {{ current.description }}
+  </p>
+ </div>
+ {# START quiz #}
+ <div class="col-md-4">
+   {# START quiz panel #}
+  <div class="panel panel-primary">
+   {# START panel heading #}
+   <div class="panel-heading">
+    <h3 class="panel-title">Badge Quiz </h2>
+   {# END panel heading #}
+   </div>
+   {# START panel body #}
+   <div class="panel-body">
+    <form id="badge-quiz">
+   {# END panel body #}
+   </div>
+  {# END quiz panel #}
+  </div>
+ {# END quiz #}
+ </div>
+</div>
+
+<hr>
+
+{# START Creative Work Animation Row #}
+<div class="row">
+ {# START Animation Controls #}
+ <div class="col-md-3">
+  <div class="btn-group">
+   <button 
+      data-bind="click: startAnimation"
+      class="btn btn-success">
+    <span class="glyphicon glyphicon-play"></span>
+   </button>
+   <button 
+      data-bind="click: stopAnimation"
+      class="btn btn-danger">
+    <span class="glyphicon glyphicon-stop"></span>
+   </button>
+   <button
+      data-bind="click: restartAnimation"
+      class="btn btn-warning">
+    <span class="glyphicon glyphicon-refresh"></span>
+   </button>
+  </div>
+  <p></p>
+  {# START Explaination Panel  #}
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+     <h3 class="panel-title">About <span data-bind="text: stepNumberView"></span> of 5</h3>
+    </div>
+    <div class="panel-body" data-bind="text: explainStep"></div>
+  {# END Explaination Panel  #}
+  </div>
+ {# END Animation Controls #}
+ </div> 
+ {# START Animation Canvas #}
+ <div class="col-md-9">
+  <div id="creativeWorkAnimation" class="animation"></div> 
+ {# END Animation Canvas #}
+ </div>
+{# END Creative Work Animation Row #}
 </div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+{# <script src="/static/js/three.min.js"></script> #}
+<script src="/static/js/svg.min.js"></script>
+<script>
+
+var CreativeWorkViewModel = function() {
+  var self = this;
+  self.stepNumber = 1;
+  self.stepNumberView = ko.observable(0);
+  self.explainStep = ko.observable();
+  self.svgDraw = SVG('creativeWorkAnimation');
+
+  // Animation Steps
+  self.showBook = function() {
+    alert("In show book");
+  }
+
+  self.showCreativeWork = function() {
+    self.creativeWork = self.svgDraw.group();
+    var creativeWorkRect = self.svgDraw.rect(250, 50);
+    creativeWorkRect.stroke({ color: 'rgb(0,0,255)', width: 1 })
+    .fill({ color: 'rgb(0, 0, 155)', opacity: 0.6});
+    creativeWorkLabel = self.svgDraw.text("Creative Work")
+    creativeWorkLabel.font({ size: 18, family: 'Verdana'}).fill({ color: 'rgb(255,255,255)'});
+    creativeWorkLabel.move(15, 10); 
+    self.creativeWork.add(creativeWorkRect);
+    self.creativeWork.add(creativeWorkLabel);
+    self.creativeWork.move(175, 100); 
+    self.explainStep("The base class for BIBFRAME Resources is CreativeWork");
+    self.creativeWorkText = self.svgDraw.text(function(add) {
+       add.tspan("abbreviatedTitle - Abbreviated title").newLine()
+       add.tspan("associatedAgent - Associated Agent").newLine()
+       add.tspan("authorizedAccessPoint - Authorized access point").newLine()
+       add.tspan("class - classification").newLine()
+       add.tspan("class-ddc - DDC Classification").newLine()
+       add.tspan("class-lcc - LCC Classification").newLine()
+       add.tspan("class-udc - UDC Classification").newLine()
+       add.tspan("contentCoverage - Coverage of Content").newLine()
+       add.tspan("contentNature - Nature of Content").newLine()
+       add.tspan("creditsNote - Credits note").newLine()
+       add.tspan("description - Description of resource").newLine()
+       add.tspan("expressionOf - Expression of").newLine()
+       add.tspan("geographicSubject - Geographic Subject").newLine()
+       add.tspan("hasAnnotation - Has Annotation").newLine()
+       add.tspan("hasExpression - Expressed as").newLine()
+       add.tspan("hasInstance - Instantiated as").newLine()
+       add.tspan("identifier - Identifier").newLine()
+       add.tspan("identifierLabel - Identifier Label").newLine()
+       add.tspan("index - Has index").newLine()
+       add.tspan("intendedAudience - Intended Audience").newLine()
+       add.tspan("isan - International Standard Audiovisual Number").newLine()
+       add.tspan("issn-l - linking International Standard Serial Number").newLine()
+       add.tspan("istc - International Standard Text Code").newLine()
+       add.tspan("iswc - International Standard Musical Work Code").newLine()
+       add.tspan("label - Label for resource").newLine()
+       add.tspan("language - Language").newLine()
+       add.tspan("languageOfWork - Language of work").newLine()
+       add.tspan("mediumOfMusic - Medium of music").newLine()
+       add.tspan("note - Note").newLine()
+       add.tspan("performerNote - Performer note").newLine()
+       add.tspan("primaryLanguage - Language").newLine()
+       add.tspan("relatedResource - Related resource").newLine()
+       add.tspan("relatedWork - Related work").newLine()
+       add.tspan("subject - Subject").newLine()
+       add.tspan("summary - Summary").newLine()
+       add.tspan("uniformTitle - Controlled title").newLine()
+    });
+    self.creativeWorkText.hide();
+    self.creativeWork.animate().move(25, 25).during(function() {
+      self.creativeWorkText.move(150, -800);
+      self.creativeWorkText.show();
+      self.creativeWorkText.animate({ duration: 3000, ease: '<', speed: 0.5 }).y(100)
+      .after(function() { 
+        self.creativeWorkText.animate({delay: 3500}).y(800);  
+      });
+
+    });
+/*    var basePropsRect = self.svgDraw.rect(50, 50)
+    basePropsRect.fill({ color: 'rgb(255,255,255)' }).stroke({ color: 'rgb(255,0,0)',
+                                                               width: 1});
+    basePropsRect.move(180, 110);
+    basePropsRect.animate({ ease: '>', delay: 750}).scale(2, .5); */
+
+  }
+
+  self.showLangMaterial = function() {
+   self.langMaterial = self.svgDraw.group();
+   var langMaterialRect = self.svgDraw.rect(175, 50).fill( { color: 'rgb(175, 0, 0)' });
+   langMaterialRect.stroke({ color: 'rgb(255, 0, 0)', width: 2 });
+   var langMaterialLabel = self.svgDraw.text("Language Material").fill({ color: 'rgb(255,255,255)' });
+   langMaterialLabel.font({ size: 18 });
+   self.langMaterial.add(langMaterialRect);
+   self.langMaterial.add(langMaterialLabel);
+   self.langMaterial.hide();
+   self.svgDraw.line(45, 220, 45, 300).stroke({ width: 3 }).animate()
+   .after(function() {
+     self.svgDraw.line(45, 300, 200, 300).stroke({ width: 3 });
+     self.langMaterial.move(25, 25);
+     self.langMaterial.show();
+     self.langMaterial.animate({ ease: '<' }).move(35, 200)
+     .after(function() {
+       self.langMaterial.animate({ ease: '<' }).move(400, 400);
+
+
+     })
+
+   });
+
+  }
+
+  self.showManuscript = function() {
+    self.creativeWorkText.remove()
+    self.explainStep("Manuscript is a subclass of Creative Work");
+    self.manuscript = self.svgDraw.group();
+    var manuscriptImg = self.svgDraw.image("/static/img/creative_writing_48x48.png");
+    var manuscriptText = self.svgDraw.text("Manuscript");
+    manuscriptText.y(50);
+    self.manuscript.add(manuscriptImg);
+    self.manuscript.add(manuscriptText);
+    self.manuscript.hide();
+    self.svgDraw.line(45, 75, 45, 150).stroke({ width: 3 }).animate()
+    .after(function() {
+      var label = self.svgDraw.text("subclass");
+      label.center(90, 130);
+      self.svgDraw.line(45, 150, 400, 150).stroke({ width: 3 });
+      self.manuscript.move(25, 25);
+      self.manuscript.show();
+      self.manuscript.front();
+      self.manuscript.animate({ ease: '<' }).move(35, 80).after(
+        function() {
+         self.manuscript.animate({ ease: '<' }).move(325, 80);
+        });
+    });
+    /*
+    self.creativeWork.animate().move(50, 50).after(
+      function() {
+        self.manuscript.move(60, 60);
+        self.manuscript.show();
+        self.manuscript.animate({ ease: '<', delay: 1500}).move(50, 150).after(
+          function() {
+            self.svgDraw.line(65, 120, 50, 145).stroke({ width: 1 });
+          });
+      }
+    );*/
+  }
+
+  self.showMovingImage = function() {
+    self.movingImage = self.svgDraw.group();
+    var movingImageImg = self.svgDraw.image("/static/img/cinema_48x48.png");
+    var movingImageText = self.svgDraw.text("Moving Image");
+    self.movingImage.add(movingImageImg);
+    self.movingImage.add(movingImageText);
+    self.movingImage.hide();
+    self.svgDraw.line(45, 150, 45, 220).stroke({ width: 3 }).animate()
+    .after(function() {
+      var label = self.svgDraw.text("subclass");
+      label.center(90, 180);
+      self.svgDraw.line(45, 220, 400, 220).stroke({ width: 3 });
+      self.movingImage.move(25, 25);
+      self.movingImage.show().front();
+      self.movingImage.animate({ ease: '<' }).move(35, 185)
+      .after(function() {
+        self.movingImage.animate({ ease: '<' }).move(325, 185);
+      });
+
+    });
+  }
+
+  // Animation Controls
+  self.restartAnimation = function() {
+   self.svgDraw.clear();
+   self.explainStep("");
+   self.stepNumber = 1;
+
+  }
+
+  self.startAnimation = function() {
+   if(self.stepNumber > 5) {
+     self.restartAnimation(); // Resets animation to the beginning
+   }
+   switch(self.stepNumber) {
+     case 1:
+       self.showCreativeWork();
+       break;
+
+     case 2:
+       self.showManuscript();
+       break;
+
+     case 3:
+       self.showMovingImage();
+       break;
+
+     case 4:
+       self.showLangMaterial();
+       break;
+ 
+     case 5:
+       self.showBook();
+       break;
+    }
+    self.stepNumberView(self.stepNumber);
+    self.stepNumber += 1;
+  }
+
+  self.stopAnimation = function() {
+   alert('stopping animation');
+  }
+
+
+}
+
+ko.applyBindings(new CreativeWorkViewModel());
+</script>
+{% endblock %}
