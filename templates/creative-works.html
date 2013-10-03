@@ -13,11 +13,22 @@
 {% block body %}
 {% include 'slide-nav.html' %}
 <div class="row"> 
- <div class="col-md-8 jumbotron">
-  <h1>{{ current.label }}</h1>
-  <p class="lead">
-   {{ current.description }}
-  </p>
+ <div class="col-md-8">
+  <div class="jumbotron">
+   <h1>{{ current.label }}</h1>
+   <p class="lead">
+    {{ current.description }}
+   </p>
+  </div>
+  <div class="well well-sm">
+   <h3>Relationship to FRBR &amp; Schema.org</h3>
+   <p>
+    BIBFRAME's Creative Work class is roughly equilivant to 
+    FRBR's Work and Expression while being somewhat narrower in scope
+    than Schema.org's 
+    <a href="http://schema.org/CreativeWork">CreativeWork</a>
+   </p>
+  </div>
  </div>
  {# START quiz #}
  <div class="col-md-4">
@@ -26,11 +37,64 @@
    {# START panel heading #}
    <div class="panel-heading">
     <h3 class="panel-title">Badge Quiz </h2>
+
+
    {# END panel heading #}
    </div>
    {# START panel body #}
    <div class="panel-body">
     <form id="badge-quiz">
+    <input type="hidden" name="slide" value="creative-works">
+    {# START Q1 #}
+    <div class="form-group">
+      <label>CreativeWork and LanguageMaterial are examples of:</label>
+     <div data-bind="foreach: questionOneItems">
+      <div class="radio">    
+       <label>
+         <input type="radio" name="q1" data-bind="attr: { value: id },
+                                                  checked: $root.selected"  >
+        <span data-bind="text: name"></span>
+       </label>
+      </div>      
+     </div>
+   {# END Q1 #}
+   </div>
+   {# START Q2 #}
+    <div class="form-group">
+      <label>True or False: Creative Works class is not an ancestor of the Map class</label>
+     <div data-bind="foreach: questionTwoItems">
+       <label class="radio-inline">
+         <input type="radio" name="q2" data-bind="attr: { value: id },
+                                                  checked: $root.selected"  >
+        <span data-bind="text: name"></span>
+       </label>
+     </div>
+   {# END Q2 #}
+   </div>
+   {# START Q3 #}
+    <div class="form-group">
+      <label>Choose all Langauge Material subclasses</label>  
+      <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q1" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+   {# END Q3 #}
+    </div>
+   <div class="form-group">
+     <div class="btn-group">
+      <a href="#" 
+         class="btn btn-danger btn-sm"
+         data-bind="click: gradeQuiz">Grade</a>
+      <button type="reset"
+         class="btn btn-warning btn-sm">Reset</button>
+     </div>
+   </div>
+   </form> 
    {# END panel body #}
    </div>
   {# END quiz panel #}
@@ -94,9 +158,67 @@ var CreativeWorkViewModel = function() {
   self.explainStep = ko.observable();
   self.svgDraw = SVG('creativeWorkAnimation');
 
+  // Quiz related 
+  self.questionOneItems = [
+    { id: 1, name: "BIBFRAME Annotations", selected: false},   
+    { id: 2, name: "Abstract parent classes", selected: false},   
+    { id: 3, name: "Contain few unique properties", selected: false},   
+    { id: 4, name: "Are directly represented in BIBFRAME systems", selected: false},   
+  ];
+
+  self.questionTwoItems = [
+    { id: 1, name: "True", selected: false},   
+    { id: 2, name: "False", selected: false}   
+  ];
+
+  self.questionThreeItems = [
+    { id: 1, name: "Article", selected: false}, 
+    { id: 2, name: "Nonmusical Audio", selected: false}, 
+    { id: 3, name: "Dissertation", selected: false}, 
+    { id: 4, name: "Newspaper", selected: false}, 
+    { id: 5, name: "Book", selected: false} 
+  ];
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+    });
+  }
+
   // Animation Steps
-  self.showBook = function() {
-    alert("In show book");
+  self.showArticle = function() {
+    self.article = self.svgDraw.group();
+    var articleImg = self.svgDraw.image('/static/img/document_48x48.png');
+    var articleLabel = self.svgDraw.text("Article").font({ 'font-weight': 'bold' });
+    articleLabel.y(50);
+    self.article.add(articleImg);
+    self.article.add(articleLabel);
+    self.article.hide();
+    self.explainStep("Article is another subclass of the Language Materials class");
+    self.svgDraw.line(110, 380, 110, 470).stroke({ width: 3 }).animate()
+    .after(function() {
+      var label = self.svgDraw.text("subclass");
+      label.center(155, 455);
+      self.svgDraw.line(110, 470, 400, 470).stroke({ width: 3 }).animate()
+      .during(function() {
+        self.article.move(110, 320).front().show();
+        self.article.animate().move(110, 420)
+        .after(function() {
+          self.article.animate().move(325, 420);
+        });
+
+      });
+
+    });
   }
 
   self.showCreativeWork = function() {
@@ -168,26 +290,50 @@ var CreativeWorkViewModel = function() {
   }
 
   self.showLangMaterial = function() {
+   self.explainStep("Language Material is an abstract subclass of Creative Work");
+   // Language Material Group
    self.langMaterial = self.svgDraw.group();
    var langMaterialRect = self.svgDraw.rect(175, 50).fill( { color: 'rgb(175, 0, 0)' });
-   langMaterialRect.stroke({ color: 'rgb(255, 0, 0)', width: 2 });
+   
+   langMaterialRect.stroke({ color: 'rgb(255, 0, 0)', width: 2 })
+   .opacity(1.0);
    var langMaterialLabel = self.svgDraw.text("Language Material").fill({ color: 'rgb(255,255,255)' });
-   langMaterialLabel.font({ size: 18 });
+   langMaterialLabel.font({ size: 18 }).move(10, 10);
    self.langMaterial.add(langMaterialRect);
    self.langMaterial.add(langMaterialLabel);
    self.langMaterial.hide();
+   // Book Group
+   self.book = self.svgDraw.group();
+   var bookImage = self.svgDraw.image("/static/img/publishing_48x48.png");
+   var bookLabel = self.svgDraw.text("Book");
+   bookLabel.y(40).font({ 'font-weight': 'bold' });
+   self.book.add(bookImage);
+   self.book.add(bookLabel);
+   self.book.hide();
    self.svgDraw.line(45, 220, 45, 300).stroke({ width: 3 }).animate()
    .after(function() {
-     self.svgDraw.line(45, 300, 200, 300).stroke({ width: 3 });
-     self.langMaterial.move(25, 25);
+     self.svgDraw.line(45, 300, 90, 300).stroke({ width: 3 });
+     self.langMaterial.move(25, 35);
      self.langMaterial.show();
-     self.langMaterial.animate({ ease: '<' }).move(35, 200)
+     self.langMaterial.animate({ ease: '<' }).move(35, 270)
      .after(function() {
-       self.langMaterial.animate({ ease: '<' }).move(400, 400);
-
-
+       self.langMaterial.animate({ ease: '<' }).move(90, 270).after(function() {
+         var label = self.svgDraw.text("subclass");
+         label.center(155, 360);
+         self.svgDraw.line(110, 320, 110, 380).stroke({ width: 3 }).animate()
+         .after(function() {
+           self.svgDraw.line(110, 380, 400, 380).stroke({ width: 3 }).animate()
+           .after(function() {
+             self.explainStep(self.explainStep() + "\n\nBook is a subclass of the Language Material class");
+             self.book.move(110, 320).front().show();
+             self.book.animate({ ease: '<' }).move(110, 320)
+             .after(function() {
+               self.book.animate({ ease: '<' }).move(325, 320)
+             });
+           });
+         });
+      });
      })
-
    });
 
   }
@@ -198,7 +344,7 @@ var CreativeWorkViewModel = function() {
     self.manuscript = self.svgDraw.group();
     var manuscriptImg = self.svgDraw.image("/static/img/creative_writing_48x48.png");
     var manuscriptText = self.svgDraw.text("Manuscript");
-    manuscriptText.y(50);
+    manuscriptText.y(40).font({ 'font-weight': 'bold' });
     self.manuscript.add(manuscriptImg);
     self.manuscript.add(manuscriptText);
     self.manuscript.hide();
@@ -229,16 +375,18 @@ var CreativeWorkViewModel = function() {
   }
 
   self.showMovingImage = function() {
+    self.explainStep("Moving Image is another subclass of Creative Work");
     self.movingImage = self.svgDraw.group();
     var movingImageImg = self.svgDraw.image("/static/img/cinema_48x48.png");
     var movingImageText = self.svgDraw.text("Moving Image");
+    movingImageText.y(50).font({ 'font-weight': 'bold' });
     self.movingImage.add(movingImageImg);
     self.movingImage.add(movingImageText);
     self.movingImage.hide();
     self.svgDraw.line(45, 150, 45, 220).stroke({ width: 3 }).animate()
     .after(function() {
       var label = self.svgDraw.text("subclass");
-      label.center(90, 180);
+      label.center(90, 200);
       self.svgDraw.line(45, 220, 400, 220).stroke({ width: 3 });
       self.movingImage.move(25, 25);
       self.movingImage.show().front();
@@ -280,7 +428,7 @@ var CreativeWorkViewModel = function() {
        break;
  
      case 5:
-       self.showBook();
+       self.showArticle();
        break;
     }
     self.stepNumberView(self.stepNumber);

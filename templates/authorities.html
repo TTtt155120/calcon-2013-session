@@ -4,8 +4,124 @@
 {% block more_css %}{% endblock %}
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> <div class="col-md-12 jumbotron"><h1>Authorities</h1></div>
+<div class="row"> 
+ <div class="col-md-12 jumbotron">
+  <h1>Authorities</h1>
+  <p class="lead">{{ current.description }}</p>
+ </div>
+</div>
+
+<div class="row">
+ <div class="col-md-4">
+  <div class="panel panel-default">
+   <div class="panel-heading">
+    <h3 class="panel-title">Authority/Agent/Person</h3>
+   </div>
+   <div class="panel-body">
+    <img src="/static/img/user_48x48.png">
+
+   </div>
+  </div>
+ </div>
+ <div class="col-md-4">
+  {# START Topic panel #}
+  <div class="panel panel-info">
+   <div class="panel-heading">
+    <h3 class="panel-title">Authority/Topic</h3>
+   </div>
+   <div class="panel-body">
+   <img src="/static/img/idea_48x48.png"> 
+
+   </div>
+  {# END Topic panel #}
+  </div>
+ </div>
+ <div class="col-md-4">
+  {# START Temporal Concept panel #}
+  <div class="panel panel-warning">
+   <div class="panel-heading">
+    <h3 class="panel-title">Authority/TemporalConcept</h3>
+   </div>
+   <div class="panel-body">
+    <img src="/static/img/calendar_48x48.png" class="pull-right">
+
+   </div>
+  {# END Temporal Concept panel #}
+  </div>
+ </div>
+</div>
+
+<div class="row">
+ <div class="col-md-4">
+  {# START Place panel #}
+  <div class="panel panel-success">
+   <div class="panel-heading">
+    <h3 class="panel-title">Authority/Place</h3>
+   </div>
+   <div class="panel-body">
+   <img src="/static/img/maps_48x48.png"> 
+
+   </div>
+  {# END Place panel #}
+  </div>
+ </div>
+
+ <div class="col-md-4">
+  {# START Organization panel #}
+  <div class="panel panel-default">
+   <div class="panel-heading">
+    <h3 class="panel-title">Authority/Organization</h3>
+   </div>
+   <div class="panel-body">
+    <img src="/static/img/bank_48x48.png"> 
+   </div>
+  {# END Organization panel #}
+  </div>
+ </div>
+
+ <div class="col-md-4">
+  {# START Quiz panel #}
+  <div class="panel panel-primary">
+   <div class="panel-heading">
+    <h3 class="panel-title">Badge Quiz</h3>
+   </div>
+   <div class="panel-body">
+   <form class="form" id="badge-quiz">
+    {# START Q1 #}
+    <div class="form-group">
+     <label>Select all correct statements from the list below</label>
+      <div data-bind="foreach: questionOneItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q1" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+    {# END Q1 #}
+    </div>
+   </form>
+   </div>
+  {# END Quiz panel #}
+  </div>
+ </div>
 </div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+ var authoritiesQuizViewModel = function() {
+  var self = this;
+  
+  self.questionOneItems = [
+   { id: 1, name: "BIBFRAME Authorities are similar in concept to MARC21 authorities", selected: false},
+   { id: 1, name: "Person, Organization, and Family are all subclasses of Agent class", selected: false},
+   { id: 1, name: "Titles are an example of a Topic Authority", selected: false},
+   { id: 1, name: "Authorities provide an important authenication function in BIBFRAME", selected: false}
+  ];
+
+ }
+ ko.applyBindings(new authoritiesQuizViewModel());
+</script>
+{% endblock %}

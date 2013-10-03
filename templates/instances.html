@@ -1,11 +1,427 @@
 {% extends 'layout.html' %}
 {% block title %}{% endblock %}
 
-{% block more_css %}{% endblock %}
+{% block more_css %}
+<style>
+
+
+</style>
+{% endblock %}
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> <div class="col-md-12 jumbotron"><h1>Instances</h1></div>
+<div class="row"> 
+
+  <div class="col-md-6" >
+  <div style="background-color: rgb(210,210,210)">
+   <h3 style="padding-left: .5em;padding-top: .5em">Properties</h3>
+   <table class='table table-striped table-condensed'>
+    <tr>
+     <th>Property</th>
+     <th>Label</th>
+    </tr>
+    <tr>
+     <td><strong>abbreviatedTitle</strong></td>
+     <td>Abbreviated title</td>
+    </tr>
+    <tr>
+     <td><strong>ansi</strong></td>
+     <td>American National Standard Institute Number</td>
+    </tr>
+    <tr>
+     <td><strong>aspectRatio</strong></td>
+     <td>Aspect ratio</td>
+    </tr>
+    <tr>
+     <td><strong>associatedAgent</strong></td>
+     <td>Associated Agent</td>
+    </tr>
+    <tr>
+     <td><strong>authorizedAccessPoint</strong></td>
+     <td>Authorized access point</td>
+    </tr>
+    <tr>
+     <td><strong>awardNote</strong></td>
+     <td>Award note</td>
+    </tr>
+    <tr>
+     <td><strong>carrierType</strong></td>
+     <td>Carrier type</td>
+    </tr>
+    <tr>
+     <td><strong>coden</strong></td>
+     <td>CODEN</td>
+    </tr>
+    <tr>
+     <td><strong>colorContent</strong></td>
+     <td>Color content</td>
+    </tr>
+    <tr>
+     <td><strong>contentAccessabilityNote</strong></td>
+     <td>Content accessibility note</td>
+    </tr>
+    <tr>
+     <td><strong>contents</strong></td>
+     <td>Contents</td>
+    </tr>
+    <tr>
+     <td><strong>creditsNote</strong></td>
+     <td>Credits note</td>
+    </tr>
+    <tr>
+     <td><strong>custodialHistory</strong></td>
+     <td>Custodial history</td>
+    </tr>
+    <tr>
+     <td><strong>derivedFromLccn</strong></td>
+     <td>Library of Congress Control Number</td>
+    </tr>
+    <tr>
+     <td><strong>description</strong></td>
+     <td>Description of resource</td>
+    </tr>
+    <tr>
+     <td><strong>dimensions</strong></td>
+     <td>Dimensions</td>
+    </tr>
+    <tr>
+     <td><strong>distribution</strong></td>
+     <td>Distribution</td>
+    </tr>
+    <tr>
+     <td><strong>doi</strong></td>
+     <td>Digital Object Identifier</td>
+    </tr>
+    <tr>
+     <td><strong>duration</strong></td>
+     <td>Duration</td>
+    </tr>
+    <tr>
+     <td><strong>ean</strong></td>
+     <td>International Article Identifier (EAN)</td>
+    </tr>
+    <tr>
+     <td><strong>edition</strong></td>
+     <td>Edition statement</td>
+    </tr>
+    <tr>
+     <td><strong>editionResponsibility</strong></td>
+     <td>Edition responsibility</td>
+    </tr>
+    <tr>
+     <td><strong>extent</strong></td>
+     <td>Extent</td>
+    </tr>
+    <tr>
+     <td><strong>fingerprint</strong></td>
+     <td>fingerprint identifier</td>
+    </tr>
+    <tr>
+     <td><strong>formatOfMusic</strong></td>
+     <td>Format of music</td>
+    </tr>
+    <tr>
+     <td><strong>frequency</strong></td>
+     <td>Frequency</td>
+    </tr>
+    <tr>
+     <td><strong>frequencyNote</strong></td>
+     <td>Frequency note</td>
+    </tr>
+    <tr>
+     <td><strong>hasAnnotation</strong></td>
+     <td>Has Annotation</td>
+    </tr>
+    <tr>
+     <td><strong>hdl</strong></td>
+     <td>handle for a resource</td>
+    </tr>
+    <tr>
+     <td><strong>identifier</strong></td>
+     <td>Identifier</td>
+    </tr>
+    <tr>
+     <td><strong>identifierLabel</strong></td>
+     <td>Identifier Label</td>
+    </tr>
+    <tr>
+     <td><strong>illustrativeContentNote</strong></td>
+     <td>Illustrative content note</td>
+    </tr>
+    <tr>
+     <td><strong>immediateAcquisition</strong></td>
+     <td>Immediate acquisition</td>
+    </tr>
+    <tr>
+     <td><strong>instanceOf</strong></td>
+     <td>Instance of</td>
+    </tr>
+    <tr>
+     <td><strong>intendedAudience</strong></td>
+     <td>Intended Audience</td>
+    </tr>
+    <tr>
+     <td><strong>isbn10</strong></td>
+     <td>International Standard Bibliographic Number</td>
+    </tr>
+    <tr>
+     <td><strong>isbn13</strong></td>
+     <td>International Standard Bibliographic Number</td>
+    </tr>
+    <tr>
+     <td><strong>ismn</strong></td>
+     <td>International Standard Music Number</td>
+    </tr>
+    <tr>
+     <td><strong>iso</strong></td>
+     <td>International Organization for Standardization standard number</td>
+    </tr>
+    <tr>
+     <td><strong>isrc</strong></td>
+     <td>International Standard Recording Code</td>
+    </tr>
+    <tr>
+     <td><strong>issue-number</strong></td>
+     <td>sound recording publisher issue number</td>
+    </tr>
+    <tr>
+     <td><strong>keyTitle</strong></td>
+     <td>Key title</td>
+    </tr>
+    <tr>
+     <td><strong>label</strong></td>
+     <td>Label for resource</td>
+    </tr>
+    <tr>
+     <td><strong>language</strong></td>
+     <td>Language</td>
+    </tr>
+    <tr>
+     <td><strong>lc-overseas-acq</strong></td>
+     <td>Library of Congress Overseas Acquisition Program number</td>
+    </tr>
+    <tr>
+     <td><strong>legal-deposit</strong></td>
+     <td>copyright or legal deposit number</td>
+    </tr>
+    <tr>
+     <td><strong>local</strong></td>
+     <td>local identifier</td>
+    </tr>
+    <tr>
+     <td><strong>manufacture</strong></td>
+     <td>Manufacture</td>
+    </tr>
+    <tr>
+     <td><strong>matrix-number</strong></td>
+     <td>sound recording publisher matrix master number</td>
+    </tr>
+    <tr>
+     <td><strong>mediaType</strong></td>
+     <td>Media type</td>
+    </tr>
+    <tr>
+     <td><strong>mediumOfMusic</strong></td>
+     <td>Medium of music</td>
+    </tr>
+    <tr>
+     <td><strong>modeOfIssuance</strong></td>
+     <td>Mode of issuance</td>
+    </tr>
+    <tr>
+     <td><strong>music-plate</strong></td>
+     <td>music publication number assigned by publisher</td>
+    </tr>
+    <tr>
+     <td><strong>music-publisher</strong></td>
+     <td>other publisher number for music</td>
+    </tr>
+    <tr>
+     <td><strong>nban</strong></td>
+     <td>National bibliography agency control number</td>
+    </tr>
+    <tr>
+     <td><strong>nbn</strong></td>
+     <td>National Bibliography Number</td>
+    </tr>
+    <tr>
+     <td><strong>notation</strong></td>
+     <td>missingLabel</td>
+    </tr>
+    <tr>
+     <td><strong>note</strong></td>
+     <td>Note</td>
+    </tr>
+    <tr>
+     <td><strong>organizationSystem</strong></td>
+     <td>Organization System</td>
+    </tr>
+    <tr>
+     <td><strong>performerNote</strong></td>
+     <td>Performer note</td>
+    </tr>
+    <tr>
+     <td><strong>philatelicIssue</strong></td>
+     <td>Philatelic issue</td>
+    </tr>
+    <tr>
+     <td><strong>postal-registration</strong></td>
+     <td>postal registration number</td>
+    </tr>
+    <tr>
+     <td><strong>preferredCitation</strong></td>
+     <td>Preferred citation</td>
+    </tr>
+    <tr>
+     <td><strong>primaryLanguage</strong></td>
+     <td>Language</td>
+    </tr>
+    <tr>
+     <td><strong>production</strong></td>
+     <td>Production</td>
+    </tr>
+    <tr>
+     <td><strong>provider</strong></td>
+     <td>Provider</td>
+    </tr>
+    <tr>
+     <td><strong>publication</strong></td>
+     <td>Publication</td>
+    </tr>
+    <tr>
+     <td><strong>publisher-number</strong></td>
+     <td>other publisher assigned number</td>
+    </tr>
+    <tr>
+     <td><strong>relatedInstance</strong></td>
+     <td>Related Instance</td>
+    </tr>
+    <tr>
+     <td><strong>relatedResource</strong></td>
+     <td>Related resource</td>
+    </tr>
+    <tr>
+     <td><strong>report-number</strong></td>
+     <td>technical report number</td>
+    </tr>
+    <tr>
+     <td><strong>responsibilityStatement</strong></td>
+     <td>Responsibility statement</td>
+    </tr>
+    <tr>
+     <td><strong>serialFirstIssue</strong></td>
+     <td>Serial first issue</td>
+    </tr>
+    <tr>
+     <td><strong>serialLastIssue</strong></td>
+     <td>Serial last issue</td>
+    </tr>
+    <tr>
+     <td><strong>sici</strong></td>
+     <td>Serial Item and Contribution Identifier</td>
+    </tr>
+    <tr>
+     <td><strong>soundContent</strong></td>
+     <td>Sound content</td>
+    </tr>
+    <tr>
+     <td><strong>stock-number</strong></td>
+     <td>stock number for acquisition</td>
+    </tr>
+    <tr>
+     <td><strong>strn</strong></td>
+     <td>Standard Technical Report Number</td>
+    </tr>
+    <tr>
+     <td><strong>study-number</strong></td>
+     <td>original study number assigned by the producer of a computer file</td>
+    </tr>
+    <tr>
+     <td><strong>summary</strong></td>
+     <td>Summary</td>
+    </tr>
+    <tr>
+     <td><strong>supplementaryContentNote</strong></td>
+     <td>Supplementary content note</td>
+    </tr>
+    <tr>
+     <td><strong>system-number</strong></td>
+     <td>system control number</td>
+    </tr>
+    <tr>
+     <td><strong>title</strong></td>
+     <td>Title</td>
+    </tr>
+    <tr>
+     <td><strong>titleVariation</strong></td>
+     <td>Title variation</td>
+    </tr>
+    <tr>
+     <td><strong>upc</strong></td>
+     <td>Universal Product Code</td>
+    </tr>
+    <tr>
+     <td><strong>uri</strong></td>
+     <td>Uniform Resource Identifier</td>
+    </tr>
+    <tr>
+     <td><strong>urn</strong></td>
+     <td>Uniform Resource Number</td>
+    </tr>
+    <tr>
+     <td><strong>videorecording-identifier</strong></td>
+     <td>publisher assigned videorecording number</td>
+    </tr>
+   </table>
+  </div>
+  </div>
+  <div class="col-md-6">
+   <div class="jumbotron">
+    <h1>Instance</h1>
+    <p class="lead">{{ current.description }}</p>
+   </div>
+   {# START Badge Quiz #}
+   <div class="panel panel-primary">
+     <div class="panel-heading">
+      <h3 class="panel-title">Badge Quiz</h3>
+     </div>
+     <div class="panel-body">
+      {# START Q1 #}
+      <div class="form-group">
+         <label></label> 
+      {# END Q1 #}
+      </div>
+      {# START Q2 #}
+      <div class="form-group">
+        <label>True or False: A website cannot be a BIBFRAME Instance</label>
+        <div data-bind="foreach: questionTwoItems">
+         <label class="radio-inline" >
+          <input type="radio" name="q2" data-bind="attr: { value:id },
+                                                   checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </div>
+     </label>
+    </div>        
+      {# END Q2 #}
+      </div>
+     </div>
+   {# END Badge Quiz #}
+   </div>
+  </div>
 </div>
+
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+ var InstanceQuizViewModel = function() {
+  var self=this;
+  
+  self.questionTwoItems = [
+   {id: 1, name: "True", selected: false},
+   {id: 2, name: "False", selected: false}
+  ]
+ }
+
+ ko.applyBindings(new InstanceQuizViewModel());
+</script>
+{% endblock %}

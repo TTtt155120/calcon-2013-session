@@ -4,7 +4,11 @@
 {% block more_css %}{% endblock %}
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> <div class="col-md-12 jumbotron"><h1>AACRL2 is to RDA...</h1></div>
+<div class="row"> 
+  <div class="col-md-12 jumbotron">
+   <h1>{{ current.label }}</h1>
+
+  </div>
 </div>
 {% endblock %}
 

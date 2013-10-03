@@ -75,14 +75,19 @@ the Library of Congress, OCLC, and others including Colorado College.""" },
                        'description': """Creative Work is the base or root
 class with specific sub-classes for different types of works. BIBFRAME uses a
 class hierarchy with child classes inheriting properties for its parent classes"""},
-                      {'name': 'annotations',
-                       'label': 'Annotations'},
-                      {'name': 'authorities',
-                       'label': 'Authorities'},
                       {'name': 'instances',
-                       'label': 'Instances'}],
-          'rda': [{'name': 'aacrl2-is-to-rda',
-                   'label': 'AACRL2 is to RDA...'},
+                       'label': 'Instances',
+                       'description': """An Instance is a single item be it a physical
+resource or digital object, and includes metadata specific to the object"""},
+                      {'name': 'authorities',
+                       'label': 'Authorities',
+                       'description': """A resource that reflects an authoritive
+relationship between the resource and a Work or Instance"""},
+                      {'name': 'annotations',
+                       'label': 'Annotations'}                      
+                      ],
+          'rda': [{'name': 'aacr2-is-to-rda',
+                   'label': 'AACR2 is to RDA...'},
                   {'name': 'marc21-is-to-BIBFRAME',
                    'label': '...as MARC21 is to BIBFRAME'},
                   {'name': 'rda-in-bibframe',

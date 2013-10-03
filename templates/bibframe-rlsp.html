@@ -1,6 +1,103 @@
 {% extends 'layout.html' %}
 
+{% block more_css %}
+<style>
+ #bf-rlsp-animation {
+  background-color: rgb(255, 255, 255);
+
+ }
+
+</style>
+{% endblock %}
+
 {% block body %}
 {% include 'slide-nav.html' %}
 
+<div class="row">
+ <div class="col-md-11 jumbotron">
+  <h1>{{ current.label }}</h1>
+  <p class="lead">{{ current.description }}</p>
+
+ </div>
+</div>
+
+
+<div class="row">
+ <div class="col-md-12">
+  <div class="btn-group">
+   <div class="btn-group">
+     <button type="button" 
+             class="btn btn-default dropdown-toggle"
+             data-toggle="dropdown">
+      Display <span class="caret"></span>
+     </button> 
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#" data-bind="click: displaySolo">Solo mode</a></li>
+        <li><a href="#" data-bind="click: displayCooperative">Cooperative Datastores</a></li>
+        <li><a href="#" data-bind="click: displayFuture">Future Plans</a></li>
+        <li class="divider"></li>
+        <li><a href="#" data-bind="click: displayAll">Run all</a></li>
+      </ul>
+     </button>
+   </div> 
+  </div>
+  <p></p>
+  <div id="bf-rlsp-animation"></div>
+ </div>
+
+</div>
+{% endblock %}
+
+{% block more_js %}
+<script src="/static/js/svg.min.js"></script>
+<script>
+ var svgDraw = SVG('bf-rlsp-animation');
+
+ var rlspCooperative = function() {
+  var title = svgDraw.text("Developing a Cooperative Library Services Platfrom").font({ size: 24 }); 
+  title.move(10,20);
+  title.animate().move(100, 20);
+
+ }
+
+ var rlspFuture = function() {
+  var title = svgDraw.text("The Future of the Redis Library Services Platfrom").font({ size: 24 }); 
+  title.move(10,20);
+  title.animate().move(100, 20);
+
+ }
+
+ var rlspSolo = function() {
+    var title = svgDraw.text("Running RLSP in Solo Mode").font({ size: 24 }); 
+  title.move(10, 20);
+  title.animate().move(200, 20);
+ }
+
+ var BIBFRAMEandRLSPViewModal = function() { 
+  var self = this;
+
+  self.displayAll = function() { 
+    svgDraw.clear();
+    rlspSolo();
+    rlspCooperative();
+    rlspFuture();
+  }
+
+  self.displayCooperative = function() {
+    svgDraw.clear();
+    rlspCooperative();
+  }
+
+  self.displayFuture = function() {
+    svgDraw.clear();
+    rlspFuture();
+  }
+
+  self.displaySolo = function() {
+    svgDraw.clear();
+    rlspSolo();
+  }
+ }
+ ko.applyBindings(new BIBFRAMEandRLSPViewModal());
+</script>
 {% endblock %}
