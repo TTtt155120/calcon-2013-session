@@ -1,4 +1,5 @@
 *.swp
 *.pyc
+*.sqlite
 answers.json
 google_auth.json

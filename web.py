@@ -26,8 +26,9 @@ __copyright__ = '(c) 2013 by Jeremy Nelson'
 import argparse
 import json
 import os
+import sqlite3
 
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, g, redirect, render_template, url_for
 from flask import jsonify, request, session
 from flask.ext.login import LoginManager, login_user, login_required
 from flask.ext.login import make_secure_token, UserMixin
@@ -36,6 +37,15 @@ from flask_oauth import OAuth
 from flup.server.fcgi import WSGIServer
 
 GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
+
+DATABASE = 'calcon2013_badges.sqlite'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = connect_to_database()
+    return db
+    
 
 oauth = OAuth()
 
@@ -94,6 +104,16 @@ class User(UserMixin):
                                  key='deterministic')
         
 
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, '_database, None)
+    if db is not None:
+        db.close()
+    
 @login_manager.user_loader
 def load_user(userid):
     return User.get(userid)
