@@ -1,0 +1,56 @@
+{
+  "bibframe": [
+    {
+      "description": "The BIBFRAME specification is\nrelative new having started with an announcement by the Library of\nCongress in 2011. Since then, a lot of work has gone into developing a\nmore robust vocabulary along with experimental support implementation by\nthe Library of Congress, OCLC, and others including Colorado College.", 
+      "label": "History of BIBFRAME", 
+      "name": "history"
+    }, 
+    {
+      "description": "An overview of the major classes and relationships in the BIBFRAME vocabulary",
+      "label": "BIBFRAME Vocabulary Overview", 
+      "name": "vocab-overview"
+    }, 
+    {
+      "description": "Creative Work is the base or root\nclass with specific sub-classes for different types of works. BIBFRAME uses a\nclass hierarchy with child classes inheriting properties for its parent classes", 
+      "label": "Creative Works", 
+      "name": "creative-works"
+    }, 
+    {
+      "description": "An Instance is a single item be it a physical\nresource or digital object, and includes metadata specific to the object", 
+      "label": "Instances", 
+      "name": "instances"
+    }, 
+    {
+      "description": "A resource that reflects an authoritative\nrelationship between the resource and a Work or Instance", 
+      "label": "Authorities", 
+      "name": "authorities"
+    }, 
+    {
+      "description": "An Annotation is additional information about a BIBFRAME Creative Work, Instance, Authority, or another Annotation", 
+      "label": "Annotations", 
+      "name": "annotations"
+    }
+  ], 
+  "rda": [
+    {
+      "description": "AACR2 has been the standard for descriptive cataloging rules,\nRDA is the new standard set to replace AACR2.", 
+      "label": "AACR2 is to RDA...", 
+      "name": "aacr2-is-to-rda"
+    }, 
+    {
+      "description": "Just as RDA is replacing AACR2, a major goal of the Library of Congress's BIBFRAME initiative is replacing MARC21",
+      "label": "...as MARC21 is to BIBFRAME", 
+      "name": "marc21-is-to-BIBFRAME"
+    }, 
+    {
+      "description": "While BIBFRAME does not currently have any\nformal mapping with RDA, some information mapping and experimentation has\noccurred, particularly in the Redis Library Services Platform", 
+      "label": "RDA in BIBFRAME", 
+      "name": "rda-in-bibframe"
+    }, 
+    {
+      "description": "The Redis Library Services Platform is an open-source project that uses BIBFRAME to represent bibliographic entities with BIBFRAME, MARC21, RDA and Schema.org properties",
+      "label": "BIBFRAME and the Redis Library Services Platform", 
+      "name": "bibframe-rlsp"
+    }
+  ]
+}

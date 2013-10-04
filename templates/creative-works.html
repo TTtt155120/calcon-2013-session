@@ -148,7 +148,7 @@
 
 {% block more_js %}
 {# <script src="/static/js/three.min.js"></script> #}
-<script src="/static/js/svg.min.js"></script>
+<script src="{{ url_for('static', filename='js/svg.min.js') }}"></script>
 <script>
 
 var CreativeWorkViewModel = function() {
@@ -197,7 +197,7 @@ var CreativeWorkViewModel = function() {
   // Animation Steps
   self.showArticle = function() {
     self.article = self.svgDraw.group();
-    var articleImg = self.svgDraw.image('/static/img/document_48x48.png');
+    var articleImg = self.svgDraw.image("{{ url_for('static', filename='img/document_48x48.png') }}");
     var articleLabel = self.svgDraw.text("Article").font({ 'font-weight': 'bold' });
     articleLabel.y(50);
     self.article.add(articleImg);
@@ -304,7 +304,7 @@ var CreativeWorkViewModel = function() {
    self.langMaterial.hide();
    // Book Group
    self.book = self.svgDraw.group();
-   var bookImage = self.svgDraw.image("/static/img/publishing_48x48.png");
+   var bookImage = self.svgDraw.image("{{ url_for('static', filename='img/publishing_48x48.png') }}");
    var bookLabel = self.svgDraw.text("Book");
    bookLabel.y(40).font({ 'font-weight': 'bold' });
    self.book.add(bookImage);
@@ -342,7 +342,7 @@ var CreativeWorkViewModel = function() {
     self.creativeWorkText.remove()
     self.explainStep("Manuscript is a subclass of Creative Work");
     self.manuscript = self.svgDraw.group();
-    var manuscriptImg = self.svgDraw.image("/static/img/creative_writing_48x48.png");
+    var manuscriptImg = self.svgDraw.image("{{ url_for('static', filename='img/creative_writing_48x48.png') }}");
     var manuscriptText = self.svgDraw.text("Manuscript");
     manuscriptText.y(40).font({ 'font-weight': 'bold' });
     self.manuscript.add(manuscriptImg);
@@ -377,7 +377,7 @@ var CreativeWorkViewModel = function() {
   self.showMovingImage = function() {
     self.explainStep("Moving Image is another subclass of Creative Work");
     self.movingImage = self.svgDraw.group();
-    var movingImageImg = self.svgDraw.image("/static/img/cinema_48x48.png");
+    var movingImageImg = self.svgDraw.image("{{ url_for('static', filename='img/cinema_48x48.png') }}");
     var movingImageText = self.svgDraw.text("Moving Image");
     movingImageText.y(50).font({ 'font-weight': 'bold' });
     self.movingImage.add(movingImageImg);

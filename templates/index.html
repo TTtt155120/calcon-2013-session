@@ -2,12 +2,12 @@
 
 {% block body %}
 <div class="jumbotron" >
-  <img src="/static/img/calcon-2013-logo.png" style="float: left">
+  <img src="{{ url_for('static', filename='img/calcon-2013-logo.png') }}" style="float: left">
   <h2 class="text-muted">CALCON 2013 Session</h2>
   <h1>BIBFRAME &amp; RDA</h1>
    <p class="lead">
     The Library of Congress Bibliographic Framework Initiative released a new vocabulary and framework for
-    replacing the venerated MARC21 standard with a new standard they call BIBFRAME. </p>
+    replacing the venerated MARC21 standard with a new vocabulary called BIBFRAME. </p>
     <p><a class="btn btn-lg btn-success" 
           href="/calcon-2013-session/bibframe/{{ slides.bibframe.0.name }}">
        What is BIBFRAME? <span class="glyphicon glyphicon-play-circle"></span>
@@ -23,7 +23,7 @@
     <p><a class="btn btn-lg btn-info" 
         href="/calcon-2013-session/badge.html">
          <img class="img-thumbnail"
-              src="/static/img/bibframe-rda-badge.png" 
+              src="{{ url_for('static', filename='img/bibframe-rda-badge.png') }}" 
               style="width: 48px; height: 48px" > Earn your Open Badge!</a></p>
 </div>
 

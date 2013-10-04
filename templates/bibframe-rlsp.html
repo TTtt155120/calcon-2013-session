@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block more_js %}
-<script src="/static/js/svg.min.js"></script>
+<script src="{{ url_for('static', filename='js/svg.min.js') }}"></script>
 <script>
  var svgDraw = SVG('bf-rlsp-animation');
 

@@ -25,6 +25,7 @@ __copyright__ = '(c) 2013 by Jeremy Nelson'
 
 import argparse
 import json
+import os
 
 from flask import Flask, redirect, render_template, url_for
 from flask import jsonify, request, session
@@ -54,49 +55,24 @@ google = oauth.remote_app(
     
                           
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='/calcon-2013-session/static')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
 
-SLIDES = {'bibframe':[{'name': 'history',
-                       'label': 'History of BIBFRAME',
-                       'description': """The BIBFRAME specification is
-relative new having started with an announcement by the Library of
-Congress in 2011. Since then, a lot of work has gone into developing a
-more robust vocabulary along with experimental support implementation by
-the Library of Congress, OCLC, and others including Colorado College.""" },
-                      {'name': 'vocab-overview',
-                       'label': 'BIBFRAME Vocabulary Overview'},
-                      {'name': 'creative-works',
-                       'label': 'Creative Works',
-                       'description': """Creative Work is the base or root
-class with specific sub-classes for different types of works. BIBFRAME uses a
-class hierarchy with child classes inheriting properties for its parent classes"""},
-                      {'name': 'instances',
-                       'label': 'Instances',
-                       'description': """An Instance is a single item be it a physical
-resource or digital object, and includes metadata specific to the object"""},
-                      {'name': 'authorities',
-                       'label': 'Authorities',
-                       'description': """A resource that reflects an authoritive
-relationship between the resource and a Work or Instance"""},
-                      {'name': 'annotations',
-                       'label': 'Annotations'}                      
-                      ],
-          'rda': [{'name': 'aacr2-is-to-rda',
-                   'label': 'AACR2 is to RDA...'},
-                  {'name': 'marc21-is-to-BIBFRAME',
-                   'label': '...as MARC21 is to BIBFRAME'},
-                  {'name': 'rda-in-bibframe',
-                   'label': 'RDA in BIBFRAME',
-                   'description': """While BIBFRAME does not currently have any
-formal mapping with RDA, some information mapping and experimentation has
-occurred, particularly in the Redis Library Services Platform"""},
-                  {'name': 'bibframe-rlsp',
-                   'label': 'BIBFRAME and the Redis Library Services Platform'}]}
+RESOURCES = []
+for name in ['bibliographic-framework-as-a-web-of-data.json']:
+    RESOURCES.append(
+        json.load(
+            open(os.path.join('static',
+                              'js',
+                              name),
+                 'rb')))
+
+SLIDES = json.load(open('slides.json'))
 
 URL_PREFIX = '/calcon-2013-session'
 
@@ -178,6 +154,7 @@ def login():
 def resources():
     return render_template("resources.html",
                            category='addendum',
+                           resources=RESOURCES,
                            slides=SLIDES)
     
 @app.route('{0}/open-badge/'.format(URL_PREFIX))

@@ -12,11 +12,11 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/static/css/jumbotron-narrow.css" rel="stylesheet">
-    <link href="/static/css/default.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/jumbotron-narrow.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/default.css') }}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -56,6 +56,7 @@
         <h4 class="modal-title">About this presentation</h4>
       </div>
       <div class="modal-body">
+        <p></p>
         <p>This presentation was created using the following open source technologies:</p>
 
         <p>The source code for this presentation is licensed under the GNU 2 and is available on Github
@@ -103,9 +104,9 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/js/jquery.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/knockout.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/knockout.js') }}"></script>
 
     {% block more_js %}{% endblock %}
   </body>

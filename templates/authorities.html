@@ -5,9 +5,19 @@
 {% block body %}
 {% include 'slide-nav.html' %}
 <div class="row"> 
- <div class="col-md-12 jumbotron">
+ <div class="col-md-8 jumbotron">
   <h1>Authorities</h1>
   <p class="lead">{{ current.description }}</p>
+ </div>
+ <div class="col-md-4">
+  <blockquote class="bibframe-slide">
+  Authorities [in BIBFRAME] are not designed to compete or replace existing 
+  authority efforts but rather provide a common, light weight abstraction layer
+  over various different Web based authority efforts to make them even more 
+  effective. 
+  <small>From page 11 of
+   <cite title=" Bibliographic Framework as a Web of Data: Linked Data Model and Supporting Services"><a href="/calcon-2013-session/resources.html#bibliographic-framework-as-a-web-of-data">Bibliographic Framework as a Web of Data: Linked Data Model and Supporting Services</a></cite></small>
+  </blockquote>
  </div>
 </div>
 
@@ -18,7 +28,7 @@
     <h3 class="panel-title">Authority/Agent/Person</h3>
    </div>
    <div class="panel-body">
-    <img src="/static/img/user_48x48.png">
+    <img src="{{ url_for('static', filename='img/user_48x48.png') }}">
 
    </div>
   </div>
@@ -30,7 +40,7 @@
     <h3 class="panel-title">Authority/Topic</h3>
    </div>
    <div class="panel-body">
-   <img src="/static/img/idea_48x48.png"> 
+   <img src="{{ url_for('static', filename='img/idea_48x48.png') }}"> 
 
    </div>
   {# END Topic panel #}
@@ -43,7 +53,7 @@
     <h3 class="panel-title">Authority/TemporalConcept</h3>
    </div>
    <div class="panel-body">
-    <img src="/static/img/calendar_48x48.png" class="pull-right">
+    <img src="{{ url_for('static', filename='img/calendar_48x48.png') }}" class="pull-right">
 
    </div>
   {# END Temporal Concept panel #}
@@ -59,7 +69,7 @@
     <h3 class="panel-title">Authority/Place</h3>
    </div>
    <div class="panel-body">
-   <img src="/static/img/maps_48x48.png"> 
+   <img src="{{ url_for('static', filename='img/maps_48x48.png') }}"> 
 
    </div>
   {# END Place panel #}
@@ -73,7 +83,7 @@
     <h3 class="panel-title">Authority/Organization</h3>
    </div>
    <div class="panel-body">
-    <img src="/static/img/bank_48x48.png"> 
+    <img src="{{ url_for('static', filename='img/bank_48x48.png') }}"> 
    </div>
   {# END Organization panel #}
   </div>
