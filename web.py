@@ -32,6 +32,7 @@ from flask import Flask, g, redirect, render_template, url_for
 from flask import jsonify, request, session
 from flask.ext.login import LoginManager, login_user, login_required
 from flask.ext.login import make_secure_token, UserMixin
+from flaskext.bcrypt import Bcrypt
 from flask_oauth import OAuth
 from contextlib import closing
 
@@ -59,7 +60,7 @@ def init_db():
         for name in SLIDES:
             slides = SLIDES.get(name)
             for slide in slides:
-                db.execute("INSERT INTO slides (name) VALUES ('{0}')".format(
+                db.execute("INSERT INTO slides (name) VALUES (?)".format(
                     slide.get('name')))
                 db.commit()
 
@@ -85,6 +86,7 @@ app = Flask(__name__,
             static_url_path='/calcon-2013-session/static')
 login_manager = LoginManager()
 login_manager.init_app(app)
+bcrypt = Bcrypt(app)
 
 ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
@@ -153,20 +155,38 @@ def glossary():
            methods = ['POST', 'GET'])
 def grade():
     score = 0
+    cursor = get_db().cursor()
     # Need to keep 
     if request.method == 'POST':
+        participant_key = session.get('key', None)
         slide = request.form['slide']
         if slide in ANSWERS:
+            q1, q2, q3 = 0, 0, 0
             q1_answer = request.form.getlist('q1')
             if q1_answer == ANSWERS[slide].get('q1'):
-                score += 1
-                
+                q1 = 1
             q2_answer = request.form.getlist('q2')
             if q2_answer == ANSWERS[slide].get('q2'):
-                score += 1
+                q2 = 1
             q3_answer = request.form.getlist('q3')
             if q3_answer == ANSWERS[slide].get('q3'):
-                score += 1
+                q3 = 1
+            if participant_key:
+                slide_result = cursor.execute(
+                    "SELECT id FROM slides WHERE name=?",
+                    slide)
+                if len(slide_result) == 1:
+                    slide_id = slide_result[0]
+                # Insert quiz results to db
+                cursor.execute("""INSERT INTO slide_results
+ (slide_id, participant_id, q1, q2, q3) VALUES (?, ?, ?, ?, ?)""",
+                           slide_id,
+                           participant_id,
+                           q1,
+                           q2,
+                           q3)
+                cursor.commit()
+            score = sum(q1, q2, q3)
         if slide not in session:
             session[slide] = score
             return jsonify({'score': score })
@@ -183,6 +203,13 @@ def grade():
 def login():
 ##    return google.authorize(callback='http://tuttdemo.coloradocollege.edu/')
     if request.method == 'POST':
+        cur = get_db().cursor()
+        email = request.POST.get('email')
+        raw_pw = request.POST.get('pw')
+        email_query = cur.execute("SELECT * FROM participants WHERE email=?",
+                                  email)
+        if len(email_query) == 1:
+            pass
         
         return redirect(request.args.get("next") or url_for("home"))
     return render_template("login.html",

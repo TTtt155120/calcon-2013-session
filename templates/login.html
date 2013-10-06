@@ -1,14 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-{% include 'slide-nav.html' %}
-
 <div class="row">
  <div class="col-md-8 well well-sm">
   <h1>Badge Login</h1>
-  <form>
+  <form class="form" method="POST" action="/calcon-2013-session/login">
     <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" class="form-control">
+      <label>Password</label>
+      <input type="password" name="pw" class="form-control">
 
+      <button type="submit" class="btn btn-default">Go</button>
     </div>
   </form>
  </div>
