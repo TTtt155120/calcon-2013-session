@@ -7,6 +7,9 @@
 
  }
 
+#bf-rlsp-animation { width: 600px;
+                     height: 600px;
+                     background-color: rgb( 255, 255, 255); }
 </style>
 {% endblock %}
 
@@ -61,16 +64,38 @@
  }
 
  var rlspFuture = function() {
-  var title = svgDraw.text("The Future of the Redis Library Services Platfrom").font({ size: 24 }); 
+  var title = svgDraw.text("The Future of the Redis Library Services Platform").font({ size: 24 }); 
   title.move(10,20);
   title.animate().move(100, 20);
 
  }
 
  var rlspSolo = function() {
-    var title = svgDraw.text("Running RLSP in Solo Mode").font({ size: 24 }); 
+  var title = svgDraw.text("Running RLSP in Solo Mode").font({ size: 24 }); 
   title.move(10, 20);
-  title.animate().move(200, 20);
+  title.animate().move(130, 20);
+  var docket = svgDraw.group();
+  var docketImg = svgDraw.image("{{ url_for('static', filename='img/docker-top-logo.png') }}");
+  docketImg.click(function() {
+   alert("Display Docket");
+  });
+  docket.add(docketImg);
+  docket.animate().move(10, 50).after(
+   function() {
+     var docket_desc_grp = svgDraw.group();
+     var docket_title = svgDraw.text("As a Docker Container").font({ size: 20 }).fill({color:' rgb(0,0,220)'});
+     docket_desc_grp.add(docket_title);
+     var docket_desc = svgDraw.text(function(add) {
+      add.tspan("Download the Redis Library Services Platform Docker container").newLine(),
+      add.tspan("Run the RLSP").newLine()
+     }); 
+     docket_desc.y(30);
+     docket_desc_grp.add(docket_desc);
+     docket_desc_grp.hide();
+     docket_desc_grp.move(110, 60);
+     docket_desc_grp.show();
+  });
+  
  }
 
  var BIBFRAMEandRLSPViewModal = function() { 

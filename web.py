@@ -33,12 +33,17 @@ from flask import jsonify, request, session
 from flask.ext.login import LoginManager, login_user, login_required
 from flask.ext.login import make_secure_token, UserMixin
 from flask_oauth import OAuth
+from contextlib import closing
 
 from flup.server.fcgi import WSGIServer
 
-GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
+## GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
+GOOGLE_SETTINGS = None
 
 DATABASE = 'calcon2013_badges.sqlite'
+
+def connect_db():
+    return sqlite3.connect(DATABASE)
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -46,21 +51,32 @@ def get_db():
         db = g._database = connect_to_database()
     return db
     
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+        for name in SLIDES:
+            slides = SLIDES.get(name)
+            for slide in slides:
+                db.execute("INSERT INTO slides (name) VALUES ('{0}')".format(
+                    slide.get('name')))
+                db.commit()
 
 oauth = OAuth()
 
-google = oauth.remote_app(
-    'google',
-    base_url='https://www.google.com/accounts',
-    authorize_url=GOOGLE_SETTINGS['web'].get('auth_uri'),
-    request_token_url=None,
-    request_token_params={'scope': 'https://www.googleapis.com/auth/userinfo.email',
-                          'response_type': 'code'},
-    access_token_url=GOOGLE_SETTINGS['web'].get('token_uri'),
-    access_token_method='POST',
-    access_token_params={'grant-type': 'authorization_code'},
-    consumer_key=GOOGLE_SETTINGS['web'].get('client_id'),
-    consumer_secret=GOOGLE_SETTINGS['web'].get('client_secret'))
+##google = oauth.remote_app(
+##    'google',
+##    base_url='https://www.google.com/accounts',
+##    authorize_url=GOOGLE_SETTINGS['web'].get('auth_uri'),
+##    request_token_url=None,
+##    request_token_params={'scope': 'https://www.googleapis.com/auth/userinfo.email',
+##                          'response_type': 'code'},
+##    access_token_url=GOOGLE_SETTINGS['web'].get('token_uri'),
+##    access_token_method='POST',
+##    access_token_params={'grant-type': 'authorization_code'},
+##    consumer_key=GOOGLE_SETTINGS['web'].get('client_id'),
+##    consumer_secret=GOOGLE_SETTINGS['web'].get('client_secret'))
     
     
                           
@@ -86,6 +102,8 @@ SLIDES = json.load(open('slides.json'))
 
 URL_PREFIX = '/calcon-2013-session'
 
+
+
 class User(UserMixin):
 
     def __init__(self, email, id, active=True):
@@ -110,7 +128,7 @@ def before_request():
 
 @app.teardown_request
 def teardown_request(exception):
-    db = getattr(g, '_database, None)
+    db = getattr(g, '_database', None)
     if db is not None:
         db.close()
     
@@ -135,12 +153,14 @@ def glossary():
            methods = ['POST', 'GET'])
 def grade():
     score = 0
+    # Need to keep 
     if request.method == 'POST':
         slide = request.form['slide']
         if slide in ANSWERS:
             q1_answer = request.form.getlist('q1')
             if q1_answer == ANSWERS[slide].get('q1'):
                 score += 1
+                
             q2_answer = request.form.getlist('q2')
             if q2_answer == ANSWERS[slide].get('q2'):
                 score += 1
@@ -161,13 +181,13 @@ def grade():
 @app.route('{0}/login'.format(URL_PREFIX),
        methods=['GET', 'POST'])
 def login():
-    return google.authorize(callback='http://tuttdemo.coloradocollege.edu/')
-##    if request.method == 'POST':
-##        
-##        return redirect(request.args.get("next") or url_for("home"))
-##    return render_template("login.html",
-##                           category='home',
-##                           slides=SLIDES)
+##    return google.authorize(callback='http://tuttdemo.coloradocollege.edu/')
+    if request.method == 'POST':
+        
+        return redirect(request.args.get("next") or url_for("home"))
+    return render_template("login.html",
+                           category='home',
+                           slides=SLIDES)
     
                            
 @app.route('{0}/resources.html'.format(URL_PREFIX))

@@ -42,11 +42,31 @@
            <label for="email_address">Email address*</label>
            <input type="email" class="form-control" id="email_address"></input>
            <button type="submit" class="btn btn-default">Sign-up</button>
+           <p>
+            <small>
+             * Your email address will only be used to issue your badge for this
+               session and nothing else.
+            </small>
+           </p>
          </div>
         </form>
        </div>
-       <h2><li>Fulfill Badge Critera</li></h2>
-
+       <h2>
+        <li>Fulfill Badge Critera</li>
+       </h2>
+       <div class="panel">
+         <p>
+          For each slide in this presentation, take the badge quiz and get 2/3 questions
+          right.  
+         </p>
+         <div class="panel-body">
+           <ul>
+            {% for slide in slides.bibframe %}
+            <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}#quiz">{{ slide.label }} Badge Quiz</a></li>
+            {% endfor %}
+           </ul>
+         </div>
+       </div>
      </ol>
    </div>
   </div>
