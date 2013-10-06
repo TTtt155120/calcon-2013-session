@@ -80,7 +80,7 @@
    alert("Display Docket");
   });
   docket.add(docketImg);
-  docket.animate().move(10, 50).after(
+  docket.animate().move(10, 250).after(
    function() {
      var docket_desc_grp = svgDraw.group();
      var docket_title = svgDraw.text("As a Docker Container").font({ size: 20 }).fill({color:' rgb(0,0,220)'});
@@ -92,7 +92,7 @@
      docket_desc.y(30);
      docket_desc_grp.add(docket_desc);
      docket_desc_grp.hide();
-     docket_desc_grp.move(110, 60);
+     docket_desc_grp.move(110, 245);
      docket_desc_grp.show();
   });
   
