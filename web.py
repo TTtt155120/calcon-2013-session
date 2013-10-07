@@ -24,6 +24,7 @@ __license__ = 'GPL v2'
 __copyright__ = '(c) 2013 by Jeremy Nelson'
 
 import argparse
+import hashlib
 import json
 import os
 import sqlite3
@@ -31,15 +32,16 @@ import sqlite3
 from flask import Flask, g, redirect, render_template, url_for
 from flask import jsonify, request, session
 from flask.ext.login import LoginManager, login_user, login_required
-from flask.ext.login import make_secure_token, UserMixin
-from flaskext.bcrypt import Bcrypt
+from flask.ext.login import make_secure_token, UserMixin, current_user
+##from flaskext.bcrypt import Bcrypt
+
 from flask_oauth import OAuth
 from contextlib import closing
 
 from flup.server.fcgi import WSGIServer
 
-## GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
-GOOGLE_SETTINGS = None
+GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
+##GOOGLE_SETTINGS = None
 
 DATABASE = 'calcon2013_badges.sqlite'
 
@@ -49,7 +51,7 @@ def connect_db():
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = connect_to_database()
+        db = g._database = connect_db()
     return db
     
 def init_db():
@@ -57,11 +59,12 @@ def init_db():
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
+        cursor = db.cursor()
         for name in SLIDES:
             slides = SLIDES.get(name)
             for slide in slides:
-                db.execute("INSERT INTO slides (name) VALUES (?)".format(
-                    slide.get('name')))
+                cursor.execute("INSERT INTO slides (name) VALUES (?)",
+                               (slide.get('name'),))
                 db.commit()
 
 oauth = OAuth()
@@ -86,7 +89,7 @@ app = Flask(__name__,
             static_url_path='/calcon-2013-session/static')
 login_manager = LoginManager()
 login_manager.init_app(app)
-bcrypt = Bcrypt(app)
+## bcrypt = Bcrypt(app)
 
 ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
@@ -136,7 +139,13 @@ def teardown_request(exception):
     
 @login_manager.user_loader
 def load_user(userid):
-    return User.get(userid)
+    user_query = get_db().cursor().execute(
+        """SELECT * FROM participant WHERE identity_hash=?""",
+        (userid,))
+    user_result = user_query.fetchone()
+    return User(id=userid,
+                email=user_result[3])
+                
 
 @app.route('{0}/badge.html'.format(URL_PREFIX))
 def badge():
@@ -158,7 +167,6 @@ def grade():
     cursor = get_db().cursor()
     # Need to keep 
     if request.method == 'POST':
-        participant_key = session.get('key', None)
         slide = request.form['slide']
         if slide in ANSWERS:
             q1, q2, q3 = 0, 0, 0
@@ -171,22 +179,23 @@ def grade():
             q3_answer = request.form.getlist('q3')
             if q3_answer == ANSWERS[slide].get('q3'):
                 q3 = 1
-            if participant_key:
+            if current_user:
                 slide_result = cursor.execute(
                     "SELECT id FROM slides WHERE name=?",
-                    slide)
+                    (slide,)).fetchall()
                 if len(slide_result) == 1:
-                    slide_id = slide_result[0]
+                    slide_id = slide_result[0][0]
+                print(slide_id, current_user.id)
                 # Insert quiz results to db
                 cursor.execute("""INSERT INTO slide_results
  (slide_id, participant_id, q1, q2, q3) VALUES (?, ?, ?, ?, ?)""",
-                           slide_id,
-                           participant_id,
+                           (slide_id,
+                           current_user.id,
                            q1,
                            q2,
-                           q3)
-                cursor.commit()
-            score = sum(q1, q2, q3)
+                           q3))
+                get_db().commit()
+            score = sum([q1, q2, q3])
         if slide not in session:
             session[slide] = score
             return jsonify({'score': score })
@@ -204,13 +213,21 @@ def login():
 ##    return google.authorize(callback='http://tuttdemo.coloradocollege.edu/')
     if request.method == 'POST':
         cur = get_db().cursor()
-        email = request.POST.get('email')
-        raw_pw = request.POST.get('pw')
-        email_query = cur.execute("SELECT * FROM participants WHERE email=?",
-                                  email)
-        if len(email_query) == 1:
-            pass
-        
+        email = request.form.get('email')
+        raw_pwd = request.form.get('pw')
+        email_query = cur.execute("SELECT identity_hash, pwd_hash FROM participant WHERE email=?",
+                                  (email,))
+        email_results = email_query.fetchall()
+        if len(email_results) == 1:
+            saved_id_hash, saved_pwd_hash = email_results[0]
+            existing_hash = hashlib.sha256(raw_pwd)
+            existing_hash.update(app.secret_key)
+            if saved_pwd_hash == existing_hash.hexdigest():
+                user = User(id=saved_id_hash,
+                            email=email)
+                login_user(user)
+            else:
+                raise ValueError("Incorrect login")
         return redirect(request.args.get("next") or url_for("home"))
     return render_template("login.html",
                            category='home',
@@ -231,6 +248,10 @@ def open_badge(action=None):
         return "In Open Badge Base"
     else:
         return "In Open Badge {0}".format(action)
+
+##@app.route('{0}/sign-up'.format(URL_PREFIX))
+##def sign_up():
+##    
 
 @app.route('{0}/<track>/<path:slide>'.format(URL_PREFIX))
 def slide(track, slide):

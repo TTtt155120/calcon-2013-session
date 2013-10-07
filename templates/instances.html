@@ -401,7 +401,12 @@
      <div class="panel-body">
       {# START Q1 #}
       <div class="form-group">
-         <label></label> 
+         <label>Which of the following is NOT an Instance property?</label> 
+         <div data-bind="foreach: questionOneItems">
+           <input type="radio" name="q1" data-bind="attr: { value: id },
+                                                           checked: $root.selected">
+            <span data-bind="text: name"></span>
+         </div>
       {# END Q1 #}
       </div>
       {# START Q2 #}
@@ -412,8 +417,8 @@
           <input type="radio" name="q2" data-bind="attr: { value:id },
                                                    checked: $root.selected">
          <span data-bind="text: name"></span>
-        </div>
-     </label>
+         </label>
+       </div>
     </div>        
       {# END Q2 #}
       </div>
@@ -429,6 +434,13 @@
 <script>
  var InstanceQuizViewModel = function() {
   var self=this;
+
+  self.questionOneItems = [
+   {id: 1, name: "VIAF", selected: false},
+   {id: 2, name: "DOI", selected: false},
+   {id: 3, name: "ISBN10", selected: false},
+   {id: 4, name: "Stock Number", selected: false}
+  ]
   
   self.questionTwoItems = [
    {id: 1, name: "True", selected: false},
