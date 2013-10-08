@@ -95,17 +95,7 @@
      </div>
    {# END Q3 #}
    </div> 
-  {% if user.is_authenticated() %}
-   <div class="form-group">
-     <div class="btn-group">
-      <a href="#" 
-         class="btn btn-danger btn-sm"
-         data-bind="click: gradeQuiz">Grade</a>
-      <button type="reset"
-         class="btn btn-warning btn-sm">Reset</button>
-     </div>
-   </div>
-   {% endif %}
+   {% include 'grade-register.html' %}
    </form>
    </div>
   {# END Quiz Panel #}
@@ -118,6 +108,8 @@
 <script>
 function VocabQuizViewModel() {
   var self = this; 
+
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
 
   self.gradeQuiz = function() {
    $.ajax({

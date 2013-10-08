@@ -4,12 +4,119 @@
 {% block more_css %}{% endblock %}
 {% block body %}
 {% include 'slide-nav.html' %}
-<div class="row"> 
- <div class="col-md-12 jumbotron">
+<div class="row">
+ <div class="col-md-8 jumbotron">
   <h1>{{ current.label }}</h1>
   <p class="lead">{{ current.description }}</p>
  </div>
+
+ <div class="col-md-4">
+   {# START Badge Quiz #}
+   <div class="panel panel-primary">
+     <div class="panel-heading">
+      <h3 class="panel-title"><a name="quiz"></a> Badge Quiz</h3>
+     </div>
+     <div class="panel-body">
+      <form id="badge-quiz">
+      <input type="hidden" name="slide" value="{{ current.name }}">     
+      {# START Q1 #}
+      <div class="form-group">
+         <label>A cataloging record in MARC21 is made up of what of the following?</label> 
+         <div data-bind="foreach: questionOneItems">
+          <div class="checkbox">
+           <input type="checkbox" name="q1" data-bind="attr: { value: id },
+                                                           checked: $root.selected">
+            <span data-bind="text: name"></span>
+          </div>
+         </div>
+      {# END Q1 #}
+      </div>
+      {# START Q2 #}
+      <div class="form-group">
+        <label>True or False: One of BIBFRAME goals is to extend bibliographic information of a library's 
+         collections beyond MARC21 specification</label>
+        <div data-bind="foreach: questionTwoItems">
+         <label class="radio-inline" >
+          <input type="radio" name="q2" data-bind="attr: { value:id },
+                                                   checked: $root.selected">
+         <span data-bind="text: name"></span>
+         </label>
+       </div>
+      {# END Q2 #}
+      </div>
+      {# START Q3 #}
+      <div class="form-group"> 
+      <label>Select all of the correct statements below:</label>
+      <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q3" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div> 
+      {# END Q3 #}
+      </div>
+   {% include 'grade-register.html' %}
+     </div>
+   
+   {# END Badge Quiz #}
+   </div>
+
+ </div>  
 </div>
+
+
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+  var marc21toBIBFRAMEViewModel = function() {
+    var self = this;
+    
+    self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}"); 
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+          var new_score = int(self.badgePoints()) + response['score'];
+          self.badgePoints(new_score);
+         }
+       }
+   });
+  }
+
+    self.questionOneItems = [
+     {id: 1, name: "Description of the item"},
+     {id: 2, name: "Web-addressable access point"},
+     {id: 3, name: "Main entry and added entries"},
+     {id: 4, name: "Subject headings"},
+     {id: 5, name: "Classification or call number"}
+    ];
+
+    self.questionTwoItems = [
+     {id: 1, name: "True"},
+     {id: 2, name: "False"}
+    ];
+
+    self.questionThreeItems = [
+     {id: 1, name: "MARC21 is incompatible with BIBFRAME"},
+     {id: 2, name: "MARC21 conflates bibliographic relationships and record format while BIBFRAME only is about the former"},
+     {id: 3, name: "BIBFRAME requirements include supporting legacy MARC21-based search technology like Z39.50"},
+     {id: 4, name: "BIBFRAME will eventually supercede the MARC21 format"}
+    ];
+  
+
+ }
+ ko.applyBindings(new marc21toBIBFRAMEViewModel());
+
+</script>
+{% endblock %}

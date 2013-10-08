@@ -399,6 +399,8 @@
       <h3 class="panel-title"><a name="quiz"></a> Badge Quiz</h3>
      </div>
      <div class="panel-body">
+      <form id="badge-quiz">
+      <input type="hidden" name="slide" value="{{ current.name }}">     
       {# START Q1 #}
       <div class="form-group">
          <label>Which of the following is NOT an Instance property?</label> 
@@ -419,20 +421,23 @@
          <span data-bind="text: name"></span>
          </label>
        </div>
- {#   </div>  #}       
       {# END Q2 #}
       </div>
- {% if user.is_authenticated() %}
-   <div class="form-group">
-     <div class="btn-group">
-      <a href="#" 
-         class="btn btn-danger btn-sm"
-         data-bind="click: gradeQuiz">Grade</a>
-      <button type="reset"
-         class="btn btn-warning btn-sm">Reset</button>
-     </div>
-   </div>
-   {% endif %}     
+      {# START Q3 #}
+      <div class="form-group"> 
+      <label>Please select all of the correct statements:</label>
+      <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q3" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div> 
+      {# END Q3 #}
+      </div>
+   {% include 'grade-register.html' %}
      </div>
    
    {# END Badge Quiz #}
@@ -447,17 +452,41 @@
  var InstanceQuizViewModel = function() {
   var self=this;
 
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}")
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+   });
+  }
+
   self.questionOneItems = [
    {id: 1, name: "VIAF", selected: false},
    {id: 2, name: "DOI", selected: false},
    {id: 3, name: "ISBN10", selected: false},
    {id: 4, name: "Stock Number", selected: false}
-  ]
+  ];
   
   self.questionTwoItems = [
    {id: 1, name: "True", selected: false},
    {id: 2, name: "False", selected: false}
-  ]
+  ];
+
+  self.questionThreeItems = [
+   {id: 1, name: "Exist as web-based control point for the materialization", selected: false},
+   {id: 2, name: "Instances are exactly equilivant to FRBR Items", selected: false},
+   {id: 3, name: "BIBFRAME Authorities are used to associate publication information to an Instance", selected: false},
+   {id: 4, name: "Instances can have more than one Creative Work", selected: false}
+  ];
  }
 
  ko.applyBindings(new InstanceQuizViewModel());

@@ -91,6 +91,8 @@
 function HistoryQuizViewModel() {
   var self = this; 
 
+  self.badgeViewModel = badgeViewer();
+
   self.questionOneItems = [
     { id: 1, name: "2007", selected: false},
     { id: 2, name: "1999", selected: false},
@@ -119,6 +121,7 @@ function HistoryQuizViewModel() {
            alert("Error " + response['error'])
          } else {
           alert("Graded Quiz " + response['score'] + " out of 3");
+
          }
        }
     });

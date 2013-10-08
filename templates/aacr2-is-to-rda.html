@@ -10,6 +10,124 @@
    <p class="lead">{{ current.description }}</p>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-6">
+  {# START Quiz #}
+  {# START Quiz panel #}
+  <div class="panel panel-primary">
+   <div class="panel-heading">
+    <h3 class="panel-title"><a name="quiz"></a> Badge Quiz</h3>
+   </div>
+   <div class="panel-body">
+    <form id="badge-quiz">
+    <input type="hidden" name="slide" value="{{ current.name }}">
+    {# START Q1 #}
+    <div class="form-group">
+    <label>AACR2 stands for:</label>
+    <div data-bind="foreach: questionOneItems">
+     <div class="radio">
+      <label>
+      <input type="radio" name="q1" data-bind="attr: { value:id },
+                                               checked: $root.selected">
+      <span data-bind="text: name"></span>
+      </label>
+     </div>
+    </div>
+    {# END Q1 #}
+    </div>
+    {# START Q2 #}
+    <div class="form-group">
+     <label>Please select all of the correct statements in the list below:</label>
+      <div data-bind="foreach: questionTwoItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q2" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+    {# END Q2 #}
+    </div>
+    {# START Q3 #}
+    <div class="form-group">
+     <label>Please select all of the INCORRECT statements below:</label>
+     <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q3" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+     </div>
+    {# END Q3 #}
+    </div>
+    </form>
+    {% include 'grade-register.html ' %}
+  
+   </div>
+  {# END Quiz panel #}
+  </div>
+  </div>
+
+  <div class="col-md-6">
+   <div class="well">
+    <h2>AACR2</h2>
+
+
+    <h2>RDA as an AACR2 replacement</h2>
+
+   </div>
+  </div>
+</div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+ var AACR2toRDAViewModel = function() {
+  var self = this;
+  
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+   });
+  }
+
+  self.questionOneItems = [
+   {id: 1, name: "Artist Alliance of Cataloging Regulations Version 2"},
+   {id: 2, name: "Anglo-American Cartographic Rules Version 2"},
+   {id: 3, name: "American Association of Cataloging Rules Version 2"},
+   {id: 4, name: "Anglo-American Cataloguing Rules Version 2"}
+  ];
+
+  self.questionTwoItems = [
+   {id: 1, name: "AACR2 was first adopted in 1978"},
+   {id: 2, name: "AACR2 has difficulty describing Video and Video Formats"},
+   {id: 3, name: "AACR2 is no longer supported"},
+   {id: 4, name: "AACR2 represents the consensus of non-English speaking world"} 
+  ];
+
+  self.questionThreeItems = [
+   {id: 1, name: "The development of RDA began in the late 1990s"},
+   {id: 2, name: "RDA is meant to supercede AACR2"},
+   {id: 3, name: "RDA is not based on FRBR"},
+   {id: 4, name: "RDA is quickly replacing AACR2"} 
+  ];
+
+}
+ko.applyBindings(new AACR2toRDAViewModel());
+</script>
+{% endblock %}

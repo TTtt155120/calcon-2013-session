@@ -2,6 +2,17 @@
 
 {% block body %}
 <div class="jumbotron" >
+ {% with messages = get_flashed_messages() %}
+   {% if messages %}
+   <div class="alert alert-block alert-warning fade in">
+    <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+    <h3>Message</h3>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+   </div>
+   {% endif %}
+ {% endwith %}
   <img src="{{ url_for('static', filename='img/calcon-2013-logo.png') }}" style="float: left">
   <h2 class="text-muted">CALCON 2013 Session</h2>
   <h1>BIBFRAME &amp; RDA</h1>

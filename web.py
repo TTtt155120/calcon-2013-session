@@ -30,8 +30,8 @@ import os
 import sqlite3
 
 from flask import Flask, g, redirect, render_template, url_for
-from flask import jsonify, request, session
-from flask.ext.login import LoginManager, login_user, login_required
+from flask import flash, jsonify, request, session
+from flask.ext.login import LoginManager, login_user, login_required, logout_user
 from flask.ext.login import make_secure_token, UserMixin, current_user
 ##from flaskext.bcrypt import Bcrypt
 
@@ -63,8 +63,9 @@ def init_db():
         for name in SLIDES:
             slides = SLIDES.get(name)
             for slide in slides:
-                cursor.execute("INSERT INTO slides (name) VALUES (?)",
-                               (slide.get('name'),))
+                cursor.execute("INSERT INTO slides (label, name) VALUES (?,?)",
+                               (slide.get('label'),
+                                slide.get('name'),))
                 db.commit()
 
 oauth = OAuth()
@@ -115,6 +116,30 @@ class User(UserMixin):
         self.id = id
         self.email = email
         self.active = active
+        self.badge = {'history': [], 'quiz_results': []}
+
+    def get_badge(self):
+        self.badge['score'] = 0
+        badge_query = get_db().cursor().execute(
+            """SELECT slides.name, slides.label, slide_results.created_on,
+                 slide_results.q1, slide_results.q2, slide_results.q3
+                 FROM slides, slide_results
+                 WHERE slide_results.participant_id=? AND slides.id=slide_results.slide_id""",
+            (self.id,))
+        badge_results = badge_query.fetchall()
+        for row in badge_results:
+            self.badge['quiz_results'].append(
+                {'label': row[1],
+                 'taken': row[2],
+                 'q1': row[3],
+                 'q2': row[4],
+                 'q3': row[5],
+                 'total': sum([row[3],
+                               row[4],
+                               row[5]])})
+            self.badge['score'] += self.badge['quiz_results'][-1].get('total')
+        return self.badge
+        
 
     def get_id(self):
         return self.id
@@ -126,6 +151,7 @@ class User(UserMixin):
         return make_secure_token(self.email,
                                  key='deterministic')
         
+
 
 @app.before_request
 def before_request():
@@ -143,22 +169,38 @@ def load_user(userid):
         """SELECT * FROM participant WHERE identity_hash=?""",
         (userid,))
     user_result = user_query.fetchone()
+    if user_result is None:
+        return None
     return User(id=userid,
                 email=user_result[3])
                 
 
 @app.route('{0}/badge.html'.format(URL_PREFIX))
 def badge():
+    participant, slide_results = None, []
+    if current_user.is_authenticated():
+        participant_query = get_db().cursor().execute(
+            "SELECT email FROM participant WHERE identity_hash=?",
+            (current_user.id,))
+        results = participant_query.fetchone()
+        participant={'email': results[0]}
+        quiz_query = get_db().cursor().execute(
+            "SELECT * FROM slide_results WHERE participant_id=?",
+            (current_user.id,))
+        participant['quiz_results'] = quiz_query.fetchall()
     return render_template('badge.html',
                            category='addendum',
-                           slides=SLIDES)
+                           slides=SLIDES,
+                           participant=participant,
+                           user=current_user)
 
 
 @app.route('{0}/glossary.html'.format(URL_PREFIX))
 def glossary():
     return render_template("glossary.html",
                            category='addendum',
-                           slides=SLIDES)
+                           slides=SLIDES,
+                           user=current_user)
 
 @app.route('{0}/grade'.format(URL_PREFIX),
            methods = ['POST', 'GET'])
@@ -168,6 +210,11 @@ def grade():
     # Need to keep 
     if request.method == 'POST':
         slide = request.form['slide']
+        if slide in session:
+            return jsonify(
+                {'error': 'Quiz for {0} with a score of {1} already exists'.format(
+                    slide,
+                    session[slide])})            
         if slide in ANSWERS:
             q1, q2, q3 = 0, 0, 0
             q1_answer = request.form.getlist('q1')
@@ -196,15 +243,8 @@ def grade():
                            q3))
                 get_db().commit()
             score = sum([q1, q2, q3])
-        if slide not in session:
             session[slide] = score
-            return jsonify({'score': score })
-        else:
-            return jsonify(
-                {'error': 'Quiz for {0} with a score of {1} already exists'.format(
-                    slide,
-                    session[slide])})
-
+        return jsonify({'score': score })
 
 
 @app.route('{0}/login'.format(URL_PREFIX),
@@ -218,7 +258,6 @@ def login():
         email_query = cur.execute("SELECT identity_hash, pwd_hash FROM participant WHERE email=?",
                                   (email,))
         email_results = email_query.fetchall()
-        print(email, email_results)
         if len(email_results) == 1:
             saved_id_hash, saved_pwd_hash = email_results[0]
             existing_hash = hashlib.sha256(raw_pwd)
@@ -232,31 +271,63 @@ def login():
         return redirect(request.args.get("next") or url_for("home"))
     return render_template("login.html",
                            category='home',
-                           slides=SLIDES)
+                           slides=SLIDES,
+                           user=current_user)
+
+@app.route('{0}/logout'.format(URL_PREFIX),
+           methods=['GET', 'POST'])
+def logout():
+    logout_user()
+    flash("Logged out")
+    return redirect(url_for("home"))
     
+
+@app.route('{0}/register'.format(URL_PREFIX),
+           methods=['POST'])
+def register():
+    raw_email = request.form.get('email_address')
+    email_checkquery = get_db().cursor().execute(
+        """SELECT identity_hash FROM participant WHERE email=?""",
+        (raw_email,))
+    if len(email_checkquery.fetchall()) > 0:
+        flash("{0} already registered for this badge".format(
+            raw_email))
+        return redirect(url_for("badge"))
+    pwd_one = request.form.get('password')
+    pwd_confirm = request.form.get('copy-password')
+    if pwd_one != pwd_confirm:
+        flash("Error passwords do not match")
+    else:
+        identity_hash = hashlib.sha256(raw_email)
+        identity_hash.update(app.secret_key)
+        pwd_hash = hashlib.sha256(pwd_one)
+        pwd_hash.update(app.secret_key)
+        db = get_db()
+        db.cursor().execute(
+            """INSERT INTO participant (identity_hash, email, pwd_hash)
+            VALUES (?, ?, ?)""",
+            (identity_hash.hexdigest(),
+             raw_email,
+             pwd_hash.hexdigest()))
+        db.commit()
+        user = User(id=identity_hash.hexdigest(),
+                    email=raw_email)
+        login_user(user)
+        flash("Successfully registered for CALCON2013 BIBFRAME and RDA Badge")
+    return redirect(url_for("badge"))
                            
 @app.route('{0}/resources.html'.format(URL_PREFIX))
 def resources():
     return render_template("resources.html",
                            category='addendum',
                            resources=RESOURCES,
-                           slides=SLIDES)
+                           slides=SLIDES,
+                           user=current_user)
     
-@app.route('{0}/open-badge/'.format(URL_PREFIX))
-@app.route('{0}/open-badge/<action>'.format(URL_PREFIX))
-def open_badge(action=None):
-    if action is None:
-        return "In Open Badge Base"
-    else:
-        return "In Open Badge {0}".format(action)
-
-##@app.route('{0}/sign-up'.format(URL_PREFIX))
-##def sign_up():
-##    
 
 @app.route('{0}/<track>/<path:slide>'.format(URL_PREFIX))
 def slide(track, slide):
-    current, last_slide, next_slide, badge = None, None, None, {}
+    current, last_slide, next_slide, badge_dict = None, None, None, {}
     for i, row in enumerate(SLIDES[track]):        
         if row.get('name') == slide:
             current = row
@@ -273,14 +344,9 @@ def slide(track, slide):
                     track,
                     next_slide.get('name'))
     if current_user.is_authenticated():
-        badge['score'] = 0
-        badge_query = get_db().cursor().execute("SELECT q1, q2, q3 FROM slide_results WHERE participant_id=?",
-                                                (current_user.id,))
-        badge_results = badge_query.fetchall()
-        for row in badge_results:
-            badge['score'] += sum(row)
+        badge_dict = current_user.get_badge()
     return render_template("{0}.html".format(slide),
-                           badge=badge,
+                           badge=badge_dict,
                            category='slide',
                            current=current,
                            last_slide=last_slide,
@@ -294,7 +360,8 @@ def home():
     default_css = url_for('static', filename='default.css')
     return render_template('index.html',
                            category='home',
-                           slides=SLIDES)
+                           slides=SLIDES,
+                           user=current_user)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

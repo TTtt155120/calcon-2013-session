@@ -1,0 +1,16 @@
+{% if user.is_authenticated() %}
+ <div class="form-group">
+  <div class="btn-group">
+   <a href="#" 
+      class="btn btn-danger btn-sm"
+      data-bind="click: gradeQuiz">Grade</a>
+   <button type="reset"
+      class="btn btn-warning btn-sm">Reset</button>
+  </div>
+ </div>
+{% else %}
+ <div class="form-group">
+  <a href="/calcon-2013-session/badge.html"
+     class="btn btn-sm btn-primary">Register to take Quiz</a>
+</div>
+{% endif %}

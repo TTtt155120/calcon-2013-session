@@ -12,6 +12,8 @@
     <h3 class="panel-title"><a name="quiz"></a> Badge Quiz</h3>
    </div>
    <div class="panel-body">
+    <form id="badge-quiz">
+    <input type="hidden" name="slide" value="annotations">
     {# START Q1 #}
     <div class="form-group">
     <label>True or False: Annotations provide additional information about a Work, Instance, or Authority</label>
@@ -22,20 +24,42 @@
       <span data-bind="text: name"></span>
      </label>
     </div>
-  
     {# END Q1 #}
     </div>
-  {% if user.is_authenticated() %}
-   <div class="form-group">
-     <div class="btn-group">
-      <a href="#" 
-         class="btn btn-danger btn-sm"
-         data-bind="click: gradeQuiz">Grade</a>
-      <button type="reset"
-         class="btn btn-warning btn-sm">Reset</button>
+    {# START Q2 #}
+    <div class="form-group">
+     <label>Why are the <em>annotationAssertedBy</em>, 
+      <em>annotationSource</em>, and <em>dateOfAssertation</em> 
+      Annotation properties important?
+     </label>
+      <div data-bind="foreach: questionTwoItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q2" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+    {# END Q2 #}
+    </div>
+    {# START Q3 #}
+    <div class="form-group">
+     <label>Please select all official BIBFRAME Annotation subclasses</label>
+     <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q3" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
      </div>
-   </div>
-   {% endif %}
+    {# END Q3 #}
+    </div>
+    </form>
+    {% include 'grade-register.html ' %}
+  
    </div>
   {# END Quiz panel #}
   </div>
@@ -43,7 +67,9 @@
  <div class="col-md-8 jumbotron">
   <h1>{{ current.label }}</h1>
   <p class="lead">{{ current.description }}</p>
-</div>
+ </div>
+ <h3>Video Introduction</h3>
+ <iframe width="420" height="315" src="//www.youtube.com/embed/MrCjP5Iaf_U" frameborder="0" allowfullscreen></iframe> 
 </div>
 
 
@@ -72,11 +98,41 @@
  var AnnotationsQuizViewModel = function() {
   var self = this;
 
+  self.badgeViewModel = badgeViewer();
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+   });
+  }
+
   self.questionOneItems = [
    {id: 1, name: "True", selected: false},
    {id: 2, name: "False", selected: false}
   ];
- 
+
+  self.questionTwoItems = [
+   {id: 1, name: "necessary to establish provenance", selected: false},
+   {id: 2, name: "cannot annotate BIBFRAME authorities", selected: false},
+   {id: 3, name: "helps in critically evaluating the creditabilty of the annotation", selected: false},
+   {id: 4, name: "can be used for controlled vocabularies", selected: false}
+  ];
+
+  self.questionThreeItems  = [
+   {id: 1, name: "CoverArt", selected: false},
+   {id: 2, name: "Facet", selected: false},
+   {id: 3, name: "Review", selected: false},
+   {id: 4, name: "Holding", selected: false}
+  ];
  }
  ko.applyBindings(new AnnotationsQuizViewModel());
 </script>

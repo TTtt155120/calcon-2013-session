@@ -10,6 +10,30 @@
   <p class="lead">{{ current.description }}</p>
  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-4">
+    <h2>RDA</h2>
+  </div>
+
+  <div class="col-md-4">
+    <h2>BIBFRAME</h2>
+  </div>
+  
+  <div class="col-md-4">
+   <h2>Quiz</h2>
+  </div>
+</div>
 {% endblock %}
 
-{% block more_js %}{% endblock %}
+{% block more_js %}
+<script>
+var rdaInBIBFRAMEViewModel = function() {
+  var self = this;
+
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+
+}
+ko.applyBindings(new rdaInBIBFRAMEViewModel());
+</script>
+{% endblock %}

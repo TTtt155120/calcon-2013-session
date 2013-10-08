@@ -97,6 +97,8 @@
    </div>
    <div class="panel-body">
    <form class="form" id="badge-quiz">
+   <input type="hidden" name="slide" value="authorities">
+
     {# START Q1 #}
     <div class="form-group">
      <label>Select all correct statements from the list below</label>
@@ -111,18 +113,34 @@
       </div>
     {# END Q1 #}
     </div>
+    {# START Q2 #}
+    <div class="form-group">
+      <label>True or False: A publisher is an example of BIBFRAME Organization</label>
+     <div data-bind="foreach: questionTwoItems">
+       <label class="radio-inline">
+         <input type="radio" name="q2" data-bind="attr: { value: id },
+                                                  checked: $root.selected"  >
+        <span data-bind="text: name"></span>
+       </label>
+     </div>    
+    {# END Q2 #}
+    </div>
+    {# START Q3 #}
+    <div class="form-group">
+      <label>Select the correct statement</label>
+       <div data-bind="foreach: questionThreeItems">
+        <div class="radio">    
+         <label>
+           <input type="radio" name="q3" data-bind="attr: { value: id },
+                                                   checked: $root.selected"  >
+          <span data-bind="text: name"></span>
+         </label>
+        </div>      
+       </div>
+    {# END Q3 #}
+    </div>
    </form>
-   {% if user.is_authenticated() %}
-   <div class="form-group">
-     <div class="btn-group">
-      <a href="#" 
-         class="btn btn-danger btn-sm"
-         data-bind="click: gradeQuiz">Grade</a>
-      <button type="reset"
-         class="btn btn-warning btn-sm">Reset</button>
-     </div>
-   </div>
-   {% endif %}
+   {% include 'grade-register.html' %}
    </div>
   {# END Quiz panel #}
   </div>
@@ -134,13 +152,26 @@
 <script>
  var authoritiesQuizViewModel = function() {
   var self = this;
-  
+
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+ 
   self.questionOneItems = [
    { id: 1, name: "BIBFRAME Authorities are similar in concept to MARC21 authorities", selected: false},
-   { id: 1, name: "Person, Organization, and Family are all subclasses of Agent class", selected: false},
-   { id: 1, name: "Titles are an example of a Topic Authority", selected: false},
-   { id: 1, name: "Authorities provide an important authenication function in BIBFRAME", selected: false}
+   { id: 2, name: "Person, Organization, and Family are all subclasses of Agent class", selected: false},
+   { id: 3, name: "Family is an example of a Topic Authority", selected: false},
+   { id: 4, name: "Authorities provide an important authenication function in BIBFRAME", selected: false}
   ];
+
+  self.questionTwoItems = [
+   {id: 1, name: "True", selected: false},
+   {id: 2, name: "False", selected: false}
+  ];
+
+  self.questionThreeItems = [
+   {id: 1, name: "All BIBFRAME Authorities must be under authority control", selected: false},
+   {id: 2, name: "A timestamp could not a TemporalConcept Authority", selected: false},
+   {id: 3, name: "A BIBFRAME Authority can be an access point to the resource", selected: false}
+  ]
 
   self.gradeQuiz = function() {
    $.ajax({
@@ -152,6 +183,7 @@
            alert("Error " + response['error'])
          } else {
           alert("Graded Quiz " + response['score'] + " out of 3");
+          self.badgePoints(self.BadgePoints + response['score']);
          }
        }
     });
