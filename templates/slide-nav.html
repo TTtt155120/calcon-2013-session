@@ -19,5 +19,17 @@
    </a>
    </div>
   </div>
+  {% if user.is_authenticated() %}
+  <div class="btn-group pull-right">
+   <button class="btn btn-lg 
+    {% if badge.get('score') <= 10 %}btn-danger{% endif %}
+    {% if badge.get('score') > 10 and badge.get('score') <= 25%}btn-warning{% endif %}
+    {% if badge.get('score') > 25 %}btn-success{% endif %}">
+    <span class="glyphicon glyphicon-dashboard"></span>
+    {{ badge.get('score') }}/30
+   </button>
+      
+  </div>
+  {% endif %}
 </div>
 <br>

@@ -48,13 +48,15 @@
     </div>
   {# END Q3 #}
   </div>
-  <div class="btn-group">
-    <a href="#" 
+  {% if user.is_authenticated() %}
+   <div class="btn-group">
+    <button
        class="btn btn-danger btn-sm"
-       data-bind="click: gradeQuiz">Grade</a>
+       data-bind="click: gradeQuiz">Grade</button>
     <button type="reset"
        class="btn btn-warning btn-sm">Reset</button>
   </div>
+  {% endif %}
   {# END panel-body #}
   </div>
  {# END panel #}

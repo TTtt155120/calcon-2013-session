@@ -419,10 +419,22 @@
          <span data-bind="text: name"></span>
          </label>
        </div>
-    </div>        
+ {#   </div>  #}       
       {# END Q2 #}
       </div>
+ {% if user.is_authenticated() %}
+   <div class="form-group">
+     <div class="btn-group">
+      <a href="#" 
+         class="btn btn-danger btn-sm"
+         data-bind="click: gradeQuiz">Grade</a>
+      <button type="reset"
+         class="btn btn-warning btn-sm">Reset</button>
      </div>
+   </div>
+   {% endif %}     
+     </div>
+   
    {# END Badge Quiz #}
    </div>
   </div>

@@ -112,6 +112,17 @@
     {# END Q1 #}
     </div>
    </form>
+   {% if user.is_authenticated() %}
+   <div class="form-group">
+     <div class="btn-group">
+      <a href="#" 
+         class="btn btn-danger btn-sm"
+         data-bind="click: gradeQuiz">Grade</a>
+      <button type="reset"
+         class="btn btn-warning btn-sm">Reset</button>
+     </div>
+   </div>
+   {% endif %}
    </div>
   {# END Quiz panel #}
   </div>
@@ -130,6 +141,21 @@
    { id: 1, name: "Titles are an example of a Topic Authority", selected: false},
    { id: 1, name: "Authorities provide an important authenication function in BIBFRAME", selected: false}
   ];
+
+  self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 3");
+         }
+       }
+    });
+  }
 
  }
  ko.applyBindings(new authoritiesQuizViewModel());

@@ -185,7 +185,7 @@ def grade():
                     (slide,)).fetchall()
                 if len(slide_result) == 1:
                     slide_id = slide_result[0][0]
-                print(slide_id, current_user.id)
+##                print(slide_id, current_user.id)
                 # Insert quiz results to db
                 cursor.execute("""INSERT INTO slide_results
  (slide_id, participant_id, q1, q2, q3) VALUES (?, ?, ?, ?, ?)""",
@@ -218,6 +218,7 @@ def login():
         email_query = cur.execute("SELECT identity_hash, pwd_hash FROM participant WHERE email=?",
                                   (email,))
         email_results = email_query.fetchall()
+        print(email, email_results)
         if len(email_results) == 1:
             saved_id_hash, saved_pwd_hash = email_results[0]
             existing_hash = hashlib.sha256(raw_pwd)
@@ -255,7 +256,7 @@ def open_badge(action=None):
 
 @app.route('{0}/<track>/<path:slide>'.format(URL_PREFIX))
 def slide(track, slide):
-    current, last_slide, next_slide = None, None, None
+    current, last_slide, next_slide, badge = None, None, None, {}
     for i, row in enumerate(SLIDES[track]):        
         if row.get('name') == slide:
             current = row
@@ -271,13 +272,22 @@ def slide(track, slide):
                     URL_PREFIX,
                     track,
                     next_slide.get('name'))
+    if current_user.is_authenticated():
+        badge['score'] = 0
+        badge_query = get_db().cursor().execute("SELECT q1, q2, q3 FROM slide_results WHERE participant_id=?",
+                                                (current_user.id,))
+        badge_results = badge_query.fetchall()
+        for row in badge_results:
+            badge['score'] += sum(row)
     return render_template("{0}.html".format(slide),
+                           badge=badge,
                            category='slide',
                            current=current,
                            last_slide=last_slide,
                            next_slide=next_slide,
                            slides=SLIDES,
-                           track=track)
+                           track=track,
+                           user=current_user)
 
 @app.route('{0}/'.format(URL_PREFIX))
 def home():
