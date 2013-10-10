@@ -1,0 +1,10 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "WebApplication", 
+  "headline": "Knockout.js", 
+  "name": "knockoutjs", 
+  "url": "http://knockoutjs.com"
+}
