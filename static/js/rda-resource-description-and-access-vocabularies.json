@@ -3,6 +3,7 @@
     "@vocab": "http://schema.org/", 
     "bf": "http://bibframe.org/vocab"
   }, 
+  "@type": "WebApplication", 
   "author": [
     {
       "@type": "Person", 

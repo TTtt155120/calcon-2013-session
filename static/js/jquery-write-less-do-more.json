@@ -1,0 +1,15 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "WebApplication", 
+  "copyrightYear": 2013, 
+  "headline": "jQuery write less, do more.", 
+  "name": "jquery-write-less-do-more", 
+  "publisher": {
+    "@type": "Organization", 
+    "name": "jQuery Foundation"
+  }, 
+  "url": "http://jquery.com/"
+}

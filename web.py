@@ -110,9 +110,16 @@ for name in ['anglo-american-cataloging-rules-second-edition.json',
                               'js',
                               name),
                  'rb')))
-for name in ['rda-resource-description-and-access-vocabularies.json',
+for name in ['bibframeorg-bibliographic-framework-initiative.json',
+             'bootstrap.json',
+             'flask.json',
+             'jquery-write-less-do-more.json',
+             'knockoutjs.json',
+             'python-programming-language-official-website.json',
+             'rda-resource-description-and-access-vocabularies.json',
              'rda-toolkit.json',
-             'redis.json']:
+             'redis.json',
+             'svgjs.json']:
    RESOURCES['websites'].append(
         json.load(
             open(os.path.join('static',

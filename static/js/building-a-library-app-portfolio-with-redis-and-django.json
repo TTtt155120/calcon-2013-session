@@ -1,5 +1,8 @@
 {
-  "@context": null, 
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
   "@type": "ScholarlyArticle", 
   "author": [
     {
