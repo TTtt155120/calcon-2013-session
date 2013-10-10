@@ -1,0 +1,23 @@
+<dt>
+ <a name="{{ resource.name }}"></a> 
+  {{ resource.headline }}
+</dt>
+<dd>
+   {% for author in resource.author %}
+    {{ author.name }}{% if not loop.end %},{% else %}.{% endif %}
+   {% endfor %}
+   {% if resource.publisher %}
+    {{ resource.publisher.name }}.
+    {% if resource.publisher.address %}
+    {{ resource.publisher.address.addressLocality }},
+    {{ resource.publisher.address.addressRegion }}.
+    {% endif %}
+   {% endif %}
+   {% if resource.copyrightYear %}
+    {{ resource.copyrightYear }}.
+   {% endif %}
+   {% if resource.url %}<a href="{{ resource.url }}">{{ resource.url }}</a>{% endif %} 
+   <a href="/calcon-2013-session/static/js/{{ resource.name }}.json">
+    <img src="{{ url_for('static', filename='img/json-ld-data-24.png') }}"></a>
+</dd>
+

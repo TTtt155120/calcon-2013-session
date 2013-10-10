@@ -95,13 +95,25 @@ login_manager.init_app(app)
 ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
 
-RESOURCES = []
+RESOURCES = {'article-books': [], 'websites': [] }
 for name in ['anglo-american-cataloging-rules-second-edition.json',
+             'bibframe-annotation-model.json',
              'bibframe-resource-types-discussion-paper.json',
+             'bibframe-use-cases-and-requirements.json',
              'bibliographic-framework-as-a-web-of-data.json',
-             'rda-toolkit.json',
+             'building-a-library-app-portfolio-with-redis-and-django.json',
+             'on-bibframe-authority.json',
              'understanding-marc-bibliographic.json']:
-    RESOURCES.append(
+    RESOURCES['article-books'].append(
+        json.load(
+            open(os.path.join('static',
+                              'js',
+                              name),
+                 'rb')))
+for name in ['rda-resource-description-and-access-vocabularies.json',
+             'rda-toolkit.json',
+             'redis.json']:
+   RESOURCES['websites'].append(
         json.load(
             open(os.path.join('static',
                               'js',

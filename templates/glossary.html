@@ -2,15 +2,234 @@
 
 {% block body %}
 <div class="row">
- <div class="col-md-10 well">
+ <div class="col-md-12 well">
   <h1>Glossary</h1>
+  <div class="btn-group pull-right">
+   <a href="#A" class="btn btn-default">A</a>
+   <a href="#B" class="btn btn-default">B</a>
+   <a href="#F" class="btn btn-default">F</a>
+   <a href="#H" class="btn btn-default">H</a>
+   <a href="#I" class="btn btn-default">I</a>
+   <a href="#L" class="btn btn-default">L</a>
+   <a href="#M" class="btn btn-default">M</a>
+   <a href="#N" class="btn btn-default">N</a>
+   <a href="#O" class="btn btn-default">O</a>
+   <a href="#P" class="btn btn-default">P</a>
+   <a href="#R" class="btn btn-default">R</a>
+   <a href="#S" class="btn btn-default">S</a>
+   <a href="#T" class="btn btn-default">T</a>
+  </div>
   <dl>
+   <h3 class="text-muted"><a name="A"></a>A</h3>
    <dt><a name="aacr2"></a>AACR2</dt>
    <dd>
     An acronym for <a href="http://aacr2.org">Anglo-American Cataloging Rules 2nd Edition</a> 
     is dominate bibliographic cataloging practices used by most libraries in some form or another 
     or cataloging material into the MARC21 bibliographic data format. 
    </dd>
+   <dt><a name="annotation"></a>Annotation</a></dt>
+   <dd>
+    An abstract core class of the <a href=#BIBFRAME">BIBFRAME</a> model that represents additional
+    information about a resource. The BIBFRAME Annotation class includes the 
+    following child subclasses:
+    <ul>
+     <li><a href="http://bibframe.org/vocab/CoverArt.html">Cover Art Annotation</a></li>
+     <li><a href="http://bibframe.org/vocab/Description.html">Description Annotation</a></li>
+     <li><a href="http://bibframe.org/vocab/Holding.html">Holding</a></li>
+     <li><a href="http://bibframe.org/vocab/Review.html">Review Annotation</a></li>
+    </ul>
+   </dd>
+   <dt><a name="aristotle-library-apps"></a>Aristotle Library Apps</dt>
+   <dd>
+    A <a href="#Python">Python-based</a> open-source project used to
+    create public and staff <a href="#HTML5">HTML5</a> apps that interacts with a bibliographic  
+    <a href="#BIBFRAME-Datastore">Redis datastore</a>. The Code repository is available on 
+    Github at <a href="https://github.com/jermnelson/aristotle-library-apps">https://github.com/jermnelson/aristotle-library-apps</a>
+   </dd>
+   <dt><a name="authority"></a>Authority</dt>
+   <dd>
+     An abstract core class of the <a href=#BIBFRAME">BIBFRAME</a> model that models authority relationships
+     between Work and Instance classes. The BIBFRAME Authority class includes the following child and 
+     grandchild subclasses:
+     <ul> 
+	<li><a href="http://bibframe.org/vocab/Agent.html">Agent</a>
+         <ul>
+          <li><a href="http://bibframe.org/vocab/Family.html">Family</a></li>
+	  <li><a href="http://bibframe.org/vocab/Jurisdiction.html">Jurisdiction</a></li>
+	  <li><a href="http://bibframe.org/vocab/Meeting.html">Meeting</a></li>
+	  <li><a href="http://bibframe.org/vocab/Organization.html">Organization</a></li>
+	  <li><a href="http://bibframe.org/vocab/Person.html">Person</a></li>
+         </ul>
+        </li>
+	<li><a href="http://bibframe.org/vocab/ClassificationEntity.html">Classification Entity</a></li>
+	<li><a href="http://bibframe.org/vocab/Place.html">Place</a></li>
+	<li><a href="http://bibframe.org/vocab/TemporalConcept.html">Temporal Concept</a></li>
+	<li><a href="http://bibframe.org/vocab/Topic.html">Topic</a></li>
+     </ul>
+   </dd>
+   <h3 class="text-muted"><a name="B"></a>B</h3>
+   <dt><a name="BIBFRAME"></a>BIBFRAME</dt>
+   <dd>
+     BIBFRAME is the modeling effort by the Library of Congress Bibliographic Framework Initiative that follows
+    a <a href="#LinkedData">LinkedData</a> approach using concepts from <a href="#FRBR">FRBR</a> and 
+    <a href="#RDA">RDA</a>. BIBFRAME is made up of four classes; 
+    <a href="#CreativeWork">Creative Work</a>, <a href="#Instance">Instance</a>, 
+    <a href="#Authority">Authority</a>, and <a href="#Annotation">Annotation</a></a>.
+   </dd>
+   <dt><a name="BIBFRAME-Datastore"></a>BIBFRAME Datastore</dt>
+   <dd>
+    An open-source project, not affiliated with the Library of Congress, that has configuration,
+    documentation, and custom scripting for a native BIBFRAME datastore implemented in Redis.
+    Source code is available at 
+    <a href="https://github.com/jermnelson/BIBFRAME-Datastore">https://github.com/jermnelson/BIBFRAME-Datastore</a>.
+   </dd>
+   <h3 class="text-muted"><a name="C"></a>C</h3>
+   <dt><a name="CreativeWork"></a>Creative Work</dt>
+   <dd>
+     An abstract core class of the <a href=#BIBFRAME">BIBFRAME</a> model. The BIBFRAME Creative Work class includes the 
+     following child and grandchild subclasses:
+     <ul>
+      <li><a href="http://bibframe.org/vocab/Audio.html">Audio</a>
+        <ul>
+          <li><a href="http://bibframe.org/vocab/MusicalAudio.html">MusicalAudio</a></li>
+          <li><a href="http://bibframe.org/vocab/NonmusicalAudio.html">Nonmusical Audio</a></li>
+        </ul>
+      </li>
+      <li><a href="http://bibframe.org/vocab/Cartography.html">Cartography</a>
+       <ul>
+        <li><a href="http://bibframe.org/vocab/Globe.html">Globe</a></li>
+	<li><a href="http://bibframe.org/vocab/Map.html">Map</a></li>
+	<li><a href="http://bibframe.org/vocab/RemoteSensingImage.html">Remote Sensing Image</a></li>
+       </ul>
+      </li>
+      <li><a href="http://bibframe.org/vocab/Dataset.html">Dataset</a></li>
+      <li><a href="http://bibframe.org/vocab/LanguageMaterial.html">Language Material</a>
+       <ul>
+	<li><a href="http://bibframe.org/vocab/Article.html">Article</a></li>
+	<li><a href="http://bibframe.org/vocab/Book.html">Book</a></li>
+	<li><a href="http://bibframe.org/vocab/Dissertation.html">Dissertation</a></li>
+	<li><a href="http://bibframe.org/vocab/Legislation.html">Legislation</a></li>
+	<li><a href="http://bibframe.org/vocab/Newspaper.html">Newspaper</a></li>
+	<li><a href="http://bibframe.org/vocab/Serial.html">Serial</a></li>
+       </ul>
+      </li>
+      <li><a href="http://bibframe.org/vocab/Manuscript.html">Manuscript</a></li>
+      <li><a href="http://bibframe.org/vocab/MixedMaterial.html">Mixed Material</a></li>
+      <li><a href="http://bibframe.org/vocab/MovingImage.html">Moving Image</a></li>
+      <li><a href="http://bibframe.org/vocab/NotatedMovement.html">Notated Movement</a></li>
+      <li><a href="http://bibframe.org/vocab/NotatedMusic.html">NotatedMusic</a></li>
+      <li><a href="http://bibframe.org/vocab/SoftwareOrMultimedia.html">Software or Multimedia</a></li>
+      <li><a href="http://bibframe.org/vocab/StillImage.html">StillImage</a></li>
+      <li><a href="http://bibframe.org/vocab/Tactile.html">Tactile</a></li>
+      <li><a href="http://bibframe.org/vocab/ThreeDimensionalObject.html">Three Dimensional Object</a></li>
+     </ul>
+   </dd> 
+   <h3 class="text-muted"><a name="F"></a>F</h3>
+   <dt><a name="FRBR"></a>FRBR</dt>
+   <dd> 
+    An acronym for 
+    <a href="http://www.ifla.org/publications/functional-requirements-for-bibliographic-records">Functional Requirements for Bibliographic Records</a> is 
+    an Entity-Relationship model for bibliographic records that was first released in 1998 by an 
+    IFLA study group. FRBR is composed of four main entities; Work, Expression, Manifestation, and Item also
+    known as <a href="#WEMI">WEMI</a> along with various other entities to support creator, publisher, and subject authority
+    relationships with the core WEMI entities.
+   </dd>
+   <h3 class="text-muted"><a name="H"></a>H</h3>
+   <dt><a name="HTML5"></a>HTML5</dt>
+   <dd>
+    HTML5 is the latest HTML specification from W3C and offers a lot features and advantages over older HTML
+    specifications including better support for video, local storage, and micro-data.
+   </dd>
+   <h3 class="text-muted"><a name="I"></a>I</h3>
+   <dt><a name="Instance"></a>Instance</dt>
+   <dd>A core class of the <a href="#BIBFRAME">BIBFRAME</a> model with the draft specification available 
+   at <a href="http://bibframe.org/vocab/Instance.html">http://bibframe.org/vocab/Instance.html</a>.
+   </dd>
+   <h3 class="text-muted"><a name="L"></a>L</h3>
+   <dt><a name="LinkedData"></a>Linked Data</dt>
+   <dd>
+    Linked Data is an international effort by multiple user communities to build a semantic web for representing relationships
+    between entities and objects on the Internet.
+   </dd>
+   <h3 class="text-muted"><a name="M"></a>M</h3>
+   <dt><a name="MARC21"></a>MARC21</a></dt>
+   <dd>
+    An acronym for <b>Ma</b>chine <b>R</b>eadable <b>C</b>ataloging record, MARC21 is the most 
+    widely used data-carrier format and specification 
+    used by libraries today. 
+   </dd>
+   <h3 class="text-muted"><a name="N"></a>N</h3>
+   <dt><a name="NoSQL"></a>NoSQL</dt>
+   <dd>
+    A general term for the class of newer data storage technologies that differ
+    from traditional databases that use SQL.
+   </dd>
+   <h3 class="text-muted"><a name="O"></a>O</h3>
+   <dt><a name="Organization"></a>Organization</dt>
+   <dd>
+    A  <a href="#BIBFRAME">BIBFRAME</a> class that represents a human organization including corporations,
+    government entities, non-profit, religious, or any other structured group. An Organization class
+    defines an authority relationship with 
+    with a <a href="#CreativeWork">Creative Work</a> or <a href="#Instance">Instance</a>
+   </dd>
+   <h3 class="text-muted"><a name="P"></a>P</h3>
+   <dt><a name="Person"></a>Person</dt> 
+   <dd>A <a href="#BIBFRAME">BIBFRAME</a> class that represents a human being. A Person entity
+      defines a type of authority relationship with a <a href="#CreativeWork">Creative Work</a> or
+      <a href="#Instance">Instance</a></dd>
+   <dt><a name="Place"></a>Place</dt>
+   <dd>
+     A <a href="#BIBFRAME">BIBFRAME</a> class that represents a geographic location. A Place entity
+     defines a geographic authority relationship with a <a href="#CreativeWork">Creative Work</a> or
+     <a href="#Instance">Instance</a>
+   </dd>
+   <dt><a name="Python"></a>Python</dt>
+   <dd>
+    <a href="http://www.python.org/">Python</a> is a popular open-source programming language that used in 
+    the <a href="#">Aristotle Library Apps</a> and
+    <a href="#BIBFRAME-Datastore">BIBFRAME Datastore</a> project. 
+   </dd>
+   <h3 class="text-muted"><a name="R"></a>R</h3>
+   <dt><a name="RDA"></a>RDA</a></dt>
+   <dd>
+    An acronym for Resource Discovery and Access, RDA is joint effort between American Library Association, the 
+    Australian Committee on Cataloging, the British Library, the Library of Congress, Canadian Library Association,
+    and CILIP. RDA is a new cataloging standard to replace <a href="#AACR2">AACR2</a>, using
+    concepts from <a href="#LinkedData">Linked Data</a>, and the <a href="#FRBR">FRBR</a> family of bibliographic
+    specifications.
+   </dd>
+   <dt><a name="Redis"></a>Redis</dt>
+   <dd>
+    <a href="http://redis.io">Redis</a> is an in-memory advanced key-value datastore that is considered
+    a <a href="#NoSQL">NoSQL</a> technology. Redis is used extensively by large commercial websites and
+    is the primary storage technology used in <a href="#RLSP">Redis Library Services Platform</a>.
+   </dd>
+   <dt><a name="rlsp"></a>Redis Library Services Platform</dt>
+   <dd>
+    An acronym for the Redis Library Services Platform, an open source project made up of two open source
+    projects, <a href="#BIBFRAME-Datastore">BIBFRAME-Datastore</a> and 
+    <a href="#aristotle-library-apps">Aristotle Library Apps</a>.
+   </dd>
+   <h3 class="text-muted"><a name="S"></a>S</h3>
+   <dt><a name="schema"></a>Schema.org</dt>
+   <dd>
+    A joint effort by Google, Microsoft, and Yandex that allows web developers to mark-up websites
+    with semantically meaningful way in a structured environment. 
+   </dd>
+   <h3 class="text-muted"><a name="T"></a>T</h3>
+   <dt><a name="Topic"></a>Topic</dt>
+   <dd>
+    A <a href="#BIBFRAME">BIBFRAME</a> class representing a specific topic that has
+    an authority relationship with either a <a href="#CreativeWork">Creative Work</a> or
+     <a href="#Instance">Instance</a>
+   </dd>
+   <h3 class="text-muted"><a name="W"></a>W</h3>
+   <dt><a name="WEMI"></a>WEMI</dt>
+   <dd>
+    An acronym for <a href="#FRBR">FRBR</a>'s Work, Expression, Manifestation, and Item entities.
+   </dd>
+  </dl>
+
   </dl>
  </div>
 </div>

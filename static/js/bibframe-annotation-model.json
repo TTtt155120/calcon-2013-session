@@ -1,0 +1,22 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "Article", 
+  "copyrightYear": 2013, 
+  "datePublished": "2013-08-26", 
+  "headline": "BIBFRAME Annotation Model", 
+  "name": "bibframe-annotation-model", 
+  "publisher": {
+    "@type": "GovernmentOrganization", 
+    "address": {
+      "@type": "PostalAddress", 
+      "addressLocality": "Washington", 
+      "addressRegion": "DC"
+    }, 
+    "name": "Library of Congress", 
+    "url": "http://loc.gov/"
+  }, 
+  "url": "http://bibframe.org/documentation/annotations/"
+}
