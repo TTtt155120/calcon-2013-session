@@ -1,0 +1,30 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "Article", 
+  "author": [
+    {
+      "@type": "Person", 
+      "familyName": "Guenther", 
+      "givenName": "Rebecca", 
+      "name": "Rebecca Guenther"
+    }
+  ], 
+  "copyrightYear": 2013, 
+  "datePublished": "2013-06-25", 
+  "headline": "BIBFRAME Resource Types Discussion Paper", 
+  "name": "bibframe-resource-types-discussion-paper", 
+  "publisher": {
+    "@type": "GovernmentOrganization", 
+    "address": {
+      "@type": "PostalAddress", 
+      "addressLocality": "Washington", 
+      "addressRegion": "DC"
+    }, 
+    "name": "Library of Congress", 
+    "url": "http://loc.gov/"
+  }, 
+  "url": "http://bibframe.org/documentation/resource-types/"
+}

@@ -28,8 +28,11 @@
     <h3 class="panel-title">Authority/Agent/Person</h3>
    </div>
    <div class="panel-body">
-    <img src="{{ url_for('static', filename='img/user_48x48.png') }}">
-
+    <img src="{{ url_for('static', filename='img/user_48x48.png') }}" class="pull-left">
+    <p>
+     A BIBFRAME class that represents a human being. A Person entity defines a 
+     type of authority relationship with a Creative Work or Instance
+    </p>    
    </div>
   </div>
  </div>
@@ -40,8 +43,9 @@
     <h3 class="panel-title">Authority/Topic</h3>
    </div>
    <div class="panel-body">
-   <img src="{{ url_for('static', filename='img/idea_48x48.png') }}"> 
-
+   <img src="{{ url_for('static', filename='img/idea_48x48.png') }}" class="pull-left"> 
+    A BIBFRAME class representing a specific topic that has an authority 
+    relationship with either a Creative Work or Instance
    </div>
   {# END Topic panel #}
   </div>
@@ -54,7 +58,8 @@
    </div>
    <div class="panel-body">
     <img src="{{ url_for('static', filename='img/calendar_48x48.png') }}" class="pull-right">
-
+    A BIBFRAME class that represents a single event, a time-span, or epoch that defines a
+    temporal authority relationship with a Creative Work or Instance.
    </div>
   {# END Temporal Concept panel #}
   </div>
@@ -69,8 +74,9 @@
     <h3 class="panel-title">Authority/Place</h3>
    </div>
    <div class="panel-body">
-   <img src="{{ url_for('static', filename='img/maps_48x48.png') }}"> 
-
+   <img src="{{ url_for('static', filename='img/maps_48x48.png') }}" class="pull-right"> 
+    A BIBFRAME class that represents a geographic location. A Place entity 
+    defines a geographic authority relationship with a Creative Work or Instance
    </div>
   {# END Place panel #}
   </div>
@@ -80,10 +86,13 @@
   {# START Organization panel #}
   <div class="panel panel-default">
    <div class="panel-heading">
-    <h3 class="panel-title">Authority/Organization</h3>
+    <h3 class="panel-title">Authority/Agent/Organization</h3>
    </div>
    <div class="panel-body">
-    <img src="{{ url_for('static', filename='img/bank_48x48.png') }}"> 
+    <img src="{{ url_for('static', filename='img/bank_48x48.png') }}" class="pull-left"> 
+    A BIBFRAME class that represents a human organization including corporations, 
+    government entities, non-profit, religious, or any other structured group. An 
+    Organization class defines an authority relationship with with a Creative Work or Instance
    </div>
   {# END Organization panel #}
   </div>
@@ -153,10 +162,13 @@
  var authoritiesQuizViewModel = function() {
   var self = this;
 
-  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
- 
+  
+  {% if user.is_authenticated() %}   
+   self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+  {% endif %}
+   
   self.questionOneItems = [
-   { id: 1, name: "BIBFRAME Authorities are similar in concept to MARC21 authorities", selected: false},
+   { id: 1, name: "BIBFRAME Authorities are similar but are more inclusive than MARC21 authorities", selected: false},
    { id: 2, name: "Person, Organization, and Family are all subclasses of Agent class", selected: false},
    { id: 3, name: "Family is an example of a Topic Authority", selected: false},
    { id: 4, name: "Authorities provide an important authenication function in BIBFRAME", selected: false}

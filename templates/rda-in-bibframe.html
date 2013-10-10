@@ -20,8 +20,32 @@
     <h2>BIBFRAME</h2>
   </div>
   
-  <div class="col-md-4">
-   <h2>Quiz</h2>
+ <div class="col-md-4">
+  {# START Quiz Panel #}
+  <div class="panel panel-primary">
+   <div class="panel-heading">
+    <h3 class="panel-title"><a name="quiz"></a> Badge Quiz </h2>
+   </div>
+   <div class="panel-body">
+    <form id="badge-quiz">
+     <input type="hidden" name="slide" value="{{ current.name }}">
+     {# START Q1 #}
+     <div class="form-group">
+      <label>Select all proposed mappings between RDA Content Type to BIBFRAME Work Subclass(es)</label>
+      <div data-bind="foreach: questionOneItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q1" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+     {# END Q1 #}
+     </div>
+   </div>
+  {# END Quiz Panel #}
+  </div>
   </div>
 </div>
 {% endblock %}
@@ -31,10 +55,16 @@
 var rdaInBIBFRAMEViewModel = function() {
   var self = this;
 
-
   {% if user.is_authenticated() %}  
   self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
   {% endif %}
+
+  self.questionOneItems = [
+   {id: 1, name: "RDA Content Type's Text mapped to BIBFRAME Language Material subclass"},
+   {id: 2, name: "RDA Content Type's Tactile music mapped to BIBFRAME Notated music and Tactile subclasses"},
+   {id: 3, name: "RDA Content Type's Computer program mapped to BIBFRAME Three dimensional object subclass"},
+   {id: 4, name: "RDA Content Type's Computer dataset to BIBFRAME Dataset subclass"}
+  ]
 
 }
 ko.applyBindings(new rdaInBIBFRAMEViewModel());

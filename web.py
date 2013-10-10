@@ -96,7 +96,11 @@ ANSWERS = json.load(open('answers.json', 'rb'))
 app.secret_key = ANSWERS.pop('secret_key')
 
 RESOURCES = []
-for name in ['bibliographic-framework-as-a-web-of-data.json']:
+for name in ['anglo-american-cataloging-rules-second-edition.json',
+             'bibframe-resource-types-discussion-paper.json',
+             'bibliographic-framework-as-a-web-of-data.json',
+             'rda-toolkit.json',
+             'understanding-marc-bibliographic.json']:
     RESOURCES.append(
         json.load(
             open(os.path.join('static',

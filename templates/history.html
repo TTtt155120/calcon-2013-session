@@ -91,7 +91,9 @@
 function HistoryQuizViewModel() {
   var self = this; 
 
-  self.badgeViewModel = badgeViewer();
+  {% if user.is_authenticated() %}   
+  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+  {% endif %} 
 
   self.questionOneItems = [
     { id: 1, name: "2007", selected: false},

@@ -386,10 +386,18 @@
     </div>
     <div class="panel-body">
      <p>
-      In the history of bibliographic theory, debate about, or even if, we should
-      have a more abstract representation of a creative artifact beside the object
-      itself.
-     </p>     
+      In the history of bibliographic theory, there is some controversy about
+      having a seperate, more abstract representation of a creative artifact beside the object
+      itself. In FRBR and BIBFRAME, a distinction is made between the creative artifact
+      (FRBR's Work and Expression, BIBFRAME's Creative Work) and the actual embodiment of 
+      the creative artifact (FRBR's Manifestation and Item, BIBFRAME's Instance). 
+     </p>    
+     <p>
+      In contrast, two of the most popular metadata standards, <a href="http://dublincore.org/">Dublin Core</a> and 
+      <a href="http://schema.org/">Schema.org</a>, do not
+      differenciate between the artifact itself and the abstract representation modeled
+      on a work.
+     </p> 
     </div>
    {# END Work distinction #}
    </div>
@@ -482,7 +490,7 @@
   ];
 
   self.questionThreeItems = [
-   {id: 1, name: "Exist as web-based control point for the materialization", selected: false},
+   {id: 1, name: "Instances are web-based control point for the materialization", selected: false},
    {id: 2, name: "Instances are exactly equilivant to FRBR Items", selected: false},
    {id: 3, name: "BIBFRAME Authorities are used to associate publication information to an Instance", selected: false},
    {id: 4, name: "Instances can have more than one Creative Work", selected: false}

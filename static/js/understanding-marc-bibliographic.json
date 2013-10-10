@@ -1,0 +1,27 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "Book", 
+  "author": [{
+    "@type": "Person", 
+    "familyName": "Furrie", 
+    "givenName": "Betty", 
+    "name": "Betty Furrie"
+  }], 
+  "copyrightYear": 2009, 
+  "headline": "Understanding MARC Bibliographic: Machine-Readable Cataloging", 
+  "name": "understanding-marc-bibliographic", 
+  "publisher": {
+    "@type": "GovernmentOrganization", 
+    "address": {
+      "@type": "PostalAddress", 
+      "addressLocality": "Washington", 
+      "addressRegion": "DC"
+    }, 
+    "name": "Library of Congress", 
+    "url": "http://loc.gov/"
+  }, 
+  "url": "http://www.loc.gov/marc/umb/"
+}
