@@ -109,7 +109,10 @@
 function VocabQuizViewModel() {
   var self = this; 
 
+
+  {% if user.is_authenticated() %}   
   self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+  {% endif %}
 
   self.gradeQuiz = function() {
    $.ajax({

@@ -31,7 +31,10 @@
 var rdaInBIBFRAMEViewModel = function() {
   var self = this;
 
+
+  {% if user.is_authenticated() %}  
   self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
+  {% endif %}
 
 }
 ko.applyBindings(new rdaInBIBFRAMEViewModel());
