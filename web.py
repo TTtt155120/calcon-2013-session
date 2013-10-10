@@ -190,7 +190,41 @@ def load_user(userid):
     return User(id=userid,
                 email=user_result[3])
                 
+@app.route('{0}/bibframe-rda-badge.json'.format(URL_PREFIX))
+def badge_class_json():
+    """
+    Following examples at <https://github.com/mozilla/openbadges/wiki/Assertions>
+    """
+    return jsonify(
+            {"name": "CALCON 2013 - BIBFRAME and RDA Badge",
+             "description":
+             "Introduction to BIBFRAME and RDA presented by Jeremy Nelson at CALCON 2013 RDA Session",
+             "image": "http://tuttdemo.coloradocollege.edu{0}".format(
+                 url_for('static', filename="img/bibframe-rda-badge.png")),
+             "criteria": "http://tuttdemo.coloradocollege.edu{0}".format(
+                 url_for('badge')),
+             "tags": ["BIBFRAME", "CALCON 2013", "RDA"],
+             "issuer": "http://tuttdemo.coloradocollege.edu{0}".format(
+                 url_for('badge_issuer_org'))})
+             
+@app.route('{0}/badge-issuer-organization.json'.format(URL_PREFIX))
+def badge_issuer_org():
+    return jsonify(
+        {"name": "Colorado College Tutt Library Systems and Metadata Services",
+         "image": "http://tuttdemo.coloradocollege.edu{0}".format(
+             url_for('static', 'img/tutt-library-spring.png')),
+         "url": "http://www.coloradocollege.edu/library/",
+         "email": "jeremy.nelson@coloradocollege.edu",
+         "revocationList": "http://tuttdemo.coloradocollege.edu{0}".format(
+             url_for('badge_revoked'))})
 
+@app.route('{0}/revoked.json'.format(URL_PREFIX))
+def badge_revoked():
+    return jsonify({})
+
+           
+
+           
 @app.route('{0}/badge.html'.format(URL_PREFIX))
 def badge():
     participant, slide_results = None, []
@@ -339,6 +373,13 @@ def resources():
                            resources=RESOURCES,
                            slides=SLIDES,
                            user=current_user)
+
+@app.route('{0}/resources/<path:filename>.json'.format(URL_PREFIX))
+def resource(filename):
+    for resource in RESOURCES.get('article-books') + RESOURCES.get('websites'):
+        if filename == resource.get('name'):
+            return jsonify(resource)
+    return None
     
 
 @app.route('{0}/<track>/<path:slide>'.format(URL_PREFIX))
