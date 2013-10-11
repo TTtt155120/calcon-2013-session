@@ -111,24 +111,7 @@
  var AACR2toRDAViewModel = function() {
   var self = this;
 
-  {% if user.is_authenticated() %}  
-  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
-  {% endif %}
-
-  self.gradeQuiz = function() {
-   $.ajax({
-      type: 'POST',
-       url: '/calcon-2013-session/grade',
-       data: $('#badge-quiz').serialize(),
-       success: function(response) {
-         if(response['error']) {
-           alert("Error " + response['error'])
-         } else {
-          alert("Graded Quiz " + response['score'] + " out of 3");
-         }
-       }
-   });
-  }
+  {% include 'quiz.js' %}  
 
   self.questionOneItems = [
    {id: 1, name: "Artist Alliance of Cataloging Regulations Version 2"},
@@ -146,7 +129,7 @@
 
   self.questionThreeItems = [
    {id: 1, name: "The development of RDA began in the late 1990s"},
-   {id: 2, name: "RDA is meant to supercede AACR2"},
+   {id: 2, name: "RDA is meant to supersede AACR2"},
    {id: 3, name: "RDA is not based on FRBR"},
    {id: 4, name: "RDA is quickly replacing AACR2"} 
   ];

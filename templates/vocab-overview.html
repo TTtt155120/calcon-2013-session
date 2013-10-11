@@ -124,6 +124,9 @@ function VocabQuizViewModel() {
            alert("Error " + response['error'])
          } else {
           alert("Graded Quiz " + response['score'] + " out of 3");
+          var existing_points = parseInt(self.badgePoints());
+          var new_total = existing_points + parseInt(response['score']);
+          self.badgePoints(new_total);
          }
        }
     });
@@ -153,10 +156,10 @@ function VocabQuizViewModel() {
 
   self.questionThreeItems = [
    { id: 1,
-     name: "Reviews, Authorities, and Creative Works are all parents of other BIBFRAME classes",
+     name: "Reviews, Authorities, and Creative Works are top-level BIBFRAME classes",
      selected: false},
    { id: 2,
-     name: "BIBFRAME attempts to model MARC21 bibliographic relationships using Linked Data principles",
+     name: "BIBFRAME attempts to model bibliographic relationships in MARC21 using Linked Data principles",
      selected: false},
    { id: 3,
      name: "BIBFRAME directly supports FRBR Work, Expression, Manifestation, and Item",

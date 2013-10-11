@@ -45,13 +45,7 @@
         Create an Mozilla Open Badge Backpack Account 
         <a href="http://backpack.openbadges.org/backpack/login">Backpack Account</a>
        </p>
-       <h2><li>Login or Register your E-mail</li></h2>
-       <div class="panel">
-         <h3>Login with your Gmail Account</h3>
-         
-       </div>
-       <h1>OR</h1>
-        <h3>Register your E-mail</h3>
+       <h2><li>Register your E-mail</li></h2>
        <div class="alert alert-info" >
         <form class="form-inline" action="/calcon-2013-session/register" method="POST">
          <div class="form-group">
@@ -79,15 +73,19 @@
         <li>Fulfill Badge Critera</li>
        </h2>
        <div class="panel">
-         <p>
-          For each slide in this presentation, take the badge quiz and get 2/3 questions
-          right.  
-         </p>
          <div class="panel-body">
+         <p>
+          Each slide in this presentation has a 3-pount badge quiz, you need at least 20 points out of 30 to 
+          earn your <strong>CALCON 2013 BIBFRAME and RDA</strong> badge.
+         </p>
            <ul>
             {% for slide in slides.bibframe %}
             <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}#quiz">{{ slide.label }} Badge Quiz</a></li>
             {% endfor %}
+             {% for slide in slides.rda %}
+            <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}#quiz">{{ slide.label }} Badge Quiz</a></li>
+            {% endfor %}
+
            </ul>
          </div>
        </div>

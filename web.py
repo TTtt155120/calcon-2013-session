@@ -24,26 +24,26 @@ __license__ = 'GPL v2'
 __copyright__ = '(c) 2013 by Jeremy Nelson'
 
 import argparse
+import datetime
 import hashlib
 import json
 import os
 import sqlite3
+import uuid
 
 from flask import Flask, g, redirect, render_template, url_for
-from flask import flash, jsonify, request, session
+from flask import abort, flash, jsonify, request, session
 from flask.ext.login import LoginManager, login_user, login_required, logout_user
 from flask.ext.login import make_secure_token, UserMixin, current_user
-##from flaskext.bcrypt import Bcrypt
 
 from flask_oauth import OAuth
 from contextlib import closing
 
 from flup.server.fcgi import WSGIServer
 
-GOOGLE_SETTINGS = json.load(open('google_auth.json', 'rb'))
-##GOOGLE_SETTINGS = None
-
 DATABASE = 'calcon2013_badges.sqlite'
+
+IDENTITY_SALT = '#calcon2013'
 
 def connect_db():
     return sqlite3.connect(DATABASE)
@@ -67,24 +67,6 @@ def init_db():
                                (slide.get('label'),
                                 slide.get('name'),))
                 db.commit()
-
-oauth = OAuth()
-
-##google = oauth.remote_app(
-##    'google',
-##    base_url='https://www.google.com/accounts',
-##    authorize_url=GOOGLE_SETTINGS['web'].get('auth_uri'),
-##    request_token_url=None,
-##    request_token_params={'scope': 'https://www.googleapis.com/auth/userinfo.email',
-##                          'response_type': 'code'},
-##    access_token_url=GOOGLE_SETTINGS['web'].get('token_uri'),
-##    access_token_method='POST',
-##    access_token_params={'grant-type': 'authorization_code'},
-##    consumer_key=GOOGLE_SETTINGS['web'].get('client_id'),
-##    consumer_secret=GOOGLE_SETTINGS['web'].get('client_secret'))
-    
-    
-                          
 
 app = Flask(__name__,
             static_url_path='/calcon-2013-session/static')
@@ -196,6 +178,14 @@ def load_user(userid):
         return None
     return User(id=userid,
                 email=user_result[3])
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page-not-found.html',
+                           category='home',
+                           slides=SLIDES,
+                           user=current_user), 404
+
                 
 @app.route('{0}/bibframe-rda-badge.json'.format(URL_PREFIX))
 def badge_class_json():
@@ -229,7 +219,48 @@ def badge_issuer_org():
 def badge_revoked():
     return jsonify({})
 
-           
+@app.route("{0}/badge/<uid>-bibframe-rda-badge.png".format(
+    URL_PREFIX))
+def badge_img_for_participant(uid):
+    badge_query = g.db.execute("""SELECT badge_img
+FROM badges WHERE uid=?""",
+                               (uid,))
+    badge_img_results = badge_query.fetchone()
+    if not badge_img_results:
+        abort(404)
+    return None
+
+@app.route("{0}/badge/<uid>-bibframe-rda-badge.json".format(
+    URL_PREFIX))
+def badge_for_participant(uid):
+    badge_query = g.db.execute("""SELECT recipient_id, issuedOn, uid
+FROM badges WHERE uid=?""",
+                               (uid,))
+    badge_results = badge_query.fetchone()
+    if not badge_results:
+        abort(404)
+    badge_json = {
+        'badge': "http://tuttdemo.coloradocollege.edu{0}".format(
+            url_for('badge_class_json')),
+        'issuedOn': badge_results[1],
+        'image': "http://tuttdemo.coloradocollege.edu"\
+            "{0}/{1}-bibframe-rda-badge.png".format(URL_PREFIX,
+                                                     uid),
+        'recipient': {
+            'type': "email",
+            'hashed': True,
+            'identity': "sha256${0}".format(
+                badge_results[0])},
+        'verify': {
+            'type': 'hosted',
+            'url': "http://tuttdemo.coloradocollege.edu"\
+            "{0}/{1}-bibframe-rda-badge.json".format(URL_PREFIX,
+                                                     uid)},
+        'uid': badge_results[2]
+        }
+    return jsonify(badge_json)
+    
+    
 
            
 @app.route('{0}/badge.html'.format(URL_PREFIX))
@@ -261,17 +292,28 @@ def glossary():
 
 @app.route('{0}/grade'.format(URL_PREFIX),
            methods = ['POST', 'GET'])
+@login_required
 def grade():
     score = 0
-    cursor = get_db().cursor()
+    cursor = g.db.cursor()
     # Need to keep 
     if request.method == 'POST':
         slide = request.form['slide']
-        if slide in session:
-            return jsonify(
-                {'error': 'Quiz for {0} with a score of {1} already exists'.format(
-                    slide,
-                    session[slide])})            
+        slide_result = cursor.execute(
+            "SELECT id FROM slides WHERE name=?",
+            (slide,)).fetchall()
+        if len(slide_result) == 1:
+            slide_id = slide_result[0][0]
+        else:
+            abort(404)
+        check_existing_query = cursor.execute(
+            """SELECT created_on FROM slide_results
+WHERE slide_id=? AND participant_id=?""",
+            (slide_id, current_user.id)).fetchone()
+        print("CHECK quiz {0}".format(check_existing_query))
+        if check_existing_query:
+            return jsonify({'error': 'You have already taken this quiz on {0}'.format(
+                check_existing_query[0])})
         if slide in ANSWERS:
             q1, q2, q3 = 0, 0, 0
             q1_answer = request.form.getlist('q1')
@@ -283,25 +325,62 @@ def grade():
             q3_answer = request.form.getlist('q3')
             if q3_answer == ANSWERS[slide].get('q3'):
                 q3 = 1
-            if current_user:
-                slide_result = cursor.execute(
-                    "SELECT id FROM slides WHERE name=?",
-                    (slide,)).fetchall()
-                if len(slide_result) == 1:
-                    slide_id = slide_result[0][0]
-##                print(slide_id, current_user.id)
-                # Insert quiz results to db
-                cursor.execute("""INSERT INTO slide_results
+            # Insert quiz results to db
+            cursor.execute("""INSERT INTO slide_results
  (slide_id, participant_id, q1, q2, q3) VALUES (?, ?, ?, ?, ?)""",
                            (slide_id,
                            current_user.id,
                            q1,
                            q2,
                            q3))
-                get_db().commit()
+            g.db.commit()
             score = sum([q1, q2, q3])
-            session[slide] = score
+        else:
+            abort(404)
         return jsonify({'score': score })
+
+
+@app.route('{0}/badge/issue'.format(URL_PREFIX),
+       methods=['POST'])
+@login_required
+def issue_badge():
+    cursor = g.db.cursor()
+    slides_query = cursor.execute(
+        """SELECT total(q1), total(q2), total(q3) FROM slide_results WHERE participant_id=?""",
+        (current_user.id,))
+    query_results = slides_query.fetchall()
+    score = 0
+    for row in query_results:
+        score += sum(row)
+    if score < 20:
+        return jsonify(
+            {'error': 'Cannot issue badge, your score {0} is below the necessary 20'})
+    # Creats a random unique id from the first char chunk in a ranomd uuid
+    uid = str(uuid.uuid4()).split("-")[0]
+    issued_on = datetime.datetime.utcnow().isoformat()
+    cursor.execute("""INSERT INTO badges
+(uid, recipient_id, issuedOn) VALUES (?,?,?)""",
+                   (uid,
+                    current_user.id,
+                    issued_on))
+    g.db.commit()
+    assert_url = '{0}/{1}/badge/{2}-bibframe-rda-badge.json'.format(
+        'http://tuttdemo.coloradocollege.edu',
+        'calcon-2013-session',
+        uid)
+    baking_service = urllib2.urlopen(
+        'http://beta.openbadges.org/baker?assertion={0}'.format(assert_url))
+    raw_image = baking_service.read()
+    cursor.execute("UPDATE badges SET badge_img=? WHERE recipient_id=?",
+                   raw_image,
+                   current_user.id)
+    cursor.execute()
+    return jsonify(
+        {'message': 'Congratulations! You have just been issued an open badge for CALCON 2013 BIBFRAME and RDA Sesson',
+         'badge-url': assert_url})
+    
+    
+
 
 
 @app.route('{0}/login'.format(URL_PREFIX),
@@ -309,7 +388,7 @@ def grade():
 def login():
 ##    return google.authorize(callback='http://tuttdemo.coloradocollege.edu/')
     if request.method == 'POST':
-        cur = get_db().cursor()
+        cur = g.db.cursor()
         email = request.form.get('email')
         raw_pwd = request.form.get('pw')
         email_query = cur.execute("SELECT identity_hash, pwd_hash FROM participant WHERE email=?",
@@ -324,7 +403,8 @@ def login():
                             email=email)
                 login_user(user)
             else:
-                raise ValueError("Incorrect login")
+                flash("Incorrect login")
+                return redirect(url_for("login"))
         return redirect(request.args.get("next") or url_for("home"))
     return render_template("login.html",
                            category='home',
@@ -356,7 +436,7 @@ def register():
         flash("Error passwords do not match")
     else:
         identity_hash = hashlib.sha256(raw_email)
-        identity_hash.update(app.secret_key)
+        identity_hash.update(IDENTITY_SALT)
         pwd_hash = hashlib.sha256(pwd_one)
         pwd_hash.update(app.secret_key)
         db = get_db()
@@ -386,7 +466,7 @@ def resource(filename):
     for resource in RESOURCES.get('article-books') + RESOURCES.get('websites'):
         if filename == resource.get('name'):
             return jsonify(resource)
-    return None
+    abort(404)
     
 
 @app.route('{0}/<track>/<path:slide>'.format(URL_PREFIX))

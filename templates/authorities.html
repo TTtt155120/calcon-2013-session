@@ -162,11 +162,8 @@
  var authoritiesQuizViewModel = function() {
   var self = this;
 
-  
-  {% if user.is_authenticated() %}   
-   self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
-  {% endif %}
-   
+ {% include 'quiz.js' %}    
+    
   self.questionOneItems = [
    { id: 1, name: "BIBFRAME Authorities are similar but are more inclusive than MARC21 authorities", selected: false},
    { id: 2, name: "Person, Organization, and Family are all subclasses of Agent class", selected: false},
@@ -185,21 +182,6 @@
    {id: 3, name: "A BIBFRAME Authority can be an access point to the resource", selected: false}
   ]
 
-  self.gradeQuiz = function() {
-   $.ajax({
-      type: 'POST',
-       url: '/calcon-2013-session/grade',
-       data: $('#badge-quiz').serialize(),
-       success: function(response) {
-         if(response['error']) {
-           alert("Error " + response['error'])
-         } else {
-          alert("Graded Quiz " + response['score'] + " out of 3");
-          self.badgePoints(self.BadgePoints + response['score']);
-         }
-       }
-    });
-  }
 
  }
  ko.applyBindings(new authoritiesQuizViewModel());

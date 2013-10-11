@@ -17,9 +17,14 @@
 {% include 'slide-nav.html' %}
 
 <div class="row">
- <div class="col-md-11 jumbotron">
+ <div class="col-md-10 jumbotron">
   <h1>{{ current.label }}</h1>
   <p class="lead">{{ current.description }}</p>
+ </div>
+ <div class="col-md-2">
+  <a class="btn btn-primary btn-lg"
+          data-toggle="modal"
+          href="#badge-quiz-dlg">Badge Quiz!</a>
 
  </div>
 </div>
@@ -49,6 +54,48 @@
  </div>
 
 </div>
+
+{# START Badge Quiz Modal #}
+<div class="modal fade" id="badge-quiz-dlg">
+  {# START modal-dialog #}
+  <div class="modal-dialog">
+   {# START modal-content #}
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{{ current.label }} Badge Quiz </h4>
+      </div>
+      <div class="modal-body">
+        <form id="badge-quiz">
+        <input type="hidden" name="slide" value="{{ current.name }}">     
+        {# START Q1 #}
+        <div class="form-group">
+         <label>Question One </label> 
+         <div data-bind="foreach: questionOneItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q1" data-bind="attr: { value:id }, 
+                                                     checked: selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+        </div>
+        {# END Q1 #}
+        </div>
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    {# END modal-content #}
+    </div>
+  {# END modal-dialog #}
+  </div>
+{# END Badge Quiz Modal #}
+</div>
+
+<div class
 {% endblock %}
 
 {% block more_js %}
@@ -100,6 +147,13 @@
 
  var BIBFRAMEandRLSPViewModal = function() { 
   var self = this;
+
+   {% include 'quiz.js' %}
+
+  self.questionOneItems = [
+    {id: 1, name: "BIBFRAME is natively supported in the Redis Library Services Platform", selected: true},
+    {id: 2, name: "Redis Library Services Platform is NOT open source", selected: false} 
+  ];
 
   self.displayAll = function() { 
     svgDraw.clear();
