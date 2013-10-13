@@ -17,36 +17,33 @@
 {% include 'slide-nav.html' %}
 
 <div class="row">
- <div class="col-md-10 jumbotron">
-  <h1>{{ current.label }}</h1>
-  <p class="lead">{{ current.description }}</p>
+ <div class="col-md-10 jumbotron"> 
+   <div data-bind="visible: showJumbo" > 
+    <h1>{{ current.label }}</h1>
+    <p class="lead">{{ current.description }}</p>
+   </div>
+   <div data-bind="visible: animationOn">
+    <div id="bf-rlsp-description">
+      <h2 data-bind="text: stepTitle"></h2>
+      <p data-bind="text: stepDescription" class="lead"></p> 
+     </div>
+     <div id="bf-rlsp-animation"></div>
+    </div> 
  </div>
  <div class="col-md-2">
+  
   <a class="btn btn-primary btn-lg"
           data-toggle="modal"
           href="#badge-quiz-dlg">Badge Quiz!</a>
 
- </div>
-</div>
-
-
-<div class="row">
- <div class="col-md-12">
-  <div class="btn-group">
-   <div class="btn-group">
-    <button class="btn btn-default btn-lg" data-bind="click: displayAll">Run <span class="glyphicon glyphicon-play"></span></button>
-   </div> 
-  </div>
   <p></p>
-  <div id="bf-rlsp-description" class="well well-sm">
-   <h2 data-bind="text: stepTitle"></h2>
-   <p data-bind="text: stepDescription" class="lead"></p>
-  </div>
-  <div id="bf-rlsp-animation"></div>
+  <button class="btn btn-default btn-lg" 
+    data-bind="click: displayAll">
+    Run <span class="glyphicon glyphicon-play"></span>
+  </button>
  </div>
-
+ </div>
 </div>
-
 {# START Badge Quiz Modal #}
 <div class="modal fade" id="badge-quiz-dlg">
   {# START modal-dialog #}
@@ -62,7 +59,7 @@
         <input type="hidden" name="slide" value="{{ current.name }}">     
         {# START Q1 #}
         <div class="form-group">
-         <label>Question One </label> 
+         <label>Please choose all correct statements about the Redis Library Services Platform </label> 
          <div data-bind="foreach: questionOneItems">
        <div class="checkbox">
         <label>
@@ -86,8 +83,6 @@
   </div>
 {# END Badge Quiz Modal #}
 </div>
-
-<div class
 {% endblock %}
 
 {% block more_js %}
@@ -102,7 +97,7 @@
 
  var Introduction = function() {
   var ala_grp = svgDraw.group();
-  var ala = svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}");
+  var ala = svgDraw.image("{{ url_for('static', filename='img/programming_64x64.png') }}");
   ala.x(30);
   ala_grp.add(ala);
   var ala_label = svgDraw.text("Aristotle Library Apps").font({ size: 18 });
@@ -111,18 +106,46 @@
   ala_grp.hide();
   ala_grp.move(30, 50);
   ala_grp.show();
-  
-  var python_img = svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}");
-  python_img.hide();
-  var django_grp = svgDraw.group();
-  var django_img = svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}");
-  django_img.x(30);
-  django_grp.add(django_img);
-  django_label = svgDraw.text("Open source Web framework\nPython based").font({ size: 18 });
-  django_label.y(100);
-  django_grp.add(django_label);
-  django_grp.add(django_img).hide();
-  ala_grp.animate().move()
+  var mobile_group = svgDraw.group();
+  mobile_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
+  mobile_group.add(svgDraw.text("Mobile and Tablets").font({ size: 18 }).y(100));
+  mobile_group.hide();
+  var server_group = svgDraw.group();
+  server_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
+  server_group.add(svgDraw.image("{{ url_for('static', filename='img/server.png') }}"));
+  server_group.add(svgDraw.text("Desktops").font({ size: 18 }).y(100));
+  server_group.hide();
+ 
+  var ala_stack_grp = svgDraw.group();
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}").move(5,0));
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}").scale(2,2).move(5,20));
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/HTML5_Logo_64.png') }}").move(100,5));
+  ala_stack_grp.hide();
+  fedora_grp = svgDraw.group();
+  var fedora_img = svgDraw.image("{{ url_for('static', filename='img/portal-logo.png') }}");
+  fedora_img.scale(2,2);
+  fedora_grp.add(fedora_img);
+  fedora_grp.hide();
+  var redis_grp = svgDraw.group();
+  var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
+  redis_grp.add(redis_img).hide();
+  ala_grp.animate().move(60, 180).after(function() {
+    redis_grp.move(20,20).show();
+    redis_grp.animate().move(350, 20).after(function() {
+     fedora_grp.move(400,0).show();
+     fedora_grp.animate().move(50,-20).after(function() {
+      var ala2Fedora = svgDraw.line(110, 175, 80, 110).stroke({ width: 2 });
+      mobile_group.move(50, 600).show();
+      mobile_group.animate().move(80, 380).during(function() { 
+       server_group.move(350, 600).show();
+       server_group.animate().move(330, 380).after(function() {
+        ala_stack_grp.move(220, 180).show();
+       }
+       );
+      });
+     });
+    });
+  });
 }
 
  var rlspSolo = function() {
@@ -159,14 +182,26 @@
   self.stepNumber = 1;
   self.stepDescription = ko.observable();
   self.stepTitle = ko.observable();
+  self.animationOn = ko.observable(false);
+  self.showJumbo = ko.observable(true);
+
    {% include 'quiz.js' %}
 
   self.questionOneItems = [
-    {id: 1, name: "BIBFRAME is natively supported in the Redis Library Services Platform", selected: true},
-    {id: 2, name: "Redis Library Services Platform is NOT open source", selected: false} 
+    {id: 1, name: "BIBFRAME is natively supported in the Redis Library Services Platform", selected: false},
+    {id: 2, name: "Redis Library Services Platform is NOT open source", selected: false},
+    {id: 3, name: "Aristotle Library Apps is the HTML5 mobile-based user interface  to the Redis Services Platform", selected: false},
+    {id: 4, name: "Django and Bootstrap are two open-source projects used in the Aristotle Library Apps project", selected: false}
+  ];
+
+  self.questionTwoItems = [
+   {id: 1, name: "True"},
+   {id: 2, name: "False"}
   ];
 
   self.displayAll = function() { 
+    self.animationOn(true);
+    self.showJumbo(false);
     svgDraw.clear();
     self.stepTitle("");
     self.stepDescription("");
@@ -186,7 +221,7 @@
            desc += " with progressive enhancements for full-desktop web browsers and network speeds"; 
            self.stepDescription(desc);
          },
-        10000);
+        6000);
         break;
 
       case 2:
