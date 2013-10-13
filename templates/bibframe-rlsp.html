@@ -34,22 +34,14 @@
  <div class="col-md-12">
   <div class="btn-group">
    <div class="btn-group">
-     <button type="button" 
-             class="btn btn-default dropdown-toggle"
-             data-toggle="dropdown">
-      Display <span class="caret"></span>
-     </button> 
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#" data-bind="click: displaySolo">Solo mode</a></li>
-        <li><a href="#" data-bind="click: displayCooperative">Cooperative Datastores</a></li>
-        <li><a href="#" data-bind="click: displayFuture">Future Plans</a></li>
-        <li class="divider"></li>
-        <li><a href="#" data-bind="click: displayAll">Run all</a></li>
-      </ul>
-     </button>
+    <button class="btn btn-default btn-lg" data-bind="click: displayAll">Run <span class="glyphicon glyphicon-play"></span></button>
    </div> 
   </div>
   <p></p>
+  <div id="bf-rlsp-description" class="well well-sm">
+   <h2 data-bind="text: stepTitle"></h2>
+   <p data-bind="text: stepDescription" class="lead"></p>
+  </div>
   <div id="bf-rlsp-animation"></div>
  </div>
 
@@ -103,19 +95,35 @@
 <script>
  var svgDraw = SVG('bf-rlsp-animation');
 
- var rlspCooperative = function() {
-  var title = svgDraw.text("Developing a Cooperative Library Services Platfrom").font({ size: 24 }); 
-  title.move(10,20);
-  title.animate().move(100, 20);
+ var BIBFRAMEDatastore = function() {
+
 
  }
 
- var rlspFuture = function() {
-  var title = svgDraw.text("The Future of the Redis Library Services Platform").font({ size: 24 }); 
-  title.move(10,20);
-  title.animate().move(100, 20);
-
- }
+ var Introduction = function() {
+  var ala_grp = svgDraw.group();
+  var ala = svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}");
+  ala.x(30);
+  ala_grp.add(ala);
+  var ala_label = svgDraw.text("Aristotle Library Apps").font({ size: 18 });
+  ala_label.y(100);
+  ala_grp.add(ala_label);
+  ala_grp.hide();
+  ala_grp.move(30, 50);
+  ala_grp.show();
+  
+  var python_img = svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}");
+  python_img.hide();
+  var django_grp = svgDraw.group();
+  var django_img = svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}");
+  django_img.x(30);
+  django_grp.add(django_img);
+  django_label = svgDraw.text("Open source Web framework\nPython based").font({ size: 18 });
+  django_label.y(100);
+  django_grp.add(django_label);
+  django_grp.add(django_img).hide();
+  ala_grp.animate().move()
+}
 
  var rlspSolo = function() {
   var title = svgDraw.text("Running RLSP in Solo Mode").font({ size: 24 }); 
@@ -148,6 +156,9 @@
  var BIBFRAMEandRLSPViewModal = function() { 
   var self = this;
 
+  self.stepNumber = 1;
+  self.stepDescription = ko.observable();
+  self.stepTitle = ko.observable();
    {% include 'quiz.js' %}
 
   self.questionOneItems = [
@@ -157,9 +168,42 @@
 
   self.displayAll = function() { 
     svgDraw.clear();
-    rlspSolo();
-    rlspCooperative();
-    rlspFuture();
+    self.stepTitle("");
+    self.stepDescription("");
+    if(self.stepNumber > 4) {  self.stepNumber = 1; }
+    switch(self.stepNumber) {
+      case 1:
+        self.stepTitle("Introduction to the Redis Library Services Platform")
+        var desc = "The Redis Library Services Platform (RLSP) is made up of two projects:";
+        desc += "The first, Aristotle Library Apps, is the web interface and front-end to ";
+        desc += "the Redis BIBFRAME datastores and Fedora Commons Digital Repository."
+        self.stepDescription(desc);
+        Introduction()
+        setTimeout(function() {
+           desc = "Bootstrap, an open-source web framework, provides a mobile first HTML5, ";
+           desc += "CSS, and Javascript interface to small, single-purpose apps for use";
+           desc += " by library patrons and staff targeting mobile and tablet user-interfaces "
+           desc += " with progressive enhancements for full-desktop web browsers and network speeds"; 
+           self.stepDescription(desc);
+         },
+        10000);
+        break;
+
+      case 2:
+        self.stepTitle("BIBFRAME Datastore Project");
+        desc = "The second project of the Redis Library Services Platform is the BIBFRAME";
+        desc += " Datastore Project, a collection of redis configuration files and Lua ";
+        desc += "server-side scripts including documentation on running Redis as a bibliographic";
+        desc += " and operational datastore as single instance or as a cluster of Redis instances.";
+        self.stepDescription(desc);
+        BIBFRAMEDatastore();
+        break;
+
+     
+
+
+    }
+    self.stepNumber += 1;
   }
 
   self.displayCooperative = function() {
