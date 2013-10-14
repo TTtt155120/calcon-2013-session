@@ -158,7 +158,8 @@ var BadgeManagerViewModel = function() {
        var rda_badge_url = response['badge-url'];
        OpenBadges.issue([rda_badge_url], 
          function(errors, successes) {
-          //alert(errors, successes); 
+          //alert(errors, successes);
+          window.location.reload(); 
        });
       }
    });
