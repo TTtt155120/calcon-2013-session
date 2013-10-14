@@ -57,8 +57,21 @@
      </div>
     {# END Q3 #}
     </div>
+    {# START Q4 #}
+    <div class="form-group">
+    <label>True of False: Local Annotations offer new opportunities for libraries</label>
+    <div data-bind="foreach: questionFourItems">
+     <label class="radio-inline" >
+      <input type="radio" name="q4" data-bind="attr: { value:id },
+                                               checked: $root.selected">
+      <span data-bind="text: name"></span>
+     </label>
+    </div>
+    {# END Q1 #}
+    </div>
+
     </form>
-    {% include 'grade-register.html ' %}
+    {% include 'grade-register.html' %}
   
    </div>
   {# END Quiz panel #}
@@ -117,6 +130,11 @@
    {id: 2, name: "Facet", selected: false},
    {id: 3, name: "Review", selected: false},
    {id: 4, name: "Holding", selected: false}
+  ];
+  
+  self.questionFourItems = [
+   {id: 1, name: "True"},
+   {id: 0, name: "False"}
   ];
  }
  ko.applyBindings(new AnnotationsQuizViewModel());

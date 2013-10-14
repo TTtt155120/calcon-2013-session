@@ -101,16 +101,24 @@ function HistoryQuizViewModel() {
     { id: 3, name: "2011", selected: false},
     { id: 4, name: "2013", selected: false}
   ];
+
   self.questionTwoItems = [
+   { id: 1, name: 'extend bibliographic records beyond libraries'},
+   { id: 2, name: 'accomidate existing content models'},
+   { id: 3, name: 'specify specific technology like operating systems and databases' },
+   { id: 4, name: 'support new metadata standards'} 
+  ];
+
+  self.questionThreeItems = [
+    { id: 1, name: 'True', selected:false },
+    { id: 0, name: 'False', selected:false }
+  ];
+
+  self.questionFourItems = [
     { id: 1, name: 'FRBR', selected: false},
     { id: 2, name: 'MARC21', selected: false},
     { id: 3, name: 'TEI', selected: false},
     { id: 4, name: 'Schema.org', selected: false}
-  ];
-  self.questionThreeItems = [
-    { id: 1, name: 'True', selected:false },
-    { id: 0, name: 'False', selected:false }
-
   ];
 
   self.gradeQuiz = function() {
@@ -122,8 +130,7 @@ function HistoryQuizViewModel() {
          if(response['error']) {
            alert("Error " + response['error'])
          } else {
-          alert("Graded Quiz " + response['score'] + " out of 3");
-
+           alert("Graded Quiz " + response['score'] + " out of 4");
          }
        }
     });

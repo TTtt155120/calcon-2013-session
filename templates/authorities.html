@@ -80,9 +80,6 @@
    </div>
   {# END Place panel #}
   </div>
- </div>
-
- <div class="col-md-4">
   {# START Organization panel #}
   <div class="panel panel-default">
    <div class="panel-heading">
@@ -98,7 +95,7 @@
   </div>
  </div>
 
- <div class="col-md-4">
+  <div class="col-md-8">
   {# START Quiz panel #}
   <div class="panel panel-primary">
    <div class="panel-heading">
@@ -110,7 +107,7 @@
 
     {# START Q1 #}
     <div class="form-group">
-     <label>Select all correct statements from the list below</label>
+     <label>Choose all of the correct statements from the list below:</label>
       <div data-bind="foreach: questionOneItems">
        <div class="checkbox">
         <label>
@@ -148,6 +145,21 @@
        </div>
     {# END Q3 #}
     </div>
+    {# START Q4 #}
+    <div class="form-group">
+     <label>Select all levels of Authorities that may exist</label>
+     <div data-bind="foreach: questionFourItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q4" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+     </div>
+    {# END Q4 #}
+    </div>
+ 
    </form>
    {% include 'grade-register.html' %}
    </div>
@@ -181,6 +193,13 @@
    {id: 2, name: "A timestamp could not a TemporalConcept Authority", selected: false},
    {id: 3, name: "A BIBFRAME Authority can be an access point to the resource", selected: false}
   ]
+
+  self.questionFourItems = [
+   { id: 1, name: "Local"},
+   { id: 2, name: "Regional"},
+   { id: 3, name: "National"},
+   { id: 4, name: "International"}
+  ];
 
 
  }

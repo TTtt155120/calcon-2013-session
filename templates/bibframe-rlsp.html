@@ -91,8 +91,17 @@
  var svgDraw = SVG('bf-rlsp-animation');
 
  var BIBFRAMEDatastore = function() {
-
-
+   var solo_redis = svgDraw.group();
+   var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
+   solo_redis.add(redis_img);
+   solo_redis.add(svgDraw.text("Single Redis Datastore").font({ size: 18 }).y(60));
+   solo_redis.move(20,30);
+   creative_work = svgDraw.group();
+   creative_work.add(svgDraw.circle(120).stroke({ color: "rgb(0,200,0)", width: 3 })
+   .fill({ color: "rgb(255,255,255)" }));
+   creative_work.add(svgDraw.image("{{ url_for('static', filename='img/creative_writing_64x64.png') }}"));
+   creative_work.add(svgDraw.text("Creative Works").font({ size: 18 }).y(90));
+   creative_work.move(250, 20);
  }
 
  var Introduction = function() {
@@ -134,12 +143,17 @@
     redis_grp.animate().move(350, 20).after(function() {
      fedora_grp.move(400,0).show();
      fedora_grp.animate().move(50,-20).after(function() {
-      var ala2Fedora = svgDraw.line(110, 175, 80, 110).stroke({ width: 2 });
+      var ala2Fedora = svgDraw.line(110, 175, 80, 110).stroke({ width: 5, color: "rgb(255,0,0)" });
+      var ala2Redis = svgDraw.line(170, 195, 370, 100).stroke({ width: 5, color: "rgb(180,25,0)" });
       mobile_group.move(50, 600).show();
       mobile_group.animate().move(80, 380).during(function() { 
        server_group.move(350, 600).show();
        server_group.animate().move(330, 380).after(function() {
-        ala_stack_grp.move(220, 180).show();
+        ala_stack_grp.show().animate().move(220, 180).after(function() {
+         var mobile2ala = svgDraw.line(110, 370, 130, 320).stroke({ width: 5, color: "rgb(0,25,200)" });
+         var server2ala = svgDraw.line(390, 370, 160, 310).stroke({ width: 5, color: "rgb(0,25,200)" });
+
+        });
        }
        );
       });
@@ -205,7 +219,7 @@
     svgDraw.clear();
     self.stepTitle("");
     self.stepDescription("");
-    if(self.stepNumber > 4) {  self.stepNumber = 1; }
+    if(self.stepNumber > 3) {  self.stepNumber = 1; }
     switch(self.stepNumber) {
       case 1:
         self.stepTitle("Introduction to the Redis Library Services Platform")
@@ -234,8 +248,15 @@
         BIBFRAMEDatastore();
         break;
 
-     
-
+      case 3:
+        self.stepTitle("Next steps for Redis Library Services Platform");
+        desc = "The development process of Redis Library Services Platform";
+        desc += " follows an iterative Agile pattern where most apps are developed";
+        desc += " and functionality added based on the user demand. The design is of ";
+        desc += "a pull platform";
+        self.stepDescription(desc);
+        
+        break;
 
     }
     self.stepNumber += 1;

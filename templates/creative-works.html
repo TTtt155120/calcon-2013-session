@@ -85,6 +85,21 @@
       </div>
    {# END Q3 #}
     </div>
+   {# START Q4 #}
+   <div class="form-group">
+    <label>Select all Cartography subclasses from the list below:</label>
+    <div data-bind="foreach: questionFourItems">
+     <div class="checkbox">
+      <label>
+       <input type="checkbox" name="q4" data-bind="attr: { value:id }, 
+                                                  checked: $root.selected">
+       <span data-bind="text: name"></span>
+      </label>
+     </div> 
+    </div>
+   {# END Q4 #}
+   </div>
+
    {% include 'grade-register.html' %}
    </form> 
    {# END panel body #}
@@ -173,7 +188,13 @@ var CreativeWorkViewModel = function() {
     { id: 5, name: "Book", selected: false} 
   ];
 
+  self.questionFourItems = [
+    { id: 1, name: "Remote Sensing Image" },
+    { id: 2, name: "Dataset"},
+    { id: 3, name: "Globe"},
+    { id: 4, name: "Map"}
 
+  ];
   // Animation Steps
   self.showArticle = function() {
     self.article = self.svgDraw.group();

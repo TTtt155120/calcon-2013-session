@@ -75,17 +75,13 @@
        <div class="panel">
          <div class="panel-body">
          <p>
-          Each slide in this presentation has a 3-pount badge quiz, you need at least 20 points out of 30 to 
+          Each slide in this presentation has a badge quiz, you need at least 20 points out of 30 to 
           earn your <strong>CALCON 2013 BIBFRAME and RDA</strong> badge.
          </p>
            <ul>
             {% for slide in slides.bibframe %}
             <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}#quiz">{{ slide.label }} Badge Quiz</a></li>
             {% endfor %}
-             {% for slide in slides.rda %}
-            <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}#quiz">{{ slide.label }} Badge Quiz</a></li>
-            {% endfor %}
-
            </ul>
          </div>
        </div>

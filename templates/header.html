@@ -7,12 +7,7 @@
     {% for slide in slides.bibframe %}
     <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}">{{ slide.label }}</a></li>
     {% endfor %}
-    <li class="divider"></li>
-    {% for slide in slides.rda %}
-    <li><a href="/calcon-2013-session/rda/{{ slide.name }}">{{ slide.label }}</a></li>
-    {% endfor %}
     </ul>
-
   </li>
   <li class="dropdown{% if category == 'addendum' %} active{% endif %}">
    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Addendum<b class="caret"></b></a>

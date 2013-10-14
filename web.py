@@ -310,12 +310,11 @@ def grade():
             """SELECT created_on FROM slide_results
 WHERE slide_id=? AND participant_id=?""",
             (slide_id, current_user.id)).fetchone()
-        print("CHECK quiz {0}".format(check_existing_query))
         if check_existing_query:
             return jsonify({'error': 'You have already taken this quiz on {0}'.format(
                 check_existing_query[0])})
         if slide in ANSWERS:
-            q1, q2, q3 = 0, 0, 0
+            q1, q2, q3, q4 = 0, 0, 0, 0
             q1_answer = request.form.getlist('q1')
             if q1_answer == ANSWERS[slide].get('q1'):
                 q1 = 1
@@ -325,16 +324,20 @@ WHERE slide_id=? AND participant_id=?""",
             q3_answer = request.form.getlist('q3')
             if q3_answer == ANSWERS[slide].get('q3'):
                 q3 = 1
+            q4_answer = request.form.getlist('q4')
+            if q4_answer == ANSWERS[slide].get('q4'):
+                q4 = 1
             # Insert quiz results to db
             cursor.execute("""INSERT INTO slide_results
- (slide_id, participant_id, q1, q2, q3) VALUES (?, ?, ?, ?, ?)""",
+ (slide_id, participant_id, q1, q2, q3, q4) VALUES (?, ?, ?, ?, ?, ?)""",
                            (slide_id,
-                           current_user.id,
-                           q1,
-                           q2,
-                           q3))
+                            current_user.id,
+                            q1,
+                            q2,
+                            q3,
+                            q4))
             g.db.commit()
-            score = sum([q1, q2, q3])
+            score = sum([q1, q2, q3, q4])
         else:
             abort(404)
         return jsonify({'score': score })

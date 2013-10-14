@@ -413,9 +413,11 @@
       <div class="form-group">
          <label>Which of the following is NOT an Instance property?</label> 
          <div data-bind="foreach: questionOneItems">
+          <div class="radio">
            <input type="radio" name="q1" data-bind="attr: { value: id },
                                                            checked: $root.selected">
             <span data-bind="text: name"></span>
+          </div>
          </div>
       {# END Q1 #}
       </div>
@@ -444,6 +446,30 @@
        </div> 
       </div> 
       {# END Q3 #}
+      </div>
+      {# START Q4 #}
+      <div class="form-group">
+         <label>What BIBFRAME class does the Instance property <em>instanceOf</em> refer to?</label> 
+         <div data-bind="foreach: questionFourItems">
+          <div class="radio">
+           <input type="radio" name="q4" data-bind="attr: { value: id },
+                                                           checked: $root.selected">
+            <span data-bind="text: name"></span>
+          </div>
+         </div>
+      {# END Q4 #}
+      </div>
+     {# START Q5 #}
+      <div class="form-group">
+        <label>True or False: Schema.org's Creative Work and subclasses do not have a seperate Item or Instance class</label>
+        <div data-bind="foreach: questionFiveItems">
+         <label class="radio-inline" >
+          <input type="radio" name="q5" data-bind="attr: { value:id },
+                                                   checked: $root.selected">
+         <span data-bind="text: name"></span>
+         </label>
+       </div>
+      {# END Q5 #}
       </div>
    {% include 'grade-register.html' %}
      </div>
@@ -475,11 +501,23 @@
   ];
 
   self.questionThreeItems = [
-   {id: 1, name: "Instances are web-based control point for the materialization", selected: false},
+   {id: 1, name: "Instances are web-based control point for the materialization of the Creative Work", selected: false},
    {id: 2, name: "Instances are exactly equilivant to FRBR Items", selected: false},
    {id: 3, name: "BIBFRAME Authorities are used to associate publication information to an Instance", selected: false},
    {id: 4, name: "Instances can have more than one Creative Work", selected: false}
   ];
+
+  self.questionFourItems = [
+   { id: 1, name: "Creative Work" },
+   { id: 2, name: "Place" },
+   { id: 3, name: "Review" },
+   { id: 4, name: "Person" }
+  ];
+
+  self.questionFiveItems = [
+   { id: 1, name: "True" },
+   { id: 2, name: "False" }
+  ]
  }
 
  ko.applyBindings(new InstanceQuizViewModel());

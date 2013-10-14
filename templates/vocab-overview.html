@@ -84,16 +84,28 @@
    </div>
    {# START Q3 #}
    <div class="form-group">
+    <label>True or False: The BIBFRAME vocabulary will be extended with new subclasses in the future.</label>
+     <div data-bind="foreach: questionThreeItems">
+      <label class="radio-inline">
+        <input type="radio" name="q3" data-bind="attr: { value: id },
+                                                   checked: $root.selected"  >
+        <span data-bind="text: name"></span>
+      </label>
+    </div>
+   {# END Q3 #}
+   </div>
+   {# START Q4 #}
+   <div class="form-group">
     <label>Which of the following statements is true?</label>
-    <div data-bind="foreach: questionThreeItems">
+    <div data-bind="foreach: questionFourItems">
     <div class="radio">    
      <label>
-       <input type="radio" name="q3" data-bind="attr: { value: id },
+       <input type="radio" name="q4" data-bind="attr: { value: id },
                                                 checked: $root.selected"  >
        <span data-bind="text: name"></span>
       </label>
      </div>
-   {# END Q3 #}
+   {# END Q4 #}
    </div> 
    {% include 'grade-register.html' %}
    </form>
@@ -155,6 +167,11 @@ function VocabQuizViewModel() {
   ];
 
   self.questionThreeItems = [
+   { id: 1, name: "True" },
+   { id: 2, name: "False" }];
+
+
+  self.questionFourItems = [
    { id: 1,
      name: "Reviews, Authorities, and Creative Works are top-level BIBFRAME classes",
      selected: false},
@@ -164,8 +181,8 @@ function VocabQuizViewModel() {
    { id: 3,
      name: "BIBFRAME directly supports FRBR Work, Expression, Manifestation, and Item",
      selected: false}
-
   ];
+  
 }
 ko.applyBindings(new VocabQuizViewModel());
 </script>

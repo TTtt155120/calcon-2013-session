@@ -24,7 +24,7 @@
    </div>
    {# START Q2 #}
    <div>
-    <label>Which of the following influenced BIBFRAME design?</label>
+    <label>Which of the following are NOT goals BIBFRAME?</label>
     <div data-bind="foreach: questionTwoItems">
      <div class="checkbox">
       <label>
@@ -48,6 +48,21 @@
     </div>
   {# END Q3 #}
   </div>
+  {# START Q4 #}
+   <div>
+    <label>Which of the following influenced BIBFRAME design?</label>
+    <div data-bind="foreach: questionFourItems">
+     <div class="checkbox">
+      <label>
+       <input type="checkbox" name="q4" data-bind="attr: { value:id }, 
+                                                   checked: $root.selected">
+       <span data-bind="text: name"></span>
+      </label>
+     </div> 
+    </div>
+   {# END Q4 #}
+   </div> 
+
   {% include 'grade-register.html' %}
   {# END panel-body #}
   </div>
