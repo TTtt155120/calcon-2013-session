@@ -259,6 +259,7 @@ FROM badges WHERE uid=?""",
         'recipient': {
             'type': "email",
             'hashed': True,
+            'salt': IDENTITY_SALT,
             'identity': "sha256${0}".format(
                 badge_results[0])},
         'verify': {
