@@ -95,7 +95,7 @@
      </dl>
      {% if user.get_badge().has_key('issuedOn') %}
       <p class="lead">Your badge was issued on {{ user.get_badge().get('issuedOn') }} and is available at 
-       <a href="http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge/{{ user.get_badge().get('uid') }}-bibframe-rda-badge.png ">
+       <a href="http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge/{{ user.get_badge().get('uid') }}-bibframe-rda-badge.json">
         http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge/{{ user.get_badge().get('uid') }}-bibframe-rda-badge.json</a>.
       {% else %}
       {% if user.get_badge().get('score') > 19 %}
@@ -158,7 +158,7 @@ var BadgeManagerViewModel = function() {
        var rda_badge_url = response['badge-url'];
        OpenBadges.issue([rda_badge_url], 
          function(errors, successes) {
-          alert(errors, successes); 
+          //alert(errors, successes); 
        });
       }
    });

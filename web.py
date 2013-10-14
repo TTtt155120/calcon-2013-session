@@ -33,7 +33,7 @@ import sys
 import uuid
 
 from flask import Flask, g, redirect, render_template, url_for
-from flask import abort, flash, jsonify, request, session
+from flask import abort, flash, jsonify, request, session, Request
 from flask.ext.login import LoginManager, login_user, login_required, logout_user
 from flask.ext.login import make_secure_token, UserMixin, current_user
 
@@ -241,12 +241,12 @@ FROM badges WHERE uid=?""",
     badge_img_results = badge_query.fetchone()
     if not badge_img_results:
         abort(404)
-    return None
+    return Request(badge_img_results[0], mimetype='image/png')
 
 @app.route("{0}/badge/<uid>-bibframe-rda-badge.json".format(
     URL_PREFIX))
 def badge_for_participant(uid):
-    badge_query = g.db.execute("""SELECT recipient_id, issuedOn, uid
+    badge_query = g.db.execute("""SELECT recipient_id, issuedOn, uid, badge_img
 FROM badges WHERE uid=?""",
                                (uid,))
     badge_results = badge_query.fetchone()
@@ -256,9 +256,6 @@ FROM badges WHERE uid=?""",
         'badge': "http://tuttdemo.coloradocollege.edu{0}".format(
             url_for('badge_class_json')),
         'issuedOn': badge_results[1],
-        'image': "http://tuttdemo.coloradocollege.edu"\
-            "{0}/{1}-bibframe-rda-badge.png".format(URL_PREFIX,
-                                                     uid),
         'recipient': {
             'type': "email",
             'hashed': True,
@@ -267,10 +264,14 @@ FROM badges WHERE uid=?""",
         'verify': {
             'type': 'hosted',
             'url': "http://tuttdemo.coloradocollege.edu"\
-            "{0}/{1}-bibframe-rda-badge.json".format(URL_PREFIX,
-                                                     uid)},
+            "{0}/badge/{1}-bibframe-rda-badge.json".format(URL_PREFIX,
+                                                           uid)},
         'uid': badge_results[2]
         }
+    if badge_results[3] is not None:
+        badge_json['image'] = "http://tuttdemo.coloradocollege.edu"\
+                              "{0}/badge/{1}-bibframe-rda-badge.png".format(
+                                  URL_PREFIX,uid)
     return jsonify(badge_json)
     
     
