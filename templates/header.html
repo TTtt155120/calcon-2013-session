@@ -7,6 +7,8 @@
     {% for slide in slides.bibframe %}
     <li><a href="/calcon-2013-session/bibframe/{{ slide.name }}">{{ slide.label }}</a></li>
     {% endfor %}
+    <li class="divider">Special Topic</li>
+    <li><a href="/calcon-2013-session/linked-data-semantic-web">LinkedData and the Semantic Web</a></li>
     </ul>
   </li>
   <li class="dropdown{% if category == 'addendum' %} active{% endif %}">

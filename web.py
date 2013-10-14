@@ -29,6 +29,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import sys
 import uuid
 
 from flask import Flask, g, redirect, render_template, url_for
@@ -125,14 +126,14 @@ class User(UserMixin):
 
     def get_badge(self):
         self.badge['score'] = 0
-        badge_query = get_db().cursor().execute(
+        slide_query = g.db.cursor().execute(
             """SELECT slides.name, slides.label, slide_results.created_on,
                  slide_results.q1, slide_results.q2, slide_results.q3, slide_results.q4
                  FROM slides, slide_results
                  WHERE slide_results.participant_id=? AND slides.id=slide_results.slide_id""",
             (self.id,))
-        badge_results = badge_query.fetchall()
-        for row in badge_results:
+        slide_results = slide_query.fetchall()
+        for row in slide_results:
             self.badge['quiz_results'].append(
                 {'label': row[1],
                  'taken': row[2],
@@ -145,6 +146,16 @@ class User(UserMixin):
                                row[5],
                                row[6]])})
             self.badge['score'] += self.badge['quiz_results'][-1].get('total')
+        badge_query = g.db.cursor().execute(
+            "SELECT issuedOn, uid FROM badges WHERE recipient_id=?",
+            (self.id,))
+        badge_result = badge_query.fetchone()
+        if badge_result:
+            raw_date = badge_result[0].split(".")[0] # Remove millisecond
+            issuedOn = datetime.datetime.strptime(raw_date,
+                                                  '%Y-%m-%dT%H:%M:%S')
+            self.badge['issuedOn'] = issuedOn.strftime("%A, %B %d %Y")
+            self.badge['uid'] = badge_result[1]
         return self.badge
         
 
@@ -351,12 +362,10 @@ WHERE slide_id=? AND participant_id=?""",
 def issue_badge():
     cursor = g.db.cursor()
     slides_query = cursor.execute(
-        """SELECT total(q1), total(q2), total(q3) FROM slide_results WHERE participant_id=?""",
+        """SELECT total(q1), total(q2), total(q3), total(q4) FROM slide_results WHERE participant_id=?""",
         (current_user.id,))
-    query_results = slides_query.fetchall()
-    score = 0
-    for row in query_results:
-        score += sum(row)
+    query_result = slides_query.fetchone()
+    score = sum(query_result)
     if score < 20:
         return jsonify(
             {'error': 'Cannot issue badge, your score {0} is below the necessary 20'})
@@ -373,19 +382,30 @@ def issue_badge():
         'http://tuttdemo.coloradocollege.edu',
         'calcon-2013-session',
         uid)
-    baking_service = urllib2.urlopen(
-        'http://beta.openbadges.org/baker?assertion={0}'.format(assert_url))
-    raw_image = baking_service.read()
-    cursor.execute("UPDATE badges SET badge_img=? WHERE recipient_id=?",
-                   raw_image,
-                   current_user.id)
-    cursor.execute()
+    try:
+        baking_service = urllib2.urlopen(
+            'http://beta.openbadges.org/baker?assertion={0}'.format(assert_url))
+        raw_image = baking_service.read()
+        cursor.execute("UPDATE badges SET badge_img=? WHERE recipient_id=?",
+                       raw_image,
+                       current_user.id)
+        cursor.execute()
+    except:
+        print("Exception occurred: {0}".format(sys.exc_info()[0]))
     return jsonify(
         {'message': 'Congratulations! You have just been issued an open badge for CALCON 2013 BIBFRAME and RDA Sesson',
          'badge-url': assert_url})
     
     
-
+@app.route('{0}/linked-data-semantic-web'.format(URL_PREFIX))
+def linked_data_semantic_web():
+    return render_template("linked-data-semantic-web.html",
+                           category='slide',
+                           resources=RESOURCES,
+                           slides=SLIDES,
+                           user=current_user)
+    
+           
 
 
 @app.route('{0}/login'.format(URL_PREFIX),

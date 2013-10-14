@@ -26,13 +26,10 @@
     <div class="alert">
      <h3>Share your accomplishment</h3>
      <p>
-      <a href="#">LinkedIn</a> 
+      <a href="http://openbadges.tumblr.com/post/55809369771/how-to-display-your-open-badges-on-your-linkedin">LinkedIn</a> 
      </p>
      <p>
       <a href="#">Twitter</a>
-     </p>
-     <p>
-      <a href="#">Facebook</a>
      </p>
 
     </div>
@@ -96,6 +93,16 @@
                   data-bind="visible: editEmailmode, value: emailValue , hasFocus: editEmailmode">
        </dd>
      </dl>
+     {% if user.get_badge().has_key('issuedOn') %}
+      <p class="lead">Your badge was issued on {{ user.get_badge().get('issuedOn') }} and is available at 
+       <a href="http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge/{{ user.get_badge().get('uid') }}-bibframe-rda-badge.png ">
+        http://tuttdemo.coloradocollege.edu/calcon-2013-session/badge/{{ user.get_badge().get('uid') }}-bibframe-rda-badge.json</a>.
+      {% else %}
+      {% if user.get_badge().get('score') > 19 %}
+       <button data-bind="click: issueBadge"
+               class="btn btn-lg btn-success">Congratulations! Click here to issue your badge</button>
+      {% endif %}
+     {% endif %}
      <table class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -142,13 +149,21 @@ var BadgeManagerViewModel = function() {
   self.editEmail = function() { self.editEmailmode(true); }
 
   self.issueBadge = function() {
-   // OpenBadge.issue([rda_badge_url], 
-   //  function(errors, successes) {
-
-   //  });
-
+   var data = '';
+   $.ajax({
+     data: data,
+     type: 'POST',
+     url: '/calcon-2013-session/badge/issue',
+     success: function(response) {      
+       var rda_badge_url = response['badge-url'];
+       OpenBadges.issue([rda_badge_url], 
+         function(errors, successes) {
+          alert(errors, successes); 
+       });
+      }
+   });
   }
-  {% endif %}
+ {% endif %}
 }
 ko.applyBindings(new BadgeManagerViewModel());
 </script>

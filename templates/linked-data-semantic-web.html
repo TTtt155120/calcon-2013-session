@@ -1,0 +1,202 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{# START Master Content Row DIV#}
+<div class="row">
+ {# START definition and aside Column #}
+ <div class="col-sm-4 col-md-4">
+  {# START Definition panel #}
+  <div class="panel panel-info">
+    <div class="panel-heading">
+     <h3 class="panel-title">Definition</h3>
+    </div>
+    <div class="panel-body">
+     <em>Linked Data</em> "...is about making links, so that a person or machine
+      can explore the web of data.  With linked data, when you have some of it, 
+      you can find other, related, data." 
+     <small>Sir Tim Berners-Lee's 
+      <a href="/metadata-day-2013/resources.html#linked-data">Linked Data</a>
+      July, 27 2006
+     </small> 
+    </div>
+  {# END Definition panel #}
+  </div>
+  <div class="panel panel-info">
+   <div class="panel-heading">
+    <h3 class="panel-title">Definition</h3>
+   </div>
+   <div class="panel-body">
+     The term "Semantic Web" refers to W3C's vision of the Web of linked data. 
+     Semantic Web technologies enable people to create data stores on the Web, build 
+     vocabularies, and write rules for handling data. Linked data are empowered by 
+     technologies such as RDF, SPARQL, OWL, and SKOS.
+     <small>From W3C's <a href="http://www.w3.org/standards/semanticweb/">Semantic Web</a>
+   </div>
+  </div>
+ {# END definition and Aside Column #}
+ </div>
+ {# START Main Title and Content #}
+ <div class="col-sm-8 col-md-8">
+  <div class="jumbotron">
+   <h1 class="main-title">What is Linked Data?</h1>
+   <h2>And how is related to the Semantic Web?</h2>
+  </div>
+ {# END Main Title and Content #}
+ </div>
+{# END Master Content Row DIV#}
+</div>
+
+<hr>
+
+<div class="row">
+ <div class="col-sm-5 col-md-5">
+  <div class="well well-sm">
+   <h3>Example of a Triple</h3>
+   <img src="{{ url_for('static', filename='img/linked-data-triple.png') }}"
+        title="Pride and Prejudice language triple"> 
+   <p><b>Pride &amp; Prejudice</b> - <em>subject</em><br>
+      <b>languageOfWork</b> - <em>predicate</em><br>
+      <b>English</b> - <em>object</em>
+  </div>
+ </div>
+ <div class="col-sm-7 col-md-7 col-lg-6">
+  <p class="lead">Linked Data is about making relationships between our data more 
+   explicit in machine-readable formats. A Linked Data statement, called a RDF Triple,
+   is usually in the format of &lt;subject&gt; &lt;predicate&gt; &lt;object&gt;.
+   </p>
+   <p class="lead">
+    What we think of as "bibliographic records" are, in a linked-data context,
+    just a collection of statements that follow this basic RDF triple model.
+    Any <em>subject</em>, <em>predicate</em>, or <em>object</em> can either be a string
+    or an URI.
+   </p>   
+ </div>
+</div>
+
+<hr>
+
+{# START Semantic Web Row #}
+<div class="row">
+ <div class="col-md-12"> 
+   <div class="well well-sm">
+    <h2>The Semantic Web is built with LinkedData</h2>
+    <p class="lead">
+     A (somewhat) famous visualization of the Semantic Web based on available LinkedData sets is
+     provided by the <em>Linking Open Data cloud diagram</em>, by Richard Cyganiak and Anja 
+     Jentzsch at <a href="http://lod-cloud.net/">http://lod-cloud.net/</a>
+    </p>
+   </div>
+    <a href="{{ url_for('static', filename='img/lod-cloud_colored.png') }}">
+     <img src="{{ url_for('static', filename='img/lod-cloud_colored.png') }}" style="width: 800px">
+    </a>
+   <p></p>
+ </div>
+{# END Semantic Web Row #}
+</div>
+
+<hr>
+
+{# START Examples Row #}
+<div class="row">
+ {# Start Embedded HTML #}
+ <div class="col-sm-4 col-md-4">
+  <div class="panel panel-warning">
+   <div class="panel-heading">
+    <h3 class="panel-title">Embedded Microdata in HTML</h3>
+   </div>
+   <div class="panel-body">
+   <p>This example uses embedded microdata from <a href="http://schema.org/">schema.org</a> to 
+    embed Linked Data into an existing HTML table.</p>
+
+     <pre class="prettyprint">
+&lt;table itemscope 
+    itemtype="http://schema.org/ScholarlyArticle"&gt;
+ &lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Title&lt;/td&gt;
+   &lt;td itemprop="name"&gt;  
+   Life History Trade-off between age at pupation and fitness traits in a tropical Mosquito (Aedes aegypti) 
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Creator&lt;/td&gt;
+   &lt;td itemprop="author" 
+       itemscope 
+       itemtype="http://schema.org/Person&gt;  
+   &lt;span itemprop="name"&gt;Kirkpatrick, Kaitlin Victoria&lt;/span&gt;
+   &lt;/td&gt;
+  &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+      </pre>
+     </code>
+   </div>
+  </div>
+ {# END Embedded HTML #}
+ </div>
+ {# Start RDF XML #}
+ <div class="col-sm-4 col-md-4">
+  <div class="panel panel-info">
+   <div class="panel-heading">
+    <div class="panel-title">RDF XML</div>
+   </div>
+   <div class="panel-body">
+   <p>This is an example of Dublin Core expressed as RDF XML </p>
+    <pre class="prettyprint">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+&gt;
+  &lt;rdf:Description 
+   rdf:about="http://tuttdemo.coloradocollege.edu/Book/5446"&gt;
+    &lt;dcterms:title&gt;
+     The two noble kinsmen
+    &lt;/dcterms:title&gt;
+  &lt;/rdf:Description&gt;
+&lt;/rdf:RDF&gt;
+    </pre>
+   </div>
+  </div>
+ {# END RDF XML #}
+ </div>
+ {# Start JSON Linked Data #}
+ <div class="col-sm-4 col-md-4">
+  <div class="panel panel-success">
+   <div class="panel-heading">
+    <div class="panel-title">JSON-LD</div>
+   </div>
+   <div class="panel-body">
+   <p>
+    This snippet of BIBFRAME linked-data view in JSON uses a senior thesis ingested
+    from Colorado College Digital Repository.
+   </p>
+   <pre class="prettyprint">
+{
+  "@context": { 
+     "@vocab": "http://bibframe.org/vocab" 
+  },
+  "@type": "Dissertation",
+  "@id": "http://hdl.handle.net/10176/coccc:8002",
+  "dissertationDegree": "Bachelor of Arts (BA)",
+  "dissertationInstitution": {
+    "@type": "Organization",
+    "label": "Colorado College",
+  },
+  "dissertationYear": 2013,
+  "title": {
+     "@type": "TitleEntity",
+     "titleValue": "Life History Trade-off between age at pupation and fitness traits in a tropical Mosquito (Aedes aegypti)" 
+  },
+  
+}
+   </pre>
+   </div>
+  </div>
+ {# END JSON Linked Data #}
+ </div>
+
+{# END Examples Row #}
+</div>
+{% endblock %}
