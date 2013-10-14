@@ -222,7 +222,7 @@ def badge_issuer_org():
     return jsonify(
         {"name": "Colorado College Tutt Library Systems and Metadata Services",
          "image": "http://tuttdemo.coloradocollege.edu{0}".format(
-             url_for('static', 'img/tutt-library-spring.png')),
+             url_for('static', filename='img/tutt-library-spring.png')),
          "url": "http://www.coloradocollege.edu/library/",
          "email": "jeremy.nelson@coloradocollege.edu",
          "revocationList": "http://tuttdemo.coloradocollege.edu{0}".format(
