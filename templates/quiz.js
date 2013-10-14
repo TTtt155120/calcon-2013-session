@@ -10,7 +10,7 @@
          if(response['error']) {
            alert("Error " + response['error'])
          } else {
-          alert("Graded Quiz " + response['score'] + " out of 3");
+          alert("Graded Quiz " + response['score'] + " out of 4");
           var existing_points = parseInt(self.badgePoints());
           var new_total = existing_points + parseInt(response['score']);
           self.badgePoints(new_total);

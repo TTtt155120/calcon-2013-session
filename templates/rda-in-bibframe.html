@@ -14,13 +14,78 @@
 <div class="row">
   <div class="col-md-4">
     <h2>RDA</h2>
+    <div class="well well-sm">
+     <ul>
+	<li>Preferred Name for the Family </li>
+	<li>Type of Family</li>
+	<li>Title of the Person</li>
+	<li>Other Designation Associated with the Person</li>
+	<li>Field of Activity of the Person</li>
+	<li>Profession or Occupation</li>
+	<li>Place Associated with the Family</li>
+	<li>Preferred Name for the Person</li>
+	<li>Relationship Designator</li>
+	<li>Date Associated with the Person</li>
+	<li>Date Associated with the Family</li>
+	<li>Prominent Member of the Family</li>
+	<li>Date of Expression</li>
+	<li>Preferred Title for the Work</li>
+	<li>Date of Work (for music only)</li>
+	<li>Fuller Form of Name</li>
+	<li>Address of the Person</li>
+	<li>Affiliation</li>
+	<li>Preferred Title for the Work</li>
+	<li>Form of Work</li>
+	<li>Date of Work</li>
+	<li>Place of Origin of the Work</li>
+	<li>Other Distinguishing Characteristic of the Work</li>
+    </ul>
+   </div>
   </div>
 
   <div class="col-md-4">
     <h2>BIBFRAME</h2>
+   <pre class="prettyprint"> 
+bf:Family:223 = {
+ rda:placeAssociatedWithTheFamily: "United Kingdom",
+ rda:preferredNameForTheFamily: "Huxley",
+ rda:typeOfFamily: "Family"
+}
+   </pre>
+   <pre class="prettyprint"> 
+bf:Person:3446 = {
+ isni: "0000  0000  8118  2766",
+ rda:titleOfThePerson: "Sir",
+ rda:fieldOfActivityOfThePerson: ["Biology, Zoology"],
+ rda:professionOrOccupation: "Biologist",
+ rda:preferredNameForThePerson: "Julian Huxley",
+ viaf: "39451154" 
+}
+   </pre>
+   <pre class="prettyprint">
+bf:Book:6678 = {
+ hasAnnotation: "bf:Review:4456",
+ language: "English",
+ rda:formOfWork: "Book",
+ rda:dateOfWork: "1931",
+ rda:dateOfExpression: "1932",
+ rda:placeOfOriginOfTheWork: "Italy",
+ rda:preferredTitleForTheWork: "Brave New World",
+ 
+}
+   </pre>
   </div>
   
  <div class="col-md-4">
+  <div class="alert alert-warning">
+   <p>Rebecaa Guenther of the Library of Congress is the author of a Discussion Paper,
+   <a href="/calcon-2013-session/resources.html#bibframe-resource-types-discussion-paper" class="alert-link">BIBFRAME Resource Types</a>
+   that offers an initial discussion and mapping between BIBFRAME Creative Work subclasses and RDA Content Types such 
+   as RDA Content Type of Text to BIBFRAME Language Material subclass and RDA Content Type of Still Image to BIBFRAME 
+   Still Image. A complete listing of these mappings is available in  
+   <a href="http://bibframe.org/documentation/resource-types/#appendix1"
+      class="alert-link">Appendix 1</a> of the discussion paper.
+  </div>
   {# START Quiz Panel #}
   <div class="panel panel-primary">
    <div class="panel-heading">
@@ -43,6 +108,45 @@
       </div>
      {# END Q1 #}
      </div>
+     {# START Q2 #}
+     <div class="form-group">
+      <label>True of False: Complete Mappings between RDA and BIBFRAME already exist </label>
+      <div data-bind="foreach: questionTwoItems">
+       <label class="radio-inline" >
+       <input type="radio" name="q2" data-bind="attr: { value:id },
+                                                checked: $root.selected">
+       <span data-bind="text: name"></span>
+      </label>
+     {# END Q2 #}
+     </div>
+     {# START Q3 #}
+     <div class="form-group">
+      <label>BIBFRAME Creative Work class is roughly equilivant to which WEMI classes?</label>
+      <div data-bind="foreach: questionThreeItems">
+       <div class="checkbox">
+        <label>
+         <input type="checkbox" name="q3" data-bind="attr: { value:id }, 
+                                                     checked: $root.selected">
+         <span data-bind="text: name"></span>
+        </label>
+       </div> 
+      </div>
+     {# END Q3 #}
+     </div>
+     {# Start Q4 #}
+    <label>Which of the following statements is true?</label>
+    <div data-bind="foreach: questionFourItems">
+    <div class="radio">    
+     <label>
+       <input type="radio" name="q4" data-bind="attr: { value: id },
+                                                checked: $root.selected"  >
+       <span data-bind="text: name"></span>
+      </label>
+     </div>
+     {# END Q4 #}
+     </div>
+   {% include 'grade-register.html' %}
+   </form>     
    </div>
   {# END Quiz Panel #}
   </div>
@@ -55,15 +159,31 @@
 var rdaInBIBFRAMEViewModel = function() {
   var self = this;
 
-  {% if user.is_authenticated() %}  
-  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
-  {% endif %}
+ {% include 'quiz.js' %}  
 
   self.questionOneItems = [
    {id: 1, name: "RDA Content Type's Text mapped to BIBFRAME Language Material subclass"},
    {id: 2, name: "RDA Content Type's Tactile music mapped to BIBFRAME Notated music and Tactile subclasses"},
    {id: 3, name: "RDA Content Type's Computer program mapped to BIBFRAME Three dimensional object subclass"},
    {id: 4, name: "RDA Content Type's Computer dataset to BIBFRAME Dataset subclass"}
+  ];
+
+  self.questionTwoItems = [
+   {id: 1, name: "True"},
+   {id: 2, name: "False"}
+  ];
+
+  self.questionThreeItems = [
+   {id: 1, name: "FRBR Work"},
+   {id: 2, name: "FRBR Manifestation"},
+   {id: 3, name: "FRBR Expression"},
+   {id: 4, name: "FRBR Item"}
+  ];
+
+  self.questionFourItems = [
+   {id: 1, name: "RDA cannot be used in BIBFRAME"},
+   {id: 2, name: "RDA properties can be used with BIBFRAME classes"},
+   {id: 3, name: "BIBFRAME and RDA properties are identical"}
   ]
 
 }

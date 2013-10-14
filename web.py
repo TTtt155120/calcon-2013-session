@@ -127,7 +127,7 @@ class User(UserMixin):
         self.badge['score'] = 0
         badge_query = get_db().cursor().execute(
             """SELECT slides.name, slides.label, slide_results.created_on,
-                 slide_results.q1, slide_results.q2, slide_results.q3
+                 slide_results.q1, slide_results.q2, slide_results.q3, slide_results.q4
                  FROM slides, slide_results
                  WHERE slide_results.participant_id=? AND slides.id=slide_results.slide_id""",
             (self.id,))
@@ -139,9 +139,11 @@ class User(UserMixin):
                  'q1': row[3],
                  'q2': row[4],
                  'q3': row[5],
+                 'q4': row[6],
                  'total': sum([row[3],
                                row[4],
-                               row[5]])})
+                               row[5],
+                               row[6]])})
             self.badge['score'] += self.badge['quiz_results'][-1].get('total')
         return self.badge
         

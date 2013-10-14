@@ -71,11 +71,41 @@
         </div>
         {# END Q1 #}
         </div>
+        {# START Q2 #}
+        <div class="form-group">
+         <label>True or False: The Aristotle Library Apps project also offers a web interface to the Fedora Commons Digital Repository</label>
+          <div data-bind="foreach: questionTwoItems">
+          <label class="radio-inline">
+          <input type="radio" name="q2" data-bind="attr: { value: id },
+                                                   checked: $root.selected"  >
+          <span data-bind="text: name"></span>
+         </label>
+        </div>
+        {# END Q2 #}
+        </div>
+        {# START Q2 #}
+        <div class="form-group">
+         <label>True or False: Redis Library Services Platform needs you for determining its software development path</label>
+          <div data-bind="foreach: questionTwoItems">
+          <label class="radio-inline">
+          <input type="radio" name="q3" data-bind="attr: { value: id },
+                                                   checked: $root.selected"  >
+          <span data-bind="text: name"></span>
+         </label>
+        </div>
+        {# END Q2 #}
+        </div>
+       
        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" 
+                class="btn btn-default" 
+                data-dismiss="modal"
+                >Close</button>
+        <button type="button" 
+                class="btn btn-primary"
+                data-bind="click: gradeQuiz">Grade Quiz</button>
       </div>
     {# END modal-content #}
     </div>
@@ -199,8 +229,28 @@
   self.animationOn = ko.observable(false);
   self.showJumbo = ko.observable(true);
 
-   {% include 'quiz.js' %}
+{% if user.is_authenticated() %}  
+ self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
 
+ self.gradeQuiz = function() {
+   $.ajax({
+      type: 'POST',
+       url: '/calcon-2013-session/grade',
+       data: $('#badge-quiz').serialize(),
+       success: function(response) {
+         if(response['error']) {
+           alert("Error " + response['error'])
+         } else {
+          alert("Graded Quiz " + response['score'] + " out of 4");
+          var existing_points = parseInt(self.badgePoints());
+          var new_total = existing_points + parseInt(response['score']);
+          self.badgePoints(new_total);
+          $("#badge-quiz-dlg").modal('hide');
+         }
+       }
+    });
+ }
+{% endif %}
   self.questionOneItems = [
     {id: 1, name: "BIBFRAME is natively supported in the Redis Library Services Platform", selected: false},
     {id: 2, name: "Redis Library Services Platform is NOT open source", selected: false},
@@ -212,6 +262,12 @@
    {id: 1, name: "True"},
    {id: 2, name: "False"}
   ];
+
+  self.questionThreeItems = [
+   {id: 1, name: "True"},
+   {id: 2, name: "False"}
+  ];
+
 
   self.displayAll = function() { 
     self.animationOn(true);

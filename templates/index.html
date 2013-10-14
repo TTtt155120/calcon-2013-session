@@ -24,6 +24,7 @@
        What is BIBFRAME? <span class="glyphicon glyphicon-play-circle"></span>
        </a>
     </p>
+{#
     <p>
      <a class="btn btn-lg btn-primary" 
         href="/calcon-2013-session/rda/{{ slides.rda.0.name }}">
@@ -31,6 +32,7 @@
        <span class="glyphicon glyphicon-play-circle"></span>
      </a>
    </p>
+#}
     <p><a class="btn btn-lg btn-info" 
         href="/calcon-2013-session/badge.html">
          <img class="img-thumbnail"
@@ -42,10 +44,10 @@
 
 <div class="row marketing">
  <div class="col-lg-6">
-   <div class="well well-sm bibframe-slide">
+   <div class="well well-sm rda-slide">
     <h3>What is BIBFRAME?</h3>
-    {% for slide in slides.bibframe %}
-     <h4>{{ slide.label }}</h4>
+    {% for slide in slides.bibframe[0:6] %}
+     <h4>{{ slide.label }} </h4>
      {% if slide.description %}<p>{{ slide.description }}</p>{% else %}
       <p>consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
      {% endif %}
@@ -54,16 +56,15 @@
  </div>
 
  <div class="col-lg-6">
-   <div class="well well-sm rda-slide">
+   <div class="well well-sm bibframe-slide">
     <h3>How is BIBFRAME related to RDA?</h3>
-    {% for slide in slides.rda %}
+    {% for slide in slides.bibframe[6:] %}
      <h4>{{ slide.label }}</h4>
      {% if slide.description %}<p>{{ slide.description }}</p>{% else %}
      <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
      {% endif %}
     {% endfor %}
    </div>
-
  </div>
 </div>
 {% endblock %}

@@ -31,6 +31,11 @@
       "name": "annotations"
     },
     {
+      "description": "While BIBFRAME does not currently have any official mapping to RDA, some information mapping and experimentation has occurred, particularly in the Redis Library Services Platform", 
+      "label": "RDA in BIBFRAME", 
+      "name": "rda-in-bibframe"
+    }, 
+    {
       "description": "The Redis Library Services Platform is an open-source project that uses BIBFRAME to represent bibliographic entities with BIBFRAME, MARC21, RDA and Schema.org properties",
       "label": "BIBFRAME and the Redis Library Services Platform", 
       "name": "bibframe-rlsp"
