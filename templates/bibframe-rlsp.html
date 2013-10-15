@@ -276,6 +276,23 @@
     }
     self.stepNumber += 1;
   }
+    self.animateRedisCluster = function() {
+      redis_consortium = svgDraw.group();
+      redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/architecture_64x64.png') }}").x(50));
+      redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").y(70));
+      redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").move(120,70));
+      redis_consortium.add(svgDraw.text("Consortium Shared Datastores").font({ size: 18 }).y(135));
+      redis_local = svgDraw.group();
+      redis_local.add(svgDraw.image("{{ url_for('static', filename='img/bank_48x48.png') }}").x(50));
+      redis_local.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").move(10,70));
+      redis_local.add(svgDraw.text("Institutional Redis Datastore for\nLocal Authorities and Annotations").font({size: 18}).y(135));
+      redis_local.y(75);
+      redis_local.hide();
+      redis_consortium.animate().x(200).after(function() {
+        redis_local.show();
+
+      }); 
+    };
 
 	 self.BIBFRAMEDatastore = function() {
 	   var solo_redis = svgDraw.group();
@@ -307,7 +324,11 @@
              book.move(0,150).show();
              book.animate().move(220, 180).after(function() {;
               all_works.animate().y(300).after(function() {
-               solo_redis.hide();    
+               setTimeout(function() {
+                 solo_redis.hide();
+                 self.animateRedisCluster()
+                },
+               6000);    
              });
             });
           })
