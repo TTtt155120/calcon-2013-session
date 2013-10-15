@@ -267,10 +267,10 @@
         self.stepTitle("Next steps for Redis Library Services Platform");
         desc = "The development process of Redis Library Services Platform";
         desc += " follows an iterative Agile pattern where most apps are developed";
-        desc += " and functionality added based on the user demand. The design is of ";
-        desc += "a pull platform";
+        desc += " and functionality added based on the user demand following  ";
+        desc += "a pull platform design philosophy";
         self.stepDescription(desc);
-        
+        self.RLSPandYou();
         break;
 
     }
@@ -279,18 +279,43 @@
     self.animateRedisCluster = function() {
       redis_consortium = svgDraw.group();
       redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/architecture_64x64.png') }}").x(50));
-      redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").y(70));
+      redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").y(70)
+      redis_consortium.add(redis_img);
       redis_consortium.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").move(120,70));
       redis_consortium.add(svgDraw.text("Consortium Shared Datastores").font({ size: 18 }).y(135));
       redis_local = svgDraw.group();
       redis_local.add(svgDraw.image("{{ url_for('static', filename='img/bank_48x48.png') }}").x(50));
       redis_local.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").move(10,70));
       redis_local.add(svgDraw.text("Institutional Redis Datastore for\nLocal Authorities and Annotations").font({size: 18}).y(135));
-      redis_local.y(75);
       redis_local.hide();
       redis_consortium.animate().x(200).after(function() {
         redis_local.show();
+        redis_local.animate().y(75).after(function() {
+         local2consortium = svgDraw.group();
+         arrow = svgDraw.path("M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z").stroke({ color: 'rgb(255, 0, 0)' })
+         .fill({ color: 'rbg(255,0,0)' });
+         arrow.move(224, 28).rotate(147);
+         local2consortium.add(arrow);
+         local2consortium.add(svgDraw.line(120, 80, 200, 35).stroke({ width: 5, color: 'rgb(255, 0, 0)' }));
+         local2consortium.animate().move(40, 40).after(function() {
+           ala_grp = svgDraw.group();
+           ala_grp.add(svgDraw.image("{{ url_for('static', filename='img/programming_64x64.png') }}").x(30));
+           ala_grp.add(svgDraw.text("Aristotle Library Apps").font({ size: 18 }).y(100));
+           ala_grp.hide();
+           ala_grp.move(340, 200).show();
+           ala2local = svgDraw.group();
+           ala2local_arrow = arrow.clone().rotate(380).move(120, 110);
+           ala2local_arrow.move(170, 159);
+           ala2local_arrow.front();
+           ala2local.add(svgDraw.line(180, 170, 340, 230).stroke({ width: 5, color: 'rgb(255, 0, 0)' }).back());
+           ala2local.add(ala2local_arrow);
+        
+           
 
+
+
+         });
+        });
       }); 
     };
 
@@ -322,8 +347,8 @@
            all_works.add(book);
 	   creative_work.animate().move(220, 60).after(function() {
              book.move(0,150).show();
-             book.animate().move(220, 180).after(function() {;
-              all_works.animate().y(300).after(function() {
+             book.animate().move(230, 180).after(function() {;
+              all_works.animate({ delay: 3000 }).y(300).after(function() {
                setTimeout(function() {
                  solo_redis.hide();
                  self.animateRedisCluster()
@@ -391,6 +416,30 @@ self.Introduction = function() {
     });
   });
 }
+
+ self.RLSPandYou = function() {
+    person_grp = svgDraw.group();
+    person_grp.add(svgDraw.image("{{ url_for('static', filename='img/user_48x48.png') }}"));
+    person_grp.add(svgDraw.text("+ You!").font({ size: 18 }).y(50));
+    person_grp.hide().move(250, 250);
+    person_grp.show();
+    person_grp.animate({ duration: 3000 }).scale(3, 3).after(function() {
+      rlsp_pull = svgDraw.group();
+      rlsp_pull.add(svgDraw.text("Redis Library Services Platform").font({ size: 32 }).fill({ color: 'rgb(255, 0, 0)' }));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/programming_64x64.png') }}").y(50));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/redis.png') }}").opacity(0.5).move(40, -45));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/portal-logo.png') }}").opacity(0.5).scale(2,2).move(230, 30));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}").opacity(0.5).move(10, 120));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}").opacity(0.5).scale(2,2).move(110,70));
+      rlsp_pull.add(svgDraw.image("{{ url_for('static', filename='img/HTML5_Logo_64.png') }}").opacity(0.5).move(400,5));
+      rlsp_pull.add(svgDraw.text("An Innovation Toolset for\nBuilding Library Mobile Cloud Apps").font({ size: 24 }).move(85, 40)); 
+      rlsp_pull.hide().move(25,25);
+      rlsp_pull.show();
+    });
+
+
+ } 
+
 
  }
  ko.applyBindings(new BIBFRAMEandRLSPViewModal());
