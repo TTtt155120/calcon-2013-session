@@ -44,6 +44,10 @@
  </div>
  </div>
 </div>
+
+</div>
+{% endblock %}
+{% block more_dlgs %}
 {# START Badge Quiz Modal #}
 <div class="modal fade" id="badge-quiz-dlg">
   {# START modal-dialog #}
@@ -103,9 +107,11 @@
                 class="btn btn-default" 
                 data-dismiss="modal"
                 >Close</button>
+      {% if user.is_authenticated() %}
         <button type="button" 
                 class="btn btn-primary"
                 data-bind="click: gradeQuiz">Grade Quiz</button>
+      {% endif %}
       </div>
     {# END modal-content #}
     </div>
@@ -113,84 +119,35 @@
   </div>
 {# END Badge Quiz Modal #}
 </div>
+
+{# START RLSP Display #}
+ <div class="modal fade" id="book-rlsp-dlg">
+  {# START modal-dialog #}
+  <div class="modal-dialog">
+   {# START modal-content #}
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" data-bind="text: titleRLSPEntity">Text</h4>
+      </div>
+      <div class="modal-body">
+      <iframe data-bind="attr: { src: jsonRLSPEntity }" height="600" width="450"></iframe>
+      </div>
+   {# END modal-content #}
+   </div>
+ {# END modal-dialog #}
+ </div> 
+
+ {# END dlg #}
+ </div>
+
+</div>
 {% endblock %}
 
 {% block more_js %}
 <script src="{{ url_for('static', filename='js/svg.min.js') }}"></script>
 <script>
  var svgDraw = SVG('bf-rlsp-animation');
-
- var BIBFRAMEDatastore = function() {
-   var solo_redis = svgDraw.group();
-   var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
-   solo_redis.add(redis_img);
-   solo_redis.add(svgDraw.text("Single Redis Datastore").font({ size: 18 }).y(60));
-   solo_redis.move(20,30);
-   creative_work = svgDraw.group();
-   creative_work.add(svgDraw.circle(120).stroke({ color: "rgb(0,200,0)", width: 3 })
-   .fill({ color: "rgb(255,255,255)" }));
-   creative_work.add(svgDraw.image("{{ url_for('static', filename='img/creative_writing_64x64.png') }}"));
-   creative_work.add(svgDraw.text("Creative Works").font({ size: 18 }).y(90));
-   creative_work.move(250, 20);
- }
-
- var Introduction = function() {
-  var ala_grp = svgDraw.group();
-  var ala = svgDraw.image("{{ url_for('static', filename='img/programming_64x64.png') }}");
-  ala.x(30);
-  ala_grp.add(ala);
-  var ala_label = svgDraw.text("Aristotle Library Apps").font({ size: 18 });
-  ala_label.y(100);
-  ala_grp.add(ala_label);
-  ala_grp.hide();
-  ala_grp.move(30, 50);
-  ala_grp.show();
-  var mobile_group = svgDraw.group();
-  mobile_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
-  mobile_group.add(svgDraw.text("Mobile and Tablets").font({ size: 18 }).y(100));
-  mobile_group.hide();
-  var server_group = svgDraw.group();
-  server_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
-  server_group.add(svgDraw.image("{{ url_for('static', filename='img/server.png') }}"));
-  server_group.add(svgDraw.text("Desktops").font({ size: 18 }).y(100));
-  server_group.hide();
- 
-  var ala_stack_grp = svgDraw.group();
-  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}").move(5,0));
-  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}").scale(2,2).move(5,20));
-  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/HTML5_Logo_64.png') }}").move(100,5));
-  ala_stack_grp.hide();
-  fedora_grp = svgDraw.group();
-  var fedora_img = svgDraw.image("{{ url_for('static', filename='img/portal-logo.png') }}");
-  fedora_img.scale(2,2);
-  fedora_grp.add(fedora_img);
-  fedora_grp.hide();
-  var redis_grp = svgDraw.group();
-  var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
-  redis_grp.add(redis_img).hide();
-  ala_grp.animate().move(60, 180).after(function() {
-    redis_grp.move(20,20).show();
-    redis_grp.animate().move(350, 20).after(function() {
-     fedora_grp.move(400,0).show();
-     fedora_grp.animate().move(50,-20).after(function() {
-      var ala2Fedora = svgDraw.line(110, 175, 80, 110).stroke({ width: 5, color: "rgb(255,0,0)" });
-      var ala2Redis = svgDraw.line(170, 195, 370, 100).stroke({ width: 5, color: "rgb(180,25,0)" });
-      mobile_group.move(50, 600).show();
-      mobile_group.animate().move(80, 380).during(function() { 
-       server_group.move(350, 600).show();
-       server_group.animate().move(330, 380).after(function() {
-        ala_stack_grp.show().animate().move(220, 180).after(function() {
-         var mobile2ala = svgDraw.line(110, 370, 130, 320).stroke({ width: 5, color: "rgb(0,25,200)" });
-         var server2ala = svgDraw.line(390, 370, 160, 310).stroke({ width: 5, color: "rgb(0,25,200)" });
-
-        });
-       }
-       );
-      });
-     });
-    });
-  });
-}
 
  var rlspSolo = function() {
   var title = svgDraw.text("Running RLSP in Solo Mode").font({ size: 24 }); 
@@ -228,6 +185,8 @@
   self.stepTitle = ko.observable();
   self.animationOn = ko.observable(false);
   self.showJumbo = ko.observable(true);
+  self.titleRLSPEntity = ko.observable();
+  self.jsonRLSPEntity = ko.observable();
 
 {% if user.is_authenticated() %}  
  self.badgePoints = ko.observable("{{ user.get_badge().get('score') }}");
@@ -283,7 +242,7 @@
         desc += "The first, Aristotle Library Apps, is the web interface and front-end to ";
         desc += "the Redis BIBFRAME datastores and Fedora Commons Digital Repository."
         self.stepDescription(desc);
-        Introduction()
+        self.Introduction()
         setTimeout(function() {
            desc = "Bootstrap, an open-source web framework, provides a mobile first HTML5, ";
            desc += "CSS, and Javascript interface to small, single-purpose apps for use";
@@ -301,7 +260,7 @@
         desc += "server-side scripts including documentation on running Redis as a bibliographic";
         desc += " and operational datastore as single instance or as a cluster of Redis instances.";
         self.stepDescription(desc);
-        BIBFRAMEDatastore();
+        self.BIBFRAMEDatastore();
         break;
 
       case 3:
@@ -318,20 +277,100 @@
     self.stepNumber += 1;
   }
 
-  self.displayCooperative = function() {
-    svgDraw.clear();
-    rlspCooperative();
-  }
+	 self.BIBFRAMEDatastore = function() {
+	   var solo_redis = svgDraw.group();
+	   var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
+	   solo_redis.add(redis_img);
+	   solo_redis.add(svgDraw.text("Single Redis Datastore").font({ size: 18 }).y(60));
+	   solo_redis.move(20,30);
+	   book = svgDraw.group();
+	   book_img = svgDraw.image("{{ url_for('static', filename='img/publishing_48x48.png') }}");
+           book_label = svgDraw.text("bf:Book:20157").font({ size: 18 }).y(90);
+	   book.add(book_img);
+           book.add(book_label);
+	   book.click(function() {
+	         self.titleRLSPEntity("bf:Book:20157");
+                 $('#book-rlsp-dlg').modal('show');
+                 self.jsonRLSPEntity('http://tuttdemo.coloradocollege.edu/apps/discovery/Book/20157/');
+           });
+           book.hide();
+	   creative_work = svgDraw.group();
+	   creative_work.add(svgDraw.circle(120).stroke({ color: "rgb(0,200,0)", width: 3 })
+	   .fill({ color: "rgb(255,255,255)" }));
+	   creative_work.add(svgDraw.image("{{ url_for('static', filename='img/creative_writing_64x64.png') }}"));
+	   creative_work.add(svgDraw.text("Creative Works").font({ size: 18 }).y(90));
+	   creative_work.move(250, 20);
+           all_works = svgDraw.group();
+           all_works.add(creative_work);
+           all_works.add(book);
+	   creative_work.animate().move(220, 60).after(function() {
+             book.move(0,150).show();
+             book.animate().move(220, 180).after(function() {;
+              all_works.animate().y(300).after(function() {
+               solo_redis.hide();    
+             });
+            });
+          })
+	  }
+	  
+self.Introduction = function() {
+  var ala_grp = svgDraw.group();
+  var ala = svgDraw.image("{{ url_for('static', filename='img/programming_64x64.png') }}");
+  ala.x(30);
+  ala_grp.add(ala);
+  var ala_label = svgDraw.text("Aristotle Library Apps").font({ size: 18 });
+  ala_label.y(100);
+  ala_grp.add(ala_label);
+  ala_grp.hide();
+  ala_grp.move(30, 50);
+  ala_grp.show();
+  var mobile_group = svgDraw.group();
+  mobile_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
+  mobile_group.add(svgDraw.text("Mobile and Tablets").font({ size: 18 }).y(100));
+  mobile_group.hide();
+  var server_group = svgDraw.group();
+  server_group.add(svgDraw.image("{{ url_for('static', filename='img/mobile_64x64.png') }}"));
+  server_group.add(svgDraw.image("{{ url_for('static', filename='img/server.png') }}"));
+  server_group.add(svgDraw.text("Desktops").font({ size: 18 }).y(100));
+  server_group.hide();
+ 
+  ala_stack_grp = svgDraw.group();
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/django-logo.gif') }}").move(5,0));
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/python-logo.gif') }}").scale(2,2).move(5,20));
+  ala_stack_grp.add(svgDraw.image("{{ url_for('static', filename='img/HTML5_Logo_64.png') }}").move(100,5));
+  ala_stack_grp.hide();
+  fedora_grp = svgDraw.group();
+  var fedora_img = svgDraw.image("{{ url_for('static', filename='img/portal-logo.png') }}");
+  fedora_img.scale(2,2);
+  fedora_grp.add(fedora_img);
+  fedora_grp.hide();
+  var redis_grp = svgDraw.group();
+  var redis_img = svgDraw.image("{{ url_for('static', filename='img/redis.png') }}");
+  redis_grp.add(redis_img).hide();
+  ala_grp.animate().move(60, 180).after(function() {
+    redis_grp.move(20,20).show();
+    redis_grp.animate().move(350, 20).after(function() {
+     fedora_grp.move(400,0).show();
+     fedora_grp.animate().move(50,-20).after(function() {
+      var ala2Fedora = svgDraw.line(110, 175, 80, 110).stroke({ width: 5, color: "rgb(255,0,0)" });
+      var ala2Redis = svgDraw.line(170, 195, 370, 100).stroke({ width: 5, color: "rgb(180,25,0)" });
+      mobile_group.move(50, 600).show();
+      mobile_group.animate().move(80, 380).during(function() { 
+       server_group.move(350, 600).show();
+       server_group.animate().move(330, 380).after(function() {
+        ala_stack_grp.show().animate().move(220, 180).after(function() {
+         var mobile2ala = svgDraw.line(110, 370, 130, 320).stroke({ width: 5, color: "rgb(0,25,200)" });
+         var server2ala = svgDraw.line(390, 370, 160, 310).stroke({ width: 5, color: "rgb(0,25,200)" });
 
-  self.displayFuture = function() {
-    svgDraw.clear();
-    rlspFuture();
-  }
+        });
+       }
+       );
+      });
+     });
+    });
+  });
+}
 
-  self.displaySolo = function() {
-    svgDraw.clear();
-    rlspSolo();
-  }
  }
  ko.applyBindings(new BIBFRAMEandRLSPViewModal());
 </script>
