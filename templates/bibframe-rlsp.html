@@ -306,9 +306,10 @@
 	   book.add(book_img);
            book.add(book_label);
 	   book.click(function() {
-	         self.titleRLSPEntity("bf:Book:20157");
-                 $('#book-rlsp-dlg').modal('show');
-                 self.jsonRLSPEntity('http://tuttdemo.coloradocollege.edu/apps/discovery/Book/20157/');
+	        // self.titleRLSPEntity("bf:Book:20157");
+                // $('#book-rlsp-dlg').modal('show');
+                // self.jsonRLSPEntity('http://tuttdemo.coloradocollege.edu/apps/discovery/Book/20157/');
+                window.open('http://tuttdemo.coloradocollege.edu/apps/discovery/Book/20157/');
            });
            book.hide();
 	   creative_work = svgDraw.group();

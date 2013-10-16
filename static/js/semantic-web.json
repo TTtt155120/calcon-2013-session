@@ -1,0 +1,15 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "WebApplication", 
+  "headline": "Semantic Web", 
+  "name": "semantic-web", 
+  "publisher": {
+    "@type": "Organization", 
+    "name": "W3C", 
+    "url": "http://w3.org/"
+  }, 
+  "url": "http://www.w3.org/standards/semanticweb/"
+}

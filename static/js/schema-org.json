@@ -1,0 +1,10 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "WebApplication", 
+  "headline": "Schema.org", 
+  "name": "schema-org", 
+  "url": "http://schema.org/"
+}

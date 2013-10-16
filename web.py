@@ -85,6 +85,7 @@ for name in ['anglo-american-cataloging-rules-second-edition.json',
              'bibframe-use-cases-and-requirements.json',
              'bibliographic-framework-as-a-web-of-data.json',
              'building-a-library-app-portfolio-with-redis-and-django.json',
+             'linked-data.json',
              'on-bibframe-authority.json',
              'understanding-marc-bibliographic.json']:
     RESOURCES['article-books'].append(
@@ -98,10 +99,13 @@ for name in ['bibframeorg-bibliographic-framework-initiative.json',
              'flask.json',
              'jquery-write-less-do-more.json',
              'knockoutjs.json',
+             'linking-open-data-cloud-diagram.json',
              'python-programming-language-official-website.json',
              'rda-resource-description-and-access-vocabularies.json',
              'rda-toolkit.json',
              'redis.json',
+             'schema-org.json',
+             'semantic-web.json',
              'svgjs.json']:
    RESOURCES['websites'].append(
         json.load(

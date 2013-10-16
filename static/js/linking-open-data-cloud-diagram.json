@@ -1,0 +1,24 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/", 
+    "bf": "http://bibframe.org/vocab"
+  }, 
+  "@type": "WebApplication", 
+  "author": [
+    {
+      "@type": "Person", 
+      "familyName": "Cyganiak", 
+      "givenName": "Richard", 
+      "name": "Richard Cyganiak"
+    }, 
+    {
+      "@type": "Person", 
+      "familyName": "Jentzsch", 
+      "givenName": "Anja", 
+      "name": "Anja Jentzsch"
+    }
+  ], 
+  "headline": "Linking Open Data Cloud Diagram", 
+  "name": "linking-open-data-cloud-diagram", 
+  "url": "http://lod-cloud.net/"
+}
